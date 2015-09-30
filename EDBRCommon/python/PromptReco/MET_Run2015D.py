@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 readFiles = cms.untracked.vstring()
-secFiles = cms.untracked.vstring()
+secFiles = cms.untracked.vstring() 
 source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles)
 readFiles.extend( [
        '/store/data/Run2015D/MET/MINIAOD/PromptReco-v3/000/256/584/00000/C0ED0230-855D-E511-85C6-02163E0170AD.root',
@@ -90,6 +90,3 @@ readFiles.extend( [
 
 secFiles.extend( [
                ] )
-~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-~                       
