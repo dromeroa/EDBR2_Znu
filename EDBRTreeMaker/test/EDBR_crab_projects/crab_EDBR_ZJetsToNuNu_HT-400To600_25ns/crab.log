@@ -1,0 +1,354 @@
+# Conditions read from  CMS_CONDITIONS  via FrontierProd 
+++++++++++ CUTS ++++++++++
+
+Graviton cut = cms.string('')
+Hadronic V cut = cms.string('pt > 200. ')
+MET cut = cms.string('pt > 250')
+
+++++++++++++++++++++++++++
+DEBUG 2015-09-24 12:44:24,122: 	 Executing command: 'submit'
+DEBUG 2015-09-24 12:44:24,123: 	 Found CRAB cache file /afs/cern.ch/user/d/dromeroa/.crab3
+DEBUG 2015-09-24 12:44:24,137: 	 Checking credentials
+DEBUG 2015-09-24 12:44:24,139: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 12:44:24,139: 	 Getting proxy life time left
+DEBUG 2015-09-24 12:44:24,845: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 593970
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:25,366: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 593969
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:25,366: 	 Proxy valid for 164:59:30 hours
+INFO 2015-09-24 12:44:25,366: 	 Will use CRAB configuration file crabConfig_EDBR_analysis.py
+DEBUG 2015-09-24 12:44:25,367: 	 Loading CRAB configuration file.
+DEBUG 2015-09-24 12:44:25,371: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-09-24 12:44:25,497: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 12:44:25,498: 	 Checking credentials
+DEBUG 2015-09-24 12:44:25,501: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 12:44:25,502: 	 Getting proxy life time left
+DEBUG 2015-09-24 12:44:26,109: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 593968
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:26,915: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 593968
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:26,916: 	 Proxy valid for 164:59:28 hours
+DEBUG 2015-09-24 12:44:27,426: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u47670 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:27,801: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+DEBUG 2015-09-24 12:44:27,916: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 12:44:27,917: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2015-09-24 12:44:27,917: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad_cmsweb.cern.ch for credential name
+DEBUG 2015-09-24 12:44:28,222: 	 Executing : 
+ command : myproxy-info -l 27fc936903888720a93ac14eb6e40118b62fc44e -s myproxy.cern.ch
+ output : username: 27fc936903888720a93ac14eb6e40118b62fc44e
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  timeleft: 387:37:02  (16.2 days)
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 12:44:28,223: 	 Myproxy is valid: 1395422
+DEBUG 2015-09-24 12:44:28,223: 	 Command use: submit
+DEBUG 2015-09-24 12:44:28,223: 	 Options use: ['-c', 'crabConfig_EDBR_analysis.py']
+DEBUG 2015-09-24 12:44:28,654: 	 CRABClient version: 3.3.1509
+DEBUG 2015-09-24 12:44:28,654: 	 Instance is prod
+DEBUG 2015-09-24 12:44:28,654: 	 Server base url is cmsweb.cern.ch
+DEBUG 2015-09-24 12:44:28,654: 	 Command url /crabserver/prod/workflow
+DEBUG 2015-09-24 12:44:28,654: 	 Started submission
+DEBUG 2015-09-24 12:44:28,654: 	 Working on /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+DEBUG 2015-09-24 12:44:29,169: 	 Loading required information from the environment
+DEBUG 2015-09-24 12:44:29,169: 	 Found CMSSW_7_4_11_patch1 for slc6_amd64_gcc491 with base /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1
+DEBUG 2015-09-24 12:44:29,211: 	 UNIQUE NAME: tarUUID 5b1786f1-10ad-48c5-9165-e21d9b72d0f6 
+DEBUG 2015-09-24 12:44:29,212: 	 self.config: from WMCore.Configuration import Configuration
+config = Configuration()
+config.section_('General')
+config.General.transferOutputs = True
+config.General.workArea = 'EDBR_crab_projects'
+config.General.requestName = 'EDBR_ZJetsToNuNu_HT-400To600_25ns'
+config.section_('JobType')
+config.JobType.psetName = 'analysis_25ns.py'
+config.JobType.pluginName = 'Analysis'
+config.section_('Data')
+config.Data.inputDataset = '/ZJetsToNuNu_HT-400To600_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM'
+config.Data.unitsPerJob = 1
+config.Data.publication = False
+config.Data.inputDBS = 'global'
+config.Data.splitting = 'FileBased'
+config.section_('Site')
+config.Site.storageSite = 'T2_BR_SPRACE'
+config.section_('User')
+config.section_('Debug')
+
+DEBUG 2015-09-24 12:44:29,212: 	 self.config.JobType.psetName: analysis_25ns.py
+INFO 2015-09-24 12:44:29,212: 	 Importing CMSSW configuration analysis_25ns.py
+INFO 2015-09-24 12:44:43,834: 	 Finished importing CMSSW configuration analysis_25ns.py
+DEBUG 2015-09-24 12:44:43,834: 	 Writing CMSSW configuration to /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/inputs/PSet.py
+DEBUG 2015-09-24 12:44:43,945: 	 The following EDM output files will be collected: []
+DEBUG 2015-09-24 12:44:43,945: 	 The following TFile output files will be collected: ['treeEDBR_ZJetsToNuNu_HT-400To600_25ns.root']
+DEBUG 2015-09-24 12:44:43,945: 	 The following user output files will be collected: []
+DEBUG 2015-09-24 12:44:43,945: 	 Loading required information from the environment
+DEBUG 2015-09-24 12:44:43,945: 	 Found CMSSW_7_4_11_patch1 for slc6_amd64_gcc491 with base /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1
+DEBUG 2015-09-24 12:44:43,945: 	 Making tarball in /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/inputs/5b1786f1-10ad-48c5-9165-e21d9b72d0f6default.tgz
+DEBUG 2015-09-24 12:44:43,947: 	 Checking directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/lib
+DEBUG 2015-09-24 12:44:43,947: 	 Adding directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/lib to tarball
+DEBUG 2015-09-24 12:44:47,602: 	 Checking directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/biglib
+DEBUG 2015-09-24 12:44:47,602: 	 Adding directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/biglib to tarball
+DEBUG 2015-09-24 12:44:47,603: 	 Checking directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/module
+DEBUG 2015-09-24 12:44:49,796: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/JetMETCorrections/Type1MET/data to tarball
+DEBUG 2015-09-24 12:44:49,813: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/JetMETCorrections/Type1MET/interface to tarball
+DEBUG 2015-09-24 12:44:49,906: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/PhysicsTools/PatAlgos/interface to tarball
+DEBUG 2015-09-24 12:44:50,216: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/PhysicsTools/PatUtils/data to tarball
+DEBUG 2015-09-24 12:44:51,253: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/PhysicsTools/PatUtils/interface to tarball
+DEBUG 2015-09-24 12:44:51,829: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRJets/interface to tarball
+DEBUG 2015-09-24 12:44:51,840: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRLeptons/interface to tarball
+DEBUG 2015-09-24 12:44:51,949: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/data to tarball
+DEBUG 2015-09-24 12:44:52,918: 	 Adding data directory /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/VetoesProducer/interface to tarball
+DEBUG 2015-09-24 12:44:53,012: 	 Uploading archive /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/inputs/5b1786f1-10ad-48c5-9165-e21d9b72d0f6default.tgz to the CRAB cache. Using URI https://cmsweb.cern.ch/crabcache
+DEBUG 2015-09-24 12:44:54,163: 	 Result uploading input files: 109dd8430cb590c4704b26d09ffc5eb847fe69c414600eeaeb2b29c8e862c216.tar.gz 
+INFO 2015-09-24 12:44:54,163: 	 Sending the request to the server
+DEBUG 2015-09-24 12:44:54,163: 	 Submitting {'maxjobruntime': 1315, 'ignorelocality': 0, 'savelogsflag': 0, 'useparent': 0, 'asyncdest': 'T2_BR_SPRACE', 'algoargs': 1, 'cachefilename': '109dd8430cb590c4704b26d09ffc5eb847fe69c414600eeaeb2b29c8e862c216.tar.gz', 'numcores': 1, 'addoutputfiles': [], 'generator': 'pythia', 'maxmemory': 2000, 'publishdbsurl': 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter', 'priority': 10, 'jobsw': 'CMSSW_7_4_11_patch1', 'edmoutfiles': [], 'cacheurl': 'https://cmsweb.cern.ch/crabcache', 'inputdata': '/ZJetsToNuNu_HT-400To600_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM', 'dryrun': 0, 'workflow': 'crab_EDBR_ZJetsToNuNu_HT-400To600_25ns', 'adduserfiles': [], 'nonprodsw': 0, 'tfileoutfiles': ['treeEDBR_ZJetsToNuNu_HT-400To600_25ns.root'], 'oneEventMode': 0, 'saveoutput': 1, 'publication': 0, 'jobarch': 'slc6_amd64_gcc491', 'totalunits': 0, 'splitalgo': 'FileBased', 'nonvaliddata': 0, 'dbsurl': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader', 'publishgroupname': 0, 'publishname2': '', 'jobtype': 'Analysis'} 
+DEBUG 2015-09-24 12:44:54,164: 	 Encoded submit request: maxjobruntime=1315&ignorelocality=0&savelogsflag=0&useparent=0&asyncdest=T2_BR_SPRACE&algoargs=1&cachefilename=109dd8430cb590c4704b26d09ffc5eb847fe69c414600eeaeb2b29c8e862c216.tar.gz&numcores=1&generator=pythia&maxmemory=2000&publishdbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fphys03%2FDBSWriter&priority=10&jobsw=CMSSW_7_4_11_patch1&cacheurl=https%3A%2F%2Fcmsweb.cern.ch%2Fcrabcache&inputdata=%2FZJetsToNuNu_HT-400To600_13TeV-madgraph%2FRunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1%2FMINIAODSIM&dryrun=0&workflow=crab_EDBR_ZJetsToNuNu_HT-400To600_25ns&nonprodsw=0&oneEventMode=0&saveoutput=1&publication=0&jobarch=slc6_amd64_gcc491&totalunits=0&splitalgo=FileBased&nonvaliddata=0&dbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fglobal%2FDBSReader&publishgroupname=0&publishname2=&jobtype=Analysis&tfileoutfiles=treeEDBR_ZJetsToNuNu_HT-400To600_25ns.root
+DEBUG 2015-09-24 12:44:55,535: 	 Result: {'result': [{'RequestName': '150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns'}]}
+INFO 2015-09-24 12:44:55,554: 	 Success: Your task has been delivered to the CRAB3 server.
+INFO 2015-09-24 12:44:55,554: 	 Task name: 150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+INFO 2015-09-24 12:44:55,554: 	 Please use 'crab status' to check how the submission process proceeds.
+DEBUG 2015-09-24 12:44:55,554: 	 About to return
+INFO 2015-09-24 12:44:55,562: 	 Log file is /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/crab.log
+DEBUG 2015-09-24 13:25:37,843: 	 Executing command: 'status'
+DEBUG 2015-09-24 13:25:37,846: 	 Found CRAB cache file /afs/cern.ch/user/d/dromeroa/.crab3
+DEBUG 2015-09-24 13:25:37,877: 	 Checking credentials
+DEBUG 2015-09-24 13:25:37,879: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 13:25:37,879: 	 Getting proxy life time left
+DEBUG 2015-09-24 13:25:38,699: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 591496
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:25:39,409: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 591495
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:25:39,409: 	 Proxy valid for 164:18:16 hours
+DEBUG 2015-09-24 13:25:39,546: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 13:25:39,547: 	 Checking credentials
+DEBUG 2015-09-24 13:25:39,547: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 13:25:39,547: 	 Getting proxy life time left
+DEBUG 2015-09-24 13:25:40,259: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 591494
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:25:40,981: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 591494
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:25:40,982: 	 Proxy valid for 164:18:14 hours
+DEBUG 2015-09-24 13:25:41,967: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+DEBUG 2015-09-24 13:25:42,094: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 13:25:42,094: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2015-09-24 13:25:42,094: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad_cmsweb.cern.ch for credential name
+DEBUG 2015-09-24 13:25:44,610: 	 Executing : 
+ command : myproxy-info -l 27fc936903888720a93ac14eb6e40118b62fc44e -s myproxy.cern.ch
+ output : username: 27fc936903888720a93ac14eb6e40118b62fc44e
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  timeleft: 386:55:46  (16.1 days)
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:25:44,612: 	 Myproxy is valid: 1392946
+DEBUG 2015-09-24 13:25:44,612: 	 Command use: status
+DEBUG 2015-09-24 13:25:44,612: 	 Options use: []
+DEBUG 2015-09-24 13:25:45,042: 	 CRABClient version: 3.3.1509
+DEBUG 2015-09-24 13:25:45,042: 	 Instance is prod
+DEBUG 2015-09-24 13:25:45,042: 	 Server base url is cmsweb.cern.ch
+DEBUG 2015-09-24 13:25:45,042: 	 Command url /crabserver/prod/workflow
+DEBUG 2015-09-24 13:25:45,043: 	 Looking up detailed status of task 150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+DEBUG 2015-09-24 13:25:46,145: 	 {'status': 'COMPLETED', 'schedd': 'crab3test-3@vocms096.cern.ch', 'saveLogs': 'F', 'jobsPerStatus': {'finished': 34}, 'jobs': {'24': {'State': 'finished'}, '25': {'State': 'finished'}, '26': {'State': 'finished'}, '27': {'State': 'finished'}, '20': {'State': 'finished'}, '21': {'State': 'finished'}, '22': {'State': 'finished'}, '23': {'State': 'finished'}, '28': {'State': 'finished'}, '29': {'State': 'finished'}, '1': {'State': 'finished'}, '3': {'State': 'finished'}, '2': {'State': 'finished'}, '5': {'State': 'finished'}, '4': {'State': 'finished'}, '7': {'State': 'finished'}, '6': {'State': 'finished'}, '9': {'State': 'finished'}, '8': {'State': 'finished'}, '11': {'State': 'finished'}, '10': {'State': 'finished'}, '13': {'State': 'finished'}, '12': {'State': 'finished'}, '15': {'State': 'finished'}, '14': {'State': 'finished'}, '17': {'State': 'finished'}, '16': {'State': 'finished'}, '19': {'State': 'finished'}, '18': {'State': 'finished'}, '31': {'State': 'finished'}, '30': {'State': 'finished'}, '34': {'State': 'finished'}, '33': {'State': 'finished'}, '32': {'State': 'finished'}}, 'publication': {'disabled': []}, 'taskWarningMsg': [], 'publicationFailures': {}, 'outdatasets': None, 'taskFailureMsg': '', 'failedJobdefs': 0, 'ASOURL': 'https://cmsweb.cern.ch/couchdb', 'totalJobdefs': 0, 'jobSetID': '150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns', 'jobdefErrors': [], 'collector': 'cmssrv221.fnal.gov,vocms099.cern.ch', 'jobList': [['finished', 24], ['finished', 25], ['finished', 26], ['finished', 27], ['finished', 20], ['finished', 21], ['finished', 22], ['finished', 23], ['finished', 28], ['finished', 29], ['finished', 1], ['finished', 3], ['finished', 2], ['finished', 5], ['finished', 4], ['finished', 7], ['finished', 6], ['finished', 9], ['finished', 8], ['finished', 11], ['finished', 10], ['finished', 13], ['finished', 12], ['finished', 15], ['finished', 14], ['finished', 17], ['finished', 16], ['finished', 19], ['finished', 18], ['finished', 31], ['finished', 30], ['finished', 34], ['finished', 33], ['finished', 32]]}
+INFO 2015-09-24 13:25:46,148: 	 CRAB project directory:		/afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+INFO 2015-09-24 13:25:46,149: 	 Task name:			150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+INFO 2015-09-24 13:25:46,149: 	 Task status:			COMPLETED	on schedd: crab3test-3@vocms096.cern.ch
+INFO 2015-09-24 13:25:46,149: 	 Dashboard monitoring URL:	http://dashb-cms-job.cern.ch/dashboard/templates/task-analysis/#user=crab&refresh=0&table=Jobs&p=1&records=25&activemenu=2&status=&site=&tid=150924_104454%3Adromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+INFO 2015-09-24 13:25:46,149: 	 
+Jobs status:			finished      100.0% (34/34)
+INFO 2015-09-24 13:25:46,149: 	 
+No publication information (publication has been disabled in the CRAB configuration file)
+INFO 2015-09-24 13:25:46,154: 	 Log file is /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/crab.log
+DEBUG 2015-09-24 13:26:23,448: 	 Executing command: 'getoutput'
+DEBUG 2015-09-24 13:26:23,448: 	 Found CRAB cache file /afs/cern.ch/user/d/dromeroa/.crab3
+DEBUG 2015-09-24 13:26:23,458: 	 Checking credentials
+DEBUG 2015-09-24 13:26:23,459: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 13:26:23,459: 	 Getting proxy life time left
+DEBUG 2015-09-24 13:26:24,177: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 591450
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:24,890: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 591450
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:24,890: 	 Proxy valid for 164:17:30 hours
+DEBUG 2015-09-24 13:26:24,891: 	 Using VO group '' and VO role 'NULL' as written in the request cache file for this task.
+DEBUG 2015-09-24 13:26:25,007: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 13:26:25,007: 	 Checking credentials
+DEBUG 2015-09-24 13:26:25,007: 	 Found proxy file /tmp/x509up_u47670
+DEBUG 2015-09-24 13:26:25,007: 	 Getting proxy life time left
+DEBUG 2015-09-24 13:26:25,719: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -timeleft
+ output : 591449
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:26,554: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47670 -actimeleft
+ output : 591448
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:26,554: 	 Proxy valid for 164:17:29 hours
+DEBUG 2015-09-24 13:26:27,171: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u47670 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:27,625: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+DEBUG 2015-09-24 13:26:28,543: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2015-09-24 13:26:28,544: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2015-09-24 13:26:28,544: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad_cmsweb.cern.ch for credential name
+DEBUG 2015-09-24 13:26:28,750: 	 Executing : 
+ command : myproxy-info -l 27fc936903888720a93ac14eb6e40118b62fc44e -s myproxy.cern.ch
+ output : username: 27fc936903888720a93ac14eb6e40118b62fc44e
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0119).cern.ch
+  timeleft: 386:55:02  (16.1 days)
+
+ error: 
+ retcode : 0
+DEBUG 2015-09-24 13:26:28,752: 	 Myproxy is valid: 1392902
+DEBUG 2015-09-24 13:26:28,752: 	 Command use: getoutput
+DEBUG 2015-09-24 13:26:28,752: 	 Options use: []
+DEBUG 2015-09-24 13:26:29,186: 	 CRABClient version: 3.3.1509
+DEBUG 2015-09-24 13:26:29,186: 	 Instance is prod
+DEBUG 2015-09-24 13:26:29,186: 	 Server base url is cmsweb.cern.ch
+DEBUG 2015-09-24 13:26:29,186: 	 Command url /crabserver/prod/workflow
+DEBUG 2015-09-24 13:26:29,576: 	 Server result: {'result': ['150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns', '-1', 'SUBMITTED', '2015-09-24 10:44:55.525462', 'None', '2015-09-24 10:46:02.169348', 'None', 'CMSSW_7_4_11_patch1', 'slc6_amd64_gcc491', '/ZJetsToNuNu_HT-400To600_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM', '[]', '[]', 'FileBased', "{'splitOnRun': False, 'halt_job_on_file_boundaries': False, 'files_per_job': 1, 'runs': [], 'lumis': []}", '0', '109dd8430cb590c4704b26d09ffc5eb847fe69c414600eeaeb2b29c8e862c216.tar.gz', 'https://cmsweb.cern.ch/crabcache', 'dromeroa', '/DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=dromeroa/CN=748067/CN=David Romero Abad', 'cms', 'None', 'None', 'crab_EDBR_ZJetsToNuNu_HT-400To600_25ns-00000000000000000000000000000000', 'T2_BR_SPRACE', 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader', 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter', 'F', 'Analysis', '{}', '[]', 'F', 'vocms052', '[]', '1315', '1', '2000', '10', 'None', 'http://vocms096.cern.ch/mon/cms177/150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns', 'None', 'None', '[]', '[]', '[]', 'pythia', '[]', "['treeEDBR_ZJetsToNuNu_HT-400To600_25ns.root']", '[]', 'https://cmsweb.cern.ch/couchdb', 'None', '0', 'cmssrv221.fnal.gov,vocms099.cern.ch', 'crab3test-3@vocms096.cern.ch', 'F', '[]', 'T', '/store/user/dromeroa/', 'F', 'None', 'F', 'F', 'F', 'None'], 'desc': {'columns': ['tm_taskname', 'panda_jobset_id', 'tm_task_status', 'tm_start_time', 'tm_start_injection', 'tm_end_injection', 'tm_task_failure', 'tm_job_sw', 'tm_job_arch', 'tm_input_dataset', 'tm_site_whitelist', 'tm_site_blacklist', 'tm_split_algo', 'tm_split_args', 'tm_totalunits', 'tm_user_sandbox', 'tm_cache_url', 'tm_username', 'tm_user_dn', 'tm_user_vo', 'tm_user_role', 'tm_user_group', 'tm_publish_name', 'tm_asyncdest', 'tm_dbs_url', 'tm_publish_dbs_url', 'tm_publication', 'tm_job_type', 'tm_arguments', 'panda_resubmitted_jobs', 'tm_save_logs', 'tw_name', 'tm_user_infiles', 'tm_maxjobruntime', 'tm_numcores', 'tm_maxmemory', 'tm_priority', 'tm_output_dataset', 'tm_user_webdir', 'tm_activity', 'tm_scriptexe', 'tm_scriptargs', 'tm_extrajdl', 'tm_task_warnings', 'tm_generator', 'tm_outfiles', 'tm_tfile_outfiles', 'tm_edm_outfiles', 'tm_asourl', 'tm_events_per_lumi', 'tm_use_parent', 'tm_collector', 'tm_schedd', 'tm_dry_run', 'tm_user_files', 'tm_transfer_outputs', 'tm_output_lfn', 'tm_ignore_locality', 'tm_fail_limit', 'tm_one_event_mode', 'tm_publish_groupname', 'tm_nonvalid_input_dataset', 'tm_secondary_input_dataset']}}
+DEBUG 2015-09-24 13:26:29,576: 	 Retrieving locations for task 150924_104454:dromeroa_crab_EDBR_ZJetsToNuNu_HT-400To600_25ns
+DEBUG 2015-09-24 13:26:29,576: 	 Retrieving all file locations
+DEBUG 2015-09-24 13:26:34,873: 	 Server result: {'result': [{'checksum': {'adler32': '161976ba', 'cksum': 250560747, 'md5': '161976ba'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_15.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_15.root', 'jobid': 15, 'size': 675872}, {'checksum': {'adler32': '548a8fc2', 'cksum': 3220224429, 'md5': '548a8fc2'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_16.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_16.root', 'jobid': 16, 'size': 1072858}, {'checksum': {'adler32': '6496f477', 'cksum': 3057309916, 'md5': '6496f477'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_18.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_18.root', 'jobid': 18, 'size': 1106064}, {'checksum': {'adler32': '231d0b3d', 'cksum': 1459976441, 'md5': '231d0b3d'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_14.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_14.root', 'jobid': 14, 'size': 1070299}, {'checksum': {'adler32': 'e81a6ca5', 'cksum': 2398441864, 'md5': 'e81a6ca5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_24.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_24.root', 'jobid': 24, 'size': 1074827}, {'checksum': {'adler32': 'fef7c7f5', 'cksum': 1343068626, 'md5': 'fef7c7f5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_12.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_12.root', 'jobid': 12, 'size': 1065478}, {'checksum': {'adler32': 'e1aea5d4', 'cksum': 41198629, 'md5': 'e1aea5d4'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_23.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_23.root', 'jobid': 23, 'size': 228965}, {'checksum': {'adler32': 'a30ddf81', 'cksum': 1384791951, 'md5': 'a30ddf81'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_9.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_9.root', 'jobid': 9, 'size': 1044274}, {'checksum': {'adler32': '7fee224', 'cksum': 604057482, 'md5': '7fee224'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_10.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_10.root', 'jobid': 10, 'size': 1084992}, {'checksum': {'adler32': 'e1ed79cc', 'cksum': 2052280293, 'md5': 'e1ed79cc'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_11.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_11.root', 'jobid': 11, 'size': 1079340}, {'checksum': {'adler32': '937ba991', 'cksum': 23458781, 'md5': '937ba991'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_21.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_21.root', 'jobid': 21, 'size': 1082117}, {'checksum': {'adler32': 'dbfa677', 'cksum': 2349295550, 'md5': 'dbfa677'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_13.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_13.root', 'jobid': 13, 'size': 1073936}, {'checksum': {'adler32': '7c23cabf', 'cksum': 2400397194, 'md5': '7c23cabf'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_31.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_31.root', 'jobid': 31, 'size': 1084069}, {'checksum': {'adler32': 'af5043ff', 'cksum': 857068844, 'md5': 'af5043ff'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_22.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_22.root', 'jobid': 22, 'size': 193344}, {'checksum': {'adler32': 'fe0f4d08', 'cksum': 3422995971, 'md5': 'fe0f4d08'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_8.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_8.root', 'jobid': 8, 'size': 825210}, {'checksum': {'adler32': '4f768251', 'cksum': 1219073084, 'md5': '4f768251'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_33.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_33.root', 'jobid': 33, 'size': 1029066}, {'checksum': {'adler32': '58df4032', 'cksum': 481024806, 'md5': '58df4032'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_17.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_17.root', 'jobid': 17, 'size': 1063168}, {'checksum': {'adler32': '67fd33f3', 'cksum': 959052396, 'md5': '67fd33f3'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_20.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_20.root', 'jobid': 20, 'size': 847199}, {'checksum': {'adler32': 'c8f1949e', 'cksum': 1508536694, 'md5': 'c8f1949e'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_7.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_7.root', 'jobid': 7, 'size': 551614}, {'checksum': {'adler32': '91f1bc0f', 'cksum': 716132072, 'md5': '91f1bc0f'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_32.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_32.root', 'jobid': 32, 'size': 1081979}, {'checksum': {'adler32': 'e2eaaa5', 'cksum': 3491190205, 'md5': 'e2eaaa5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_6.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_6.root', 'jobid': 6, 'size': 1048480}, {'checksum': {'adler32': 'de7048b4', 'cksum': 3315497521, 'md5': 'de7048b4'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_34.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_34.root', 'jobid': 34, 'size': 336617}, {'checksum': {'adler32': 'dcc5e04d', 'cksum': 1521606506, 'md5': 'dcc5e04d'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_28.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_28.root', 'jobid': 28, 'size': 448657}, {'checksum': {'adler32': '2208e98', 'cksum': 2939209287, 'md5': '2208e98'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_1.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_1.root', 'jobid': 1, 'size': 343869}, {'checksum': {'adler32': 'c48af502', 'cksum': 3451300993, 'md5': 'c48af502'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_26.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_26.root', 'jobid': 26, 'size': 61143}, {'checksum': {'adler32': '35f0423c', 'cksum': 2276797696, 'md5': '35f0423c'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_25.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_25.root', 'jobid': 25, 'size': 97389}, {'checksum': {'adler32': '321a7e30', 'cksum': 1976850345, 'md5': '321a7e30'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_19.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_19.root', 'jobid': 19, 'size': 293740}, {'checksum': {'adler32': '60ac0ea1', 'cksum': 679367445, 'md5': '60ac0ea1'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_5.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_5.root', 'jobid': 5, 'size': 235236}, {'checksum': {'adler32': 'f8eb256b', 'cksum': 4209514446, 'md5': 'f8eb256b'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_27.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_27.root', 'jobid': 27, 'size': 345790}, {'checksum': {'adler32': '919dfbd7', 'cksum': 1285675310, 'md5': '919dfbd7'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_4.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_4.root', 'jobid': 4, 'size': 301908}, {'checksum': {'adler32': 'f53d32b1', 'cksum': 1799989168, 'md5': 'f53d32b1'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_29.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_29.root', 'jobid': 29, 'size': 157966}, {'checksum': {'adler32': '87c5e766', 'cksum': 2967691525, 'md5': '87c5e766'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_3.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_3.root', 'jobid': 3, 'size': 44920}, {'checksum': {'adler32': '4dcd18a2', 'cksum': 4020620752, 'md5': '4dcd18a2'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_2.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_2.root', 'jobid': 2, 'size': 65450}, {'checksum': {'adler32': 'f839a11f', 'cksum': 2727604639, 'md5': 'f839a11f'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_30.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_30.root', 'jobid': 30, 'size': 77473}], 'desc': {'columns': ['tm_taskname', 'panda_jobset_id', 'tm_task_status', 'tm_user_role', 'tm_user_group', 'tm_task_failure', 'tm_split_args', 'panda_resubmitted_jobs', 'tm_save_logs', 'tm_username', 'tm_user_dn', 'tm_arguments', 'tm_input_dataset', 'tm_dbs_url', 'tm_task_warnings', 'tm_publication', 'tm_user_webdir', 'tm_asourl', 'tm_output_dataset', 'tm_collector', 'tm_schedd', 'tm_dry_run']}}
+INFO 2015-09-24 13:26:34,877: 	 Setting the destination to /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/results 
+INFO 2015-09-24 13:26:34,878: 	 Retrieving 34 files
+DEBUG 2015-09-24 13:26:34,879: 	 Executing command: 'remote_copy'
+DEBUG 2015-09-24 13:26:34,879: 	 Found CRAB cache file /afs/cern.ch/user/d/dromeroa/.crab3
+DEBUG 2015-09-24 13:26:34,948: 	 Skipping proxy creation
+DEBUG 2015-09-24 13:26:34,948: 	 Command use: remote_copy
+DEBUG 2015-09-24 13:26:34,948: 	 Options use: ['--destination', '/afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/results', '--input', [{'checksum': {'adler32': '161976ba', 'cksum': 250560747, 'md5': '161976ba'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_15.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_15.root', 'jobid': 15, 'size': 675872}, {'checksum': {'adler32': '548a8fc2', 'cksum': 3220224429, 'md5': '548a8fc2'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_16.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_16.root', 'jobid': 16, 'size': 1072858}, {'checksum': {'adler32': '6496f477', 'cksum': 3057309916, 'md5': '6496f477'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_18.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_18.root', 'jobid': 18, 'size': 1106064}, {'checksum': {'adler32': '231d0b3d', 'cksum': 1459976441, 'md5': '231d0b3d'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_14.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_14.root', 'jobid': 14, 'size': 1070299}, {'checksum': {'adler32': 'e81a6ca5', 'cksum': 2398441864, 'md5': 'e81a6ca5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_24.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_24.root', 'jobid': 24, 'size': 1074827}, {'checksum': {'adler32': 'fef7c7f5', 'cksum': 1343068626, 'md5': 'fef7c7f5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_12.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_12.root', 'jobid': 12, 'size': 1065478}, {'checksum': {'adler32': 'e1aea5d4', 'cksum': 41198629, 'md5': 'e1aea5d4'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_23.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_23.root', 'jobid': 23, 'size': 228965}, {'checksum': {'adler32': 'a30ddf81', 'cksum': 1384791951, 'md5': 'a30ddf81'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_9.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_9.root', 'jobid': 9, 'size': 1044274}, {'checksum': {'adler32': '7fee224', 'cksum': 604057482, 'md5': '7fee224'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_10.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_10.root', 'jobid': 10, 'size': 1084992}, {'checksum': {'adler32': 'e1ed79cc', 'cksum': 2052280293, 'md5': 'e1ed79cc'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_11.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_11.root', 'jobid': 11, 'size': 1079340}, {'checksum': {'adler32': '937ba991', 'cksum': 23458781, 'md5': '937ba991'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_21.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_21.root', 'jobid': 21, 'size': 1082117}, {'checksum': {'adler32': 'dbfa677', 'cksum': 2349295550, 'md5': 'dbfa677'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_13.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_13.root', 'jobid': 13, 'size': 1073936}, {'checksum': {'adler32': '7c23cabf', 'cksum': 2400397194, 'md5': '7c23cabf'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_31.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_31.root', 'jobid': 31, 'size': 1084069}, {'checksum': {'adler32': 'af5043ff', 'cksum': 857068844, 'md5': 'af5043ff'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_22.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_22.root', 'jobid': 22, 'size': 193344}, {'checksum': {'adler32': 'fe0f4d08', 'cksum': 3422995971, 'md5': 'fe0f4d08'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_8.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_8.root', 'jobid': 8, 'size': 825210}, {'checksum': {'adler32': '4f768251', 'cksum': 1219073084, 'md5': '4f768251'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_33.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_33.root', 'jobid': 33, 'size': 1029066}, {'checksum': {'adler32': '58df4032', 'cksum': 481024806, 'md5': '58df4032'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_17.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_17.root', 'jobid': 17, 'size': 1063168}, {'checksum': {'adler32': '67fd33f3', 'cksum': 959052396, 'md5': '67fd33f3'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_20.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_20.root', 'jobid': 20, 'size': 847199}, {'checksum': {'adler32': 'c8f1949e', 'cksum': 1508536694, 'md5': 'c8f1949e'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_7.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_7.root', 'jobid': 7, 'size': 551614}, {'checksum': {'adler32': '91f1bc0f', 'cksum': 716132072, 'md5': '91f1bc0f'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_32.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_32.root', 'jobid': 32, 'size': 1081979}, {'checksum': {'adler32': 'e2eaaa5', 'cksum': 3491190205, 'md5': 'e2eaaa5'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_6.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_6.root', 'jobid': 6, 'size': 1048480}, {'checksum': {'adler32': 'de7048b4', 'cksum': 3315497521, 'md5': 'de7048b4'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_34.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_34.root', 'jobid': 34, 'size': 336617}, {'checksum': {'adler32': 'dcc5e04d', 'cksum': 1521606506, 'md5': 'dcc5e04d'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_28.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_28.root', 'jobid': 28, 'size': 448657}, {'checksum': {'adler32': '2208e98', 'cksum': 2939209287, 'md5': '2208e98'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_1.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_1.root', 'jobid': 1, 'size': 343869}, {'checksum': {'adler32': 'c48af502', 'cksum': 3451300993, 'md5': 'c48af502'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_26.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_26.root', 'jobid': 26, 'size': 61143}, {'checksum': {'adler32': '35f0423c', 'cksum': 2276797696, 'md5': '35f0423c'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_25.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_25.root', 'jobid': 25, 'size': 97389}, {'checksum': {'adler32': '321a7e30', 'cksum': 1976850345, 'md5': '321a7e30'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_19.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_19.root', 'jobid': 19, 'size': 293740}, {'checksum': {'adler32': '60ac0ea1', 'cksum': 679367445, 'md5': '60ac0ea1'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_5.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_5.root', 'jobid': 5, 'size': 235236}, {'checksum': {'adler32': 'f8eb256b', 'cksum': 4209514446, 'md5': 'f8eb256b'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_27.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_27.root', 'jobid': 27, 'size': 345790}, {'checksum': {'adler32': '919dfbd7', 'cksum': 1285675310, 'md5': '919dfbd7'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_4.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_4.root', 'jobid': 4, 'size': 301908}, {'checksum': {'adler32': 'f53d32b1', 'cksum': 1799989168, 'md5': 'f53d32b1'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_29.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_29.root', 'jobid': 29, 'size': 157966}, {'checksum': {'adler32': '87c5e766', 'cksum': 2967691525, 'md5': '87c5e766'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_3.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_3.root', 'jobid': 3, 'size': 44920}, {'checksum': {'adler32': '4dcd18a2', 'cksum': 4020620752, 'md5': '4dcd18a2'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_2.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_2.root', 'jobid': 2, 'size': 65450}, {'checksum': {'adler32': 'f839a11f', 'cksum': 2727604639, 'md5': 'f839a11f'}, 'pfn': 'srm://osg-se.sprace.org.br:8443/srm/managerv2?SFN=/pnfs/sprace.org.br/data/cms/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_30.root', 'lfn': '/store/user/dromeroa/ZJetsToNuNu_HT-400To600_13TeV-madgraph/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/150924_104454/0000/treeEDBR_ZJetsToNuNu_HT-400To600_25ns_30.root', 'jobid': 30, 'size': 77473}], '--dir', '/afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns', '--proxy', '/tmp/x509up_u47670', '--parallel', None, '--wait', None]
+DEBUG 2015-09-24 13:26:35,997: 	 CRABClient version: 3.3.1509
+DEBUG 2015-09-24 13:26:35,997: 	 Instance is prod
+DEBUG 2015-09-24 13:26:35,997: 	 Server base url is cmsweb.cern.ch
+DEBUG 2015-09-24 13:26:35,997: 	 Command url /crabserver/prod/workflow
+INFO 2015-09-24 13:26:36,073: 	 Will use `gfal-copy` command for file transfers
+DEBUG 2015-09-24 13:26:36,347: 	 Starting ChildProcess with 10 ChildProcess
+INFO 2015-09-24 13:26:36,429: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_15.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,452: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_16.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,464: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_18.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,497: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_14.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,523: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_24.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,545: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_12.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,564: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_23.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,575: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_9.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,601: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_10.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,621: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_11.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,641: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_21.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,679: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_13.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,714: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_31.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,803: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_22.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,823: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_8.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,851: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_33.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,911: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_17.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,930: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_20.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,944: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_7.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,959: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_32.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,971: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_6.root' in retrieval queue 
+INFO 2015-09-24 13:26:36,999: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_34.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,038: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_28.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,066: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_1.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,078: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_26.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,090: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_25.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,131: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_19.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,144: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_5.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,155: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_27.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,166: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_4.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,180: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_29.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,191: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_3.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,201: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_2.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,214: 	 Placing file 'treeEDBR_ZJetsToNuNu_HT-400To600_25ns_30.root' in retrieval queue 
+INFO 2015-09-24 13:26:37,214: 	 Please wait
+DEBUG 2015-09-24 13:26:37,214: 	 stopchildproc() method has been called
+INFO 2015-09-24 13:27:30,286: 	 Success: All files successfully retrieved
+INFO 2015-09-24 13:27:30,304: 	 Log file is /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP22/CMSSW_7_4_11_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/test/EDBR_crab_projects/crab_EDBR_ZJetsToNuNu_HT-400To600_25ns/crab.log
