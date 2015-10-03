@@ -22,7 +22,7 @@ VZ_JetMET       = True
 #*********************************** THE SAMPLES ****************************************************#
 # choose the sample                                                                     
 
-SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
+#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 #SAMPLE="RSGravToZZ_kMpl01_50ns_M_1000"
 #SAMPLE="RSGravToZZ_kMpl01_50ns_M_2000"
 #SAMPLE="BulkGravToZZToZlepZhad_M-600" 

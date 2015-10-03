@@ -108,6 +108,9 @@ private:
  std::string payload_;
  double prunedMassCorrection( double, double, const pat::Jet&, edm::ESHandle<JetCorrectorParametersCollection> ); 
 
+       //------------------ AK8 JET ID VARIABLES------------------------------------
+  double chf, nhf, cef, nef;
+  int nch, nconstituents;
 
   //-----------------------  AK4 JETS  ----------------------------------------------
   int numjets;
@@ -345,6 +348,16 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("delPhilepmet"    ,&delPhilepmet   ,"delPhilepmet/D"   );
   outTree_->Branch("deltaRlepjet"    ,&deltaRlepjet   ,"deltaRlepjet/D"   );
   outTree_->Branch("delPhijetmet"    ,&delPhijetmet   ,"delPhijetmet/D"   );
+
+  /// Jet ID variables
+  outTree_->Branch("chf"   ,&chf  ,"chf/D"  );
+  outTree_->Branch("nhf"   ,&nhf  ,"nhf/D"     );
+  outTree_->Branch("cef"   ,&cef  ,"cef/D"   );
+  outTree_->Branch("nef"   ,&nef  ,"nef/D"   );
+  outTree_->Branch("nch"   ,&nch  ,"nch/I"   );
+  outTree_->Branch("nconstituents"  ,&nconstituents  ,"nconstituents/I"   );
+
+
 }
 
 
@@ -642,6 +655,22 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    //jecAK8_->setRho   ( rho );
                    //jecAK8_->setNPV   ( vertices->size() );
                    //double corr = jecAK8_->getCorrection(); 
+                   ////----------- FOR JET ID  --------////
+                   chf = 0.0;
+                   nhf = 0.0;
+                   cef = 0.0;
+                   nef = 0.0;
+                   nch = 0;
+                   nconstituents = 0;
+                   //// ----   JET ID VARIABLES ------ ////
+                   if ( hadronicVnu.isPFJet() ) {
+                    chf = hadronicVnu.chargedHadronEnergyFraction();
+                    nhf = hadronicVnu.neutralHadronEnergyFraction();
+                    cef = hadronicVnu.chargedEmEnergyFraction();
+                    nef = hadronicVnu.neutralEmEnergyFraction();
+                    nch = hadronicVnu.chargedMultiplicity();
+                    nconstituents = hadronicVnu.numberOfDaughters();
+                   }
                    ////----- OTHER VARIABLES --------//// 
                    ptVhad    = hadronicVnu.pt();
                    yVhad     = hadronicVnu.eta();
@@ -886,6 +915,12 @@ void EDBRTreeMaker::setDummyValues() {
      highPtMu2      = -1e4;
      regjetspt      = -1e4;
      regjetsmass    = -1e4;
+     chf            = -1e4;
+     nhf            = -1e4;
+     cef            = -1e4;
+     nef            = -1e4;
+     nch            = -1e4; 
+     nconstituents  = -1e4;
 
 }
 
