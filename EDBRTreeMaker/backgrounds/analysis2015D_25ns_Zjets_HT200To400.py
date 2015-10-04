@@ -28,7 +28,7 @@ VZ_JetMET       = True
 
 ###------   Z +JETS  -----------
 #SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
-#SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
+SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
 
@@ -135,10 +135,10 @@ process.gravitonFilter =  cms.EDFilter(   "CandViewCountFilter",
 
 process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isGen           = cms.bool    (  False                     ),
-                                          isData          = cms.bool    (  False                      ),
+                                          isData          = cms.bool    (  False                     ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  122                       ),
+                                          targetLumiInvPb = cms.double  (  150.6                     ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),

@@ -23,4 +23,4 @@ cd /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP29_GIT/CMSSW_7_4_13/src/ED
 
 eval `scramv1 runtime -sh`
 
-
+cmsRun analysis2015D_25ns_mc_signal.py
