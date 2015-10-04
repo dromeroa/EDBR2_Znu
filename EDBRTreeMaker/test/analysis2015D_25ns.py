@@ -58,64 +58,30 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
-configXsecs = {  "BulkGravToZZToZlepZhad_M-600"         : 4.0151E-04,
-                 "BulkGravToZZToZlepZhad_M-800"         : 7.3592E-05,
-                 "BulkGravToZZToZlepZhad_M-1000"        : 1.9648E-05,
-                 "BulkGravToZZToZlepZhad_M-1200"        : 6.5205E-06,
-                 "BulkGravToZZToZlepZhad_M-1400"        : 2.4833E-06,
-                 "BulkGravToZZToZlepZhad_M-1600"        : 8.1645E-07,
-                 "BulkGravToZZToZlepZhad_M-1800"        : 3.7583E-07,
-                 "BulkGravToZZToZlepZhad_M-2000"        : 2.2636E-07,
-                 "BulkGravToZZToZlepZhad_M-2500"        : 4.2349E-08,
-                 "BulkGravToZZToZlepZhad_M-3000"        : 9.2671E-09,
-                 "BulkGravToZZToZlepZhad_M-3500"        : 4.7064E-09,
-                 "BulkGravToZZToZlepZhad_M-4000"        : 1.9530E-09,
-                 "BulkGravToZZToZlepZhad_M-4500"        : 8.9900E-10,
-                 "RSGravToZZ_kMpl01_50ns_M_1000"        : 1,
-                 "RSGravToZZ_kMpl01_50ns_M_2000"        : 1,
-                 "WJetsToLNu"                           : 61526.7,
-                 "QCD_Pt_120to170_13TeV_50ns"           : 471100,
-                 "QCD_Pt_170to300_13TeV_50ns"           : 117276,
-                 "QCD_Pt_300to470_13TeV_50ns"           : 7823.0,
-                 "QCD_Pt_470to600_13TeV_50ns"           : 648.2,
-                 "QCD_Pt_600to800_13TeV_50ns"           : 186.9,
-                 "QCD_Pt_800to1000_13TeV_50ns"          : 32.293,
-                 "QCD_Pt_1000to1400_13TeV_50ns"         : 9.83,
-                 "QCD_Pt_1400to1800_13TeV_50ns"         : 0.842650,
-                 "QCD_Pt_1800to2400_13TeV_50ns"         : 0.114943,
-                 "QCD_Pt_2400to3200_13TeV_50ns"         : 0.006830,
-                 "QCD_Pt_3200toInf_13TeV_50ns"          : 0.000165,
-                 "RSGravToZZ_kMpl01_M-2000_25ns"        : 1,
+configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
+                "RSGravToZZ_kMpl01_M-2000_25ns"        : 1,
+                "ZJetsToNuNu_HT-100To200_25ns"         : 280.47,
+                "ZJetsToNuNu_HT-200To400_25ns"         : 78.36,
+                "ZJetsToNuNu_HT-400To600_25ns"         : 10.944,
+                "ZJetsToNuNu_HT-600ToInf_25ns"         : 4.203,
+                "WJetsToLNu_HT-100To200_25ns"          : 1292,
+                "WJetsToLNu_HT-200To400_25ns"          : 385.9,
+                "WJetsToLNu_HT-400To600_25ns"          : 47.9,
+                "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
+
               }
 
-configNevents = {"BulkGravToZZToZlepZhad_M-600"         : 50000,
-                 "BulkGravToZZToZlepZhad_M-800"         : 50000,
-                 "BulkGravToZZToZlepZhad_M-1000"        : 48400,
-                 "BulkGravToZZToZlepZhad_M-1200"        : 49200,
-                 "BulkGravToZZToZlepZhad_M-1400"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-1600"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-1800"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-2000"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-2500"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-3000"        : 49200,
-                 "BulkGravToZZToZlepZhad_M-3500"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-4000"        : 50000,
-                 "BulkGravToZZToZlepZhad_M-4500"        : 50000,
-                 "RSGravToZZ_kMpl01_50ns_M_1000"        : 29586,
-                 "RSGravToZZ_kMpl01_50ns_M_2000"        : 29751,
-                 "WJetsToLNu"                           : 24089991,
-                 "QCD_Pt_120to170_13TeV_50ns"           : 3446207,
-                 "QCD_Pt_170to300_13TeV_50ns"           : 3438066,
-                 "QCD_Pt_300to470_13TeV_50ns"           : 2930578,
-                 "QCD_Pt_470to600_13TeV_50ns"           : 1939229,
-                 "QCD_Pt_600to800_13TeV_50ns"           : 1890256,
-                 "QCD_Pt_800to1000_13TeV_50ns"          : 1911296,
-                 "QCD_Pt_1000to1400_13TeV_50ns"         : 1461216,
-                 "QCD_Pt_1400to1800_13TeV_50ns"         : 197959,
-                 "QCD_Pt_1800to2400_13TeV_50ns"         : 194924,
-                 "QCD_Pt_2400to3200_13TeV_50ns"         : 198383,
-                 "QCD_Pt_3200toInf_13TeV_50ns"          : 188696,
+configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
                  "RSGravToZZ_kMpl01_M-2000_25ns"        : 29751,
+                 "ZJetsToNuNu_HT-100To200_25ns"         : 5148193,
+                 "ZJetsToNuNu_HT-200To400_25ns"         : 5032927,
+                 "ZJetsToNuNu_HT-400To600_25ns"         : 1014139,
+                 "ZJetsToNuNu_HT-600ToInf_25ns"         : 1015904,
+                 "WJetsToLNu_HT-100To200_25ns"          : 10142187,
+                 "WJetsToLNu_HT-200To400_25ns"          : 5231856,
+                 "WJetsToLNu_HT-400To600_25ns"          : 1901705,
+                 "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
+
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -353,12 +319,8 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+"last.root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
                                   )
 
 
-#process.out = cms.OutputModule("PoolOutputModule",
-#          fileName = cms.untracked.string('patTuple.root'),
-#          outputCommands = cms.untracked.vstring('keep *')
-#)
-#process.outpath = cms.EndPath(process.out)
+
