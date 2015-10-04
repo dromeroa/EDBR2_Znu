@@ -19,43 +19,34 @@ VZ_JetMET       = True
 #                                                                                                    #
 #****************************************************************************************************#
 
+
 #*********************************** THE SAMPLES ****************************************************#
-# choose the sample                                                                     
+### CHOOSE THE SAMPLE :                                                                   
 
+###-------- RSGRrav------------------
 #SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
-#SAMPLE="RSGravToZZ_kMpl01_50ns_M_1000"
-#SAMPLE="RSGravToZZ_kMpl01_50ns_M_2000"
-#SAMPLE="BulkGravToZZToZlepZhad_M-600" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-800" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-1000" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-1200" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-1400" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-1600" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-1800" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-2000" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-2500" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-3000" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-3500" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-4000" 
-#SAMPLE="BulkGravToZZToZlepZhad_M-4500" 
 
-###--- W + jets---------------------
+###------   Z +JETS  -----------
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
+#SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
+#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
 
-#SAMPLE="WJetsToLNu"
+###-----   W + jets-------------------
+#SAMPLE="WJetsToLNu_25ns_inclusive"
+#SAMPLE="WJetsToLNu_HT-100To200_25ns"
+#SAMPLE="WJetsToLNu_HT-200To400_25ns"
+#SAMPLE="WJetsToLNu_HT-400To600_25ns"
+#SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
 
-###-------  QCD   -----------------
+### ------- TTJets ------------------
+#SAMPLE="TTJets_25ns_madgraph"
+#SAMPLE="TTjets_25ns_powheg" 
 
-#SAMPLE="QCD_Pt_120to170_13TeV_50ns"
-#SAMPLE="QCD_Pt_170to300_13TeV_50ns"
-#SAMPLE="QCD_Pt_300to470_13TeV_50ns"
-#SAMPLE="QCD_Pt_470to600_13TeV_50ns"
-#SAMPLE="QCD_Pt_600to800_13TeV_50ns"        
-#SAMPLE="QCD_Pt_800to1000_13TeV_50ns"        
-#SAMPLE="QCD_Pt_1000to1400_13TeV_50ns"       
-#SAMPLE="QCD_Pt_1400to1800_13TeV_50ns"      
-#SAMPLE="QCD_Pt_1800to2400_13TeV_50ns"     
-#SAMPLE="QCD_Pt_2400to3200_13TeV_50ns"       
-#SAMPLE="QCD_Pt_3200toInf_13TeV_50ns" 
+### ------- Dibosons ---------------
+#SAMPLE="WW_25ns"
+#SAMPLE="WZ_25ns"
+#SAMPLE="ZZ_25ns"
 
 
 ### Source
