@@ -28,6 +28,7 @@ SAMPLE="MET_Run2015D"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
+#process.maxEvents.input =1000000 
 process.maxEvents.input = -1
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -94,7 +95,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  122                     ),
+                                          targetLumiInvPb = cms.double  (  150.6                     ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -274,7 +275,7 @@ if VZ_JetMET == True :
     ## goodVertex is run after this sequence
 
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
-                                                process.ApplyBaselineHBHENoiseFilter      *
+#                                                process.ApplyBaselineHBHENoiseFilter      *
                                                 process.eeBadScFilter                     *
                                                 process.CSCTightHaloFilter
                                              )
@@ -312,6 +313,6 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+"withfilter.root")
                                   )
 

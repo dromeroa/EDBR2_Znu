@@ -49,6 +49,11 @@
 #include "TLorentzVector.h"
 #include "TMath.h"
 
+////------TRIGGER
+#include "FWCore/Common/interface/TriggerNames.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 //
 // class declaration
@@ -117,6 +122,9 @@ private:
   double regjetspt , regjetseta, regjetsphi,  regjetsmass;
   double HT, MHTx, MHTy, MHT;
 
+  //------------ THE MET FILTER FUNCTION --------------------------------------------
+  bool Pass_Filter(edm::Handle<edm::TriggerResults> triggerResults, const edm::TriggerNames & triggerNames, std::string triggPath);
+  bool is_HBHENoiseFilter_Fired;
   //-------------------- LEPTONS -----------------------------------------------------
   double ptlep1,   ptlep2;
   double etalep1,  etalep2;
@@ -348,6 +356,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("delPhilepmet"    ,&delPhilepmet   ,"delPhilepmet/D"   );
   outTree_->Branch("deltaRlepjet"    ,&deltaRlepjet   ,"deltaRlepjet/D"   );
   outTree_->Branch("delPhijetmet"    ,&delPhijetmet   ,"delPhijetmet/D"   );
+
+  outTree_->Branch("is_HBHENoiseFilter_Fired"    ,&is_HBHENoiseFilter_Fired   ,"is_HBHENoiseFilter_Fired/O"   ); 
 
   /// Jet ID variables
   outTree_->Branch("chf"   ,&chf  ,"chf/D"  );
@@ -646,15 +656,13 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////--------------------------------------------------------------------------------////   
                    ////-------------------  HADRONS ---------------------------------------------------////
                    ////--------------------------------------------------------------------------------////
-                   //// JEC
-                   //reco::Candidate::LorentzVector uncorrJet = hadronicVnu.correctedP4(0);
-                   //jecAK8_->setJetEta( uncorrJet.eta() );
-                   //jecAK8_->setJetPt ( uncorrJet.pt() );
-                   //jecAK8_->setJetE  ( uncorrJet.energy() );
-                   //jecAK8_->setJetA  ( hadronicVnu.jetArea() );
-                   //jecAK8_->setRho   ( rho );
-                   //jecAK8_->setNPV   ( vertices->size() );
-                   //double corr = jecAK8_->getCorrection(); 
+                   ////------- FLAG FOR MET FILTER -----////
+                   edm::Handle<edm::TriggerResults> trigResults2;
+                   //// This configuration is for data, in case of MC, check if RECO have to change
+                   edm::InputTag trigResultsTag2("TriggerResults","","RECO");
+                   iEvent.getByLabel(trigResultsTag2,trigResults2);
+                   const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2); 
+                   is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");
                    ////----------- FOR JET ID  --------////
                    chf = 0.0;
                    nhf = 0.0;
@@ -808,6 +816,17 @@ double EDBRTreeMaker::prunedMassCorrection( double rho,
       jecAK8->setJetEta( jet.correctedP4(0).eta() );
       jecAK8->setJetE ( jet.correctedP4(0).energy() );
       return jecAK8->getCorrection();
+}
+
+bool EDBRTreeMaker::Pass_Filter( edm::Handle<edm::TriggerResults> trigResults, 
+                                 const edm::TriggerNames & trigNames,
+                                 std::string triggPath){
+   bool isFired_Filter = false;
+   unsigned int TrggIndex( trigNames.triggerIndex(triggPath) );
+   if(TrggIndex < trigResults->size())isFired_Filter = trigResults->accept(TrggIndex);
+
+   return isFired_Filter;
+
 }
 
 void EDBRTreeMaker::setDummyValues() {
