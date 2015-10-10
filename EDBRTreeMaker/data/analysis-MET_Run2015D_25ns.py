@@ -75,6 +75,10 @@ process.bestLeptonicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("leptonicVSelector"),
                                           maxNumber = cms.uint32(1) )
 
+
+process.corrJetsProducer.isData = True
+
+
 process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("hadronicV"),
                                           maxNumber = cms.uint32(1) )
