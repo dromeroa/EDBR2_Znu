@@ -46,9 +46,9 @@ usedNevents = configNevents[SAMPLE]
 
 #*********************************** JSON file ****************************************************#
 # https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
-# last modified 25-Sep-2015 
+# last modified 09-Oct-2015 
 import FWCore.PythonUtilities.LumiList as LumiList
-process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-256869_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt').getVLuminosityBlockRange()
 #*******************************************************************************************************#
 
 ### Hadronic and leptonic boson.
@@ -317,6 +317,6 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+"withfilter.root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
                                   )
 
