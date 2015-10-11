@@ -137,8 +137,8 @@ if option == 'RECO':
     process.hadronicV.cut = cms.string('pt > 200. '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
-    ##-----  FOR NOW NO CUT IN JET MASS  --------------##
-    process.hadronicVnu.cut = cms.string('pt > 200. ')
+
+    ##-----  FOR NOW CUT IN MET --------------##
     process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
@@ -226,8 +226,8 @@ if VZ_JetMET == True :
 
 
     process.jetSequence.replace(    process.fatJetsSequence,
-                                    process.fatJetsNuSequence  *
-                                    process.hadronicVnu        )
+                                    process.fatJetsNuSequence       *
+                                    process.hadronicVnuSequence     )
 
     process.jetSequence.remove(process.hadronicV)
 
