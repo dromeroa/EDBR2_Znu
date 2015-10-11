@@ -265,8 +265,8 @@ if VZ_JetMET == True :
 
 
     process.jetSequence.replace(    process.fatJetsSequence, 
-                                    process.fatJetsNuSequence  *
-                                    process.hadronicVnu        )
+                                    process.fatJetsNuSequence          *
+                                    process.hadronicVnuSequence        )
 
     process.jetSequence.remove(process.hadronicV) 
 
@@ -296,12 +296,10 @@ if VZ_JetMET == True :
                                     process.metSequence              *  
                                     process.egmGsfElectronIDs        *    
                                     process.VETOSelectEvents         *
-#                                    process.elevetoSequence          *
                                     process.egmPhotonIDs             *
                                     process.photonvetoSequence       *
                                     process.muonsVetoSequence        *
                                     process.tausVetoSequence
-#                                    process.ak4jecSequence       
                             )
 
     process.analysis.remove(process.leptonSequence)
