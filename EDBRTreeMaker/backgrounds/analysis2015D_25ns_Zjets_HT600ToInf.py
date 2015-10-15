@@ -27,10 +27,10 @@ VZ_JetMET       = True
 #SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
-#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
+SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
 
 ###-----   W + jets-------------------
 #SAMPLE="WJetsToLNu_25ns_inclusive"

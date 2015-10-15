@@ -9,9 +9,10 @@ process.load("Configuration.Geometry.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 ### find the global tag in the DAS under the Configs for given dataset
 ###
-### new global tag with last JEC 12 Oct 
-### from https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD#Run2015D_PromptReco_v4_Data_2015 
-process.GlobalTag.globaltag = '74X_dataRun2_Prompt_v4'
+### new global tag with new JEC
+###  Taken from the MINIAOD https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD#Run2015D_PromptReco_v4_Data_2015 and
+### https://twiki.cern.ch/twiki/bin/view/CMS/JECDataMC#Recommended_for_MC
+process.GlobalTag.globaltag = '74X_dataRun2_reMiniAOD_v0'
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
@@ -29,7 +30,7 @@ SAMPLE="MET_Run2015D"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
-#process.maxEvents.input =1000000 
+#process.maxEvents.input =10000 
 process.maxEvents.input = -1
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -47,9 +48,9 @@ usedNevents = configNevents[SAMPLE]
 
 #*********************************** JSON file ****************************************************#
 # https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
-# last modified 09-Oct-2015 
+# last modified 12-Oct-2015 
 import FWCore.PythonUtilities.LumiList as LumiList
-process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.txt').getVLuminosityBlockRange()
 #*******************************************************************************************************#
 
 ### Hadronic and leptonic boson.
@@ -95,12 +96,13 @@ process.gravitonFilter =  cms.EDFilter(   "CandViewCountFilter",
                                           minNumber = cms.uint32(1),
                                           filter = cms.bool(True) )
 
+#### The luminosity is taken from last json from the Laura email
 process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isGen           = cms.bool    (  False                     ),
                                           isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  668.93                    ),
+                                          targetLumiInvPb = cms.double  (  594.65                     ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -247,7 +249,7 @@ if VZ_JetMET == True :
         setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
 
 
-    ### LAST UPDATE FROM 10 Oct 2015
+
     ###---------------- MET FILTERS DATA ---------------------------------------------###
     ###-------------------------------------------------------------------------------###
     process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
@@ -264,15 +266,6 @@ if VZ_JetMET == True :
        inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHEIsoNoiseFilterResult'),
        reverseDecision = cms.bool(False)
     )
-
-
-#    process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-###    process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
-
-#    process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
-#         inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
-#         reverseDecision = cms.bool(False)
-#    )
 
     process.eeBadScFilter = cms.EDFilter("HLTHighLevel",
         TriggerResultsTag  = cms.InputTag("TriggerResults","","RECO"),
@@ -295,9 +288,11 @@ if VZ_JetMET == True :
 
     ## goodVertex is run after this sequence
 
+
+### FOR NOW NO HBHE ISO FILTER
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
                                                 process.ApplyBaselineHBHENoiseFilter      *
-                                                process.ApplyBaselineHBHEIsoNoiseFilter   *
+#                                                process.ApplyBaselineHBHEIsoNoiseFilter   *
                                                 process.eeBadScFilter                     *
                                                 process.CSCTightHaloFilter
                                              )
@@ -334,6 +329,6 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+"v4.root")
                                   )
 

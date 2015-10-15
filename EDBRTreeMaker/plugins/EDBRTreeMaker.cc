@@ -659,7 +659,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////------- FLAG FOR MET FILTER -----////
                    edm::Handle<edm::TriggerResults> trigResults2;
                    //// This configuration is for data, in case of MC, check if RECO have to change
-                   edm::InputTag trigResultsTag2("TriggerResults","","RECO");
+                   //// For Data
+                   //edm::InputTag trigResultsTag2("TriggerResults","","RECO");
+                   //// For MC
+                   edm::InputTag trigResultsTag2("TriggerResults","","PAT");
                    iEvent.getByLabel(trigResultsTag2,trigResults2);
                    const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2); 
                    is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");

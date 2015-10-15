@@ -17,9 +17,8 @@
 #            bsub -q 2nd -M 50000 -J job2 < lxbatchSubmit.sh
 
 export X509_USER_PROXY=/afs/cern.ch/user/d/dromeroa/x509up_u47670
-cd /afs/cern.ch/work/d/dromeroa/private/EDBR_CRAB3_SEP30/CMSSW_7_4_13/src/ExoDiBosonResonances/EDBRTreeMaker/data
+cd /afs/cern.ch/work/d/dromeroa/private/EDBR2_PILEUP_Oct11/CMSSW_7_4_14/src/ExoDiBosonResonances/EDBRTreeMaker/data
 
 eval `scramv1 runtime -sh`
 
-cmsRun analysis-MET_Run2015D_25ns.py
-
+cmsRun analysis-MET_Run2015D_25ns_v4.py

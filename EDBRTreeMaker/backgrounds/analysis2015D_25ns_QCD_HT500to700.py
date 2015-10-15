@@ -27,7 +27,7 @@ VZ_JetMET       = True
 #SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
@@ -48,6 +48,12 @@ SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="WZ_25ns"
 #SAMPLE="ZZ_25ns"
 
+###-------- QCD ------------------
+#SAMPLE="QCD_HT2000toInf_25ns"
+#SAMPLE="QCD_HT1500to2000_25ns"
+#SAMPLE="QCD_HT1000to1500_25ns"
+#SAMPLE="QCD_HT700to1000_25ns"
+SAMPLE="QCD_HT500to700_25ns"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
@@ -68,6 +74,12 @@ configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
                 "WJetsToLNu_HT-200To400_25ns"          : 385.9,
                 "WJetsToLNu_HT-400To600_25ns"          : 47.9,
                 "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
+                "WW_25ns"                              : 118.7,
+                "QCD_HT500to700_25ns"                  : 29370.0,
+                "QCD_HT700to1000_25ns"                 : 6524.0,
+                "QCD_HT1000to1500_25ns"                : 1064.0,
+                "QCD_HT1500to2000_25ns"                : 121.5,   
+                "QCD_HT2000toInf_25ns"                 : 25.42,    
 
               }
 
@@ -81,6 +93,12 @@ configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
                  "WJetsToLNu_HT-200To400_25ns"          : 5231856,
                  "WJetsToLNu_HT-400To600_25ns"          : 1901705,
                  "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
+                 "WW_25ns"                              : 994416,
+                 "QCD_HT500to700_25ns"                  : 19542847,
+                 "QCD_HT700to1000_25ns"                 : 1961774,
+                 "QCD_HT1000to1500_25ns"                : 4963895, 
+                 "QCD_HT1500to2000_25ns"                : 3848411,  
+                 "QCD_HT2000toInf_25ns"                 : 1961774,
 
                 }
 

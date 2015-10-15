@@ -27,7 +27,7 @@ VZ_JetMET       = True
 #SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
@@ -44,7 +44,7 @@ SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="TTjets_25ns_powheg" 
 
 ### ------- Dibosons ---------------
-#SAMPLE="WW_25ns"
+SAMPLE="WW_25ns"
 #SAMPLE="WZ_25ns"
 #SAMPLE="ZZ_25ns"
 
@@ -68,6 +68,7 @@ configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
                 "WJetsToLNu_HT-200To400_25ns"          : 385.9,
                 "WJetsToLNu_HT-400To600_25ns"          : 47.9,
                 "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
+                "WW_25ns"                              : 118.7,
 
               }
 
@@ -81,6 +82,7 @@ configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
                  "WJetsToLNu_HT-200To400_25ns"          : 5231856,
                  "WJetsToLNu_HT-400To600_25ns"          : 1901705,
                  "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
+                 "WW_25ns"                              : 994416, 
 
                 }
 

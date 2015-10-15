@@ -24,10 +24,10 @@ VZ_JetMET       = True
 ### CHOOSE THE SAMPLE :                                                                   
 
 ###-------- RSGRrav------------------
-#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
+SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
@@ -52,7 +52,7 @@ SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
 process.maxEvents.input = -1
-#process.maxEvents.input = 10000
+#process.maxEvents.input = 1000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -138,7 +138,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  False                     ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  594.65                    ),
+                                          targetLumiInvPb = cms.double  (  594.65                     ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -176,7 +176,7 @@ if option == 'RECO':
     process.hadronicV.cut = cms.string('pt > 200. '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
-    ##-----  FOR NOW NO CUT IN MET -------------##
+    ##-----  FOR NOW CUT IN MET  --------------##
     process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 

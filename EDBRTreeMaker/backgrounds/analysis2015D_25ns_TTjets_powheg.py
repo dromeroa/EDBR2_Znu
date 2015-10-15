@@ -27,7 +27,7 @@ VZ_JetMET       = True
 #SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
@@ -41,7 +41,8 @@ SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
 
 ### ------- TTJets ------------------
 #SAMPLE="TTJets_25ns_madgraph"
-#SAMPLE="TTjets_25ns_powheg" 
+SAMPLE="TTjets_25ns_powheg" 
+#SAMPLE="TTjets_25ns_amcatnlo"
 
 ### ------- Dibosons ---------------
 #SAMPLE="WW_25ns"
@@ -68,6 +69,8 @@ configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
                 "WJetsToLNu_HT-200To400_25ns"          : 385.9,
                 "WJetsToLNu_HT-400To600_25ns"          : 47.9,
                 "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
+                "TTJets_25ns_amcatnlo"                 : 831.76,  
+                "TTjets_25ns_powheg"                   : 831.76,  
 
               }
 
@@ -81,6 +84,9 @@ configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
                  "WJetsToLNu_HT-200To400_25ns"          : 5231856,
                  "WJetsToLNu_HT-400To600_25ns"          : 1901705,
                  "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
+                 "TTJets_25ns_amcatnlo"                 : 42730273,
+                 "TTjets_25ns_powheg"                   : 19899500,
+
 
                 }
 

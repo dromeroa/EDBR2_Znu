@@ -28,7 +28,7 @@ SAMPLE="MET_Run2015D"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
-#process.maxEvents.input =1000000 
+#process.maxEvents.input =10000 
 process.maxEvents.input = -1
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -279,7 +279,7 @@ if VZ_JetMET == True :
     ## goodVertex is run after this sequence
 
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
-#                                                process.ApplyBaselineHBHENoiseFilter      *
+                                                process.ApplyBaselineHBHENoiseFilter      *
                                                 process.eeBadScFilter                     *
                                                 process.CSCTightHaloFilter
                                              )
