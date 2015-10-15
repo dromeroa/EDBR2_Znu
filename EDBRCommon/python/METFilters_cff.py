@@ -9,6 +9,8 @@ HBHENoiseFilter = cms.EDFilter("HLTHighLevel",
            throw              = cms.bool(True)
 )
 
+
+
 goodVertices = cms.EDFilter("HLTHighLevel",
         TriggerResultsTag  = cms.InputTag("TriggerResults","","PAT"),
         HLTPaths           = cms.vstring("Flag_goodVertices"),
