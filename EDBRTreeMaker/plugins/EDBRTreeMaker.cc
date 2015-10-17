@@ -356,6 +356,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("delPhilepmet"    ,&delPhilepmet   ,"delPhilepmet/D"   );
   outTree_->Branch("deltaRlepjet"    ,&deltaRlepjet   ,"deltaRlepjet/D"   );
   outTree_->Branch("delPhijetmet"    ,&delPhijetmet   ,"delPhijetmet/D"   );
+  outTree_->Branch("deltaPhijetjetabs"   ,&deltaPhijetjetabs   ,"deltaPhijetjetabs/D");
 
   outTree_->Branch("is_HBHENoiseFilter_Fired"    ,&is_HBHENoiseFilter_Fired   ,"is_HBHENoiseFilter_Fired/O"   ); 
 
@@ -723,7 +724,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////-----------------------------------------------------------------------------------////
                    ////--------------------------------  AK4 JETS  ---------------------------------------////
                    ////-----------------------------------------------------------------------------------////
-                   edm::Handle<std::vector<pat::Jet>> jets;
+                   edm::Handle<pat::JetCollection> jets; 
                    iEvent.getByLabel("slimmedJets", jets);
                    ////--- NUMBER OF JETS ----//// 
                    numjets = jets->size();
@@ -883,6 +884,7 @@ void EDBRTreeMaker::setDummyValues() {
      delPhilepmet   = -1e4;
      delPhijetmet   = -1e4;
      deltaphijetmet = -1e4; 
+     deltaPhijetjetabs = -1e4;
      lep            = -1e4;
      reg            = -1e4;
      rho            = -1e4;
