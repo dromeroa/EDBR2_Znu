@@ -119,12 +119,12 @@ private:
 
   //-----------------------  AK4 JETS  ----------------------------------------------
   int numjets;
-  double regjetspt , regjetseta, regjetsphi,  regjetsmass;
+  double ak4jetspt , ak4jetseta, ak4jetsphi,  ak4jetsmass;
   double HT, MHTx, MHTy, MHT;
-  std::vector<double> regjets_pt;
-  std::vector<double> regjets_eta;
-  std::vector<double> regjets_phi;
-  std::vector<double> regjets_mass;
+  std::vector<double> ak4jets_pt;
+  std::vector<double> ak4jets_eta;
+  std::vector<double> ak4jets_phi;
+  std::vector<double> ak4jets_mass;
 
   //------------ THE MET FILTER FUNCTION --------------------------------------------
   bool Pass_Filter(edm::Handle<edm::TriggerResults> triggerResults, const edm::TriggerNames & triggerNames, std::string triggPath);
@@ -350,8 +350,11 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/D"           );
   outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/D"           );
   outTree_->Branch("metnomu"         ,&metnomu        ,"metnomu/D"        );
-  outTree_->Branch("regjetspt"       ,&regjetspt      ,"regjetspt/D"      );
-  outTree_->Branch("regjetsmass"     ,&regjetsmass    ,"regjetsmass/D"    );
+  // ak4 jets
+  outTree_->Branch("ak4jets_pt"      ,&ak4jets_pt                         );
+  outTree_->Branch("ak4jets_eta"     ,&ak4jets_eta                        );
+  outTree_->Branch("ak4jets_phi"     ,&ak4jets_phi                        );
+  outTree_->Branch("ak4jets_mass"    ,&ak4jets_mass                       );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
@@ -730,22 +733,27 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////--------------------------------  AK4 JETS  ---------------------------------------////
                    ////-----------------------------------------------------------------------------------////
                    edm::Handle<std::vector<pat::Jet>> jets;
-                   iEvent.getByLabel(ak4JetTags_, jets); 
-
-
-                   edm::Handle<pat::JetCollection> jets; 
-                   iEvent.getByLabel("slimmedJets", jets);
+                   iEvent.getByLabel(niceak4JetTags_, jets); 
+                   ////jets( vector of kinematic variables)
+                   ak4jets_pt.clear();
+                   ak4jets_eta.clear();
+                   ak4jets_phi.clear();
+                   ak4jets_mass.clear(); 
                    ////--- NUMBER OF JETS ----//// 
                    numjets = jets->size();
                    ////--------  HT AND MHT  -------------////
                    HT=0;
                    MHTx = 0, MHTy = 0;
                    for (const pat::Jet &j : *jets) {
-                         regjetspt  =  j.pt();
-                         regjetseta =  j.eta();
-                         regjetsphi =  j.phi();
-                         regjetsmass = j.mass();
-                         HT += regjetspt;
+                         ak4jetspt  =  j.pt();
+                         ak4jetseta =  j.eta();
+                         ak4jetsphi =  j.phi();
+                         ak4jetsmass = j.mass();
+                         ak4jets_pt.push_back(ak4jetspt);
+                         ak4jets_eta.push_back(ak4jetseta);
+                         ak4jets_phi.push_back(ak4jetsphi);
+                         ak4jets_mass.push_back(ak4jetsmass);
+                         HT += ak4jetspt;
                          MHTx -= j.px();
                          MHTy -= j.py();
                     }         
@@ -882,6 +890,9 @@ void EDBRTreeMaker::setDummyValues() {
      metPhi         = -1e4;
      metpt          = -1e4;
      metphi         = -1e4;
+     metpx          = -1e4;
+     metpy          = -1e4;
+     metnomu        = -1e4;
      matchHlt1      = -1e4;
      matchHlt2      = -1e4;
      deltaRlep1Obj  = -1e4;
@@ -946,8 +957,10 @@ void EDBRTreeMaker::setDummyValues() {
      trackerMu2     = -1e4;
      highPtMu1      = -1e4;
      highPtMu2      = -1e4;
-     regjetspt      = -1e4;
-     regjetsmass    = -1e4;
+     HT             = -1e4;
+     MHT            = -1e4;
+     MHTx           = -1e4;
+     MHTy           = -1e4;
      chf            = -1e4;
      nhf            = -1e4;
      cef            = -1e4;
