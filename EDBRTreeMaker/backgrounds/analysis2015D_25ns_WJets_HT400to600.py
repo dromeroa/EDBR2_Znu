@@ -37,8 +37,8 @@ VZ_JetMET       = True
 #SAMPLE="WJetsToLNu_25ns_inclusive"
 #SAMPLE="WJetsToLNu_HT-100To200_25ns"
 #SAMPLE="WJetsToLNu_HT-200To400_25ns"
-#SAMPLE="WJetsToLNu_HT-400To600_25ns"
-SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
+SAMPLE="WJetsToLNu_HT-400To600_25ns"
+#SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
 
 ### ------- TTJets ------------------
 #SAMPLE="TTjets_25ns_powheg" 
@@ -60,8 +60,8 @@ SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
-#process.maxEvents.input = -1
-process.maxEvents.input = 100000
+process.maxEvents.input = -1
+#process.maxEvents.input = 100000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000

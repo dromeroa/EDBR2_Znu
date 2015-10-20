@@ -344,6 +344,6 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+"v3.root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
                                   )
 

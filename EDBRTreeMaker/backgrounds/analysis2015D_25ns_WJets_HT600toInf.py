@@ -60,8 +60,8 @@ SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
-#process.maxEvents.input = -1
-process.maxEvents.input = 100000
+process.maxEvents.input = -1
+#process.maxEvents.input = 100000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
