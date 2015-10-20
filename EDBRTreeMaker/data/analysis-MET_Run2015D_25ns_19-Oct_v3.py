@@ -138,7 +138,7 @@ if option == 'GEN':
 if option == 'RECO':
     process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
-    process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff.py")
+    process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.hltFilterZnu_cff")
