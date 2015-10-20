@@ -121,6 +121,10 @@ private:
   int numjets;
   double regjetspt , regjetseta, regjetsphi,  regjetsmass;
   double HT, MHTx, MHTy, MHT;
+  std::vector<double> regjets_pt;
+  std::vector<double> regjets_eta;
+  std::vector<double> regjets_phi;
+  std::vector<double> regjets_mass;
 
   //------------ THE MET FILTER FUNCTION --------------------------------------------
   bool Pass_Filter(edm::Handle<edm::TriggerResults> triggerResults, const edm::TriggerNames & triggerNames, std::string triggPath);
@@ -199,6 +203,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   gravitonSrc_      (                                   iConfig.getParameter<std::string>   ( "gravitonSrc"     ) ),
   metSrc_           (                                   iConfig.getParameter<std::string>   ( "metSrc"          ) ),
   vertexToken_      ( consumes<reco::VertexCollection>( iConfig.getParameter<edm::InputTag> ( "vertex"        ) ) ),
+  niceak4JetTags_   (                                   iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"  ) ),
 //  metnohfToken_     (                                   iConfig.getParameter<edm::InputTag> ( "metnohf"         ) ),
 //  ak4jetscorrToken_ (                                   iConfig.getParameter<edm::InputTag> ( "ak4jetscorr"     ) ),
   payload_          (                                   iConfig.getParameter<std::string>   ( "payload"         ) )
@@ -724,6 +729,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////-----------------------------------------------------------------------------------////
                    ////--------------------------------  AK4 JETS  ---------------------------------------////
                    ////-----------------------------------------------------------------------------------////
+                   edm::Handle<std::vector<pat::Jet>> jets;
+                   iEvent.getByLabel(ak4JetTags_, jets); 
+
+
                    edm::Handle<pat::JetCollection> jets; 
                    iEvent.getByLabel("slimmedJets", jets);
                    ////--- NUMBER OF JETS ----//// 

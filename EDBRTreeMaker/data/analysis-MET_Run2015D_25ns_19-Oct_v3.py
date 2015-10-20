@@ -85,6 +85,14 @@ process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("hadronicV"),
                                           maxNumber = cms.uint32(1) )
 
+if VZ_JetMET == True :
+   process.niceak4JetsSelector = cms.EDFilter(  "CandViewSelector",
+                                                src = cms.InputTag("niceak4Jets"),
+                                                cut = cms.string( "" ),
+                                                filter = cms.bool(True)
+                                       )
+
+
 process.graviton = cms.EDProducer(        "CandViewCombiner",
                                           decay = cms.string("bestLeptonicV bestHadronicV"),
                                           checkCharge = cms.bool(False),
@@ -106,6 +114,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
+                                          niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
 
@@ -129,6 +138,7 @@ if option == 'GEN':
 if option == 'RECO':
     process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
+    process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff.py")
     process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.hltFilterZnu_cff")
@@ -154,6 +164,11 @@ process.leptonSequence = cms.Sequence(    process.leptonicVSequence +
 process.jetSequence = cms.Sequence(       process.fatJetsSequence   +
                                           process.hadronicV         +
                                           process.bestHadronicV     )
+
+if VZ_JetMET == True :
+   process.ak4jetSequence = cms.Sequence(        process.ak4JetsNuSequence     +
+                                                 process.niceak4JetsSelector   )
+
 
 process.gravitonSequence = cms.Sequence(  process.graviton          +
                                           process.gravitonFilter    )
@@ -303,6 +318,7 @@ if VZ_JetMET == True :
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *
+                                    process.ak4jetSequence           *
                                     process.metSequence              *
                                     process.egmGsfElectronIDs        *
                                     process.VETOSelectEvents         *
