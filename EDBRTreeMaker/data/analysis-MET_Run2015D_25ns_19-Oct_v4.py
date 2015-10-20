@@ -26,7 +26,7 @@ VZ_JetMET       = True
 #*********************************** THE SAMPLES ****************************************************#
 # choose the sample                                                                     
 
-SAMPLE="MET_Run2015D"
+SAMPLE="MET_Run2015D_v4"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
@@ -37,10 +37,10 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
-configXsecs = {   "MET_Run2015D"      : 1.0,
+configXsecs = {   "MET_Run2015D_v4"      : 1.0,
               }
 
-configNevents = { "MET_Run2015D"       :1,
+configNevents = { "MET_Run2015D_v4"       :1,
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -96,13 +96,13 @@ process.gravitonFilter =  cms.EDFilter(   "CandViewCountFilter",
                                           minNumber = cms.uint32(1),
                                           filter = cms.bool(True) )
 
-#### The luminosity is taken from last json from the Laura email
+#### The luminosity is calculated with brilcalc
 process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isGen           = cms.bool    (  False                     ),
                                           isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  594.65                     ),
+                                          targetLumiInvPb = cms.double  (  1263.88                   ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -289,7 +289,6 @@ if VZ_JetMET == True :
     ## goodVertex is run after this sequence
 
 
-### FOR NOW NO HBHE ISO FILTER
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
                                                 process.ApplyBaselineHBHENoiseFilter      *
                                                 process.ApplyBaselineHBHEIsoNoiseFilter   *

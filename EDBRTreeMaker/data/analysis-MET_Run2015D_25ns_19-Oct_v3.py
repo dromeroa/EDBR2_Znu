@@ -5,15 +5,18 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 #process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.Geometry.GeometryIdeal_cff")
-# This is for MC
-#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-# find the global tag in the DAS under the Configs for given dataset
+#This is for DATA :GlobalTag_condDBv2
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
-process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v2'
+### find the global tag in the DAS under the Configs for given dataset
+###
+### new global tag with new JEC
+###  Taken from the MINIAOD https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD#Run2015D_PromptReco_v4_Data_2015 and
+### https://twiki.cern.ch/twiki/bin/view/CMS/JECDataMC#Recommended_for_MC
+process.GlobalTag.globaltag = '74X_dataRun2_reMiniAOD_v0'
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
-CHANNEL         = "VZnu_CHANNEL" 
+CHANNEL         = "VZnu_CHANNEL"
 VZ_semileptonic = False
 VZ_JetMET       = True
 #                                                                                                    #
@@ -21,99 +24,33 @@ VZ_JetMET       = True
 
 
 #*********************************** THE SAMPLES ****************************************************#
-### CHOOSE THE SAMPLE :                                                                   
+# choose the sample                                                                     
 
-###-------- RSGRrav------------------
-#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
-
-###------   Z +JETS  -----------
-#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
-#SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
-#SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
-#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
-
-###-----   W + jets-------------------
-#SAMPLE="WJetsToLNu_25ns_inclusive"
-#SAMPLE="WJetsToLNu_HT-100To200_25ns"
-#SAMPLE="WJetsToLNu_HT-200To400_25ns"
-#SAMPLE="WJetsToLNu_HT-400To600_25ns"
-#SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
-
-### ------- TTJets ------------------
-#SAMPLE="TTJets_25ns_madgraph"
-#SAMPLE="TTjets_25ns_powheg" 
-
-### ------- Dibosons ---------------
-#SAMPLE="WW_25ns"
-#SAMPLE="WZ_25ns"
-#SAMPLE="ZZ_25ns"
-
-###-------- QCD ------------------
-#SAMPLE="QCD_HT2000toInf_25ns"
-#SAMPLE="QCD_HT1500to2000_25ns"
-#SAMPLE="QCD_HT1000to1500_25ns"
-#SAMPLE="QCD_HT700to1000_25ns"
-#SAMPLE="QCD_HT500to700_25ns"
-#SAMPLE="QCD_HT300to500_25ns"
-#SAMPLE="QCD_HT200to300_25ns"
-SAMPLE="QCD_HT100to200_25ns"
+SAMPLE="MET_Run2015D_v3"
 
 ### Source
-process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
+process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
+#process.maxEvents.input =10000 
 process.maxEvents.input = -1
-#process.maxEvents.input = 10000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
-configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
-                "RSGravToZZ_kMpl01_M-2000_25ns"        : 1,
-                "ZJetsToNuNu_HT-100To200_25ns"         : 280.47,
-                "ZJetsToNuNu_HT-200To400_25ns"         : 78.36,
-                "ZJetsToNuNu_HT-400To600_25ns"         : 10.944,
-                "ZJetsToNuNu_HT-600ToInf_25ns"         : 4.203,
-                "WJetsToLNu_HT-100To200_25ns"          : 1292,
-                "WJetsToLNu_HT-200To400_25ns"          : 385.9,
-                "WJetsToLNu_HT-400To600_25ns"          : 47.9,
-                "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
-                "WW_25ns"                              : 118.7,
-                "QCD_HT100to200_25ns"                  : 80093092,
-                "QCD_HT200to300_25ns"                  : 1735000.0, 
-                "QCD_HT300to500_25ns"                  : 366800.0,
-                "QCD_HT500to700_25ns"                  : 29370.0,
-                "QCD_HT700to1000_25ns"                 : 6524.0,
-                "QCD_HT1000to1500_25ns"                : 1064.0,
-                "QCD_HT1500to2000_25ns"                : 121.5,   
-                "QCD_HT2000toInf_25ns"                 : 25.42,    
-
+configXsecs = {   "MET_Run2015D_v3"      : 1.0,
               }
 
-configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
-                 "RSGravToZZ_kMpl01_M-2000_25ns"        : 29751,
-                 "ZJetsToNuNu_HT-100To200_25ns"         : 5148193,
-                 "ZJetsToNuNu_HT-200To400_25ns"         : 5032927,
-                 "ZJetsToNuNu_HT-400To600_25ns"         : 1014139,
-                 "ZJetsToNuNu_HT-600ToInf_25ns"         : 1015904,
-                 "WJetsToLNu_HT-100To200_25ns"          : 10142187,
-                 "WJetsToLNu_HT-200To400_25ns"          : 5231856,
-                 "WJetsToLNu_HT-400To600_25ns"          : 1901705,
-                 "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
-                 "WW_25ns"                              : 994416,
-                 "QCD_HT100to200_25ns"                  : 27540000.0,
-                 "QCD_HT200to300_25ns"                  : 18717349,
-                 "QCD_HT300to500_25ns"                  : 20086103,
-                 "QCD_HT500to700_25ns"                  : 19542847,
-                 "QCD_HT700to1000_25ns"                 : 1961774,
-                 "QCD_HT1000to1500_25ns"                : 4963895, 
-                 "QCD_HT1500to2000_25ns"                : 3848411,  
-                 "QCD_HT2000toInf_25ns"                 : 1961774,
-
+configNevents = { "MET_Run2015D_v3"       :1,
                 }
 
 usedXsec = configXsecs[SAMPLE]
 usedNevents = configNevents[SAMPLE]
 
+#*********************************** JSON file ****************************************************#
+# https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
+# last modified 19-Oct-2015 
+import FWCore.PythonUtilities.LumiList as LumiList
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
 #*******************************************************************************************************#
 
 ### Hadronic and leptonic boson.
@@ -124,7 +61,7 @@ process.load("ExoDiBosonResonances.EDBRCommon.hadronicZnu_cff")
 #process.load("ExoDiBosonResonances.EDBRCommon.hadronicW_cff")
 
 WBOSONCUT = "pt > 200. & sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 50."
-ZBOSONCUT = "pt > 200. & 70. < mass < 110."
+ZBOSONCUT = "pt > 20. & 70. < mass < 110."
 
 process.leptonicVFilter = cms.EDFilter(   "CandViewCountFilter",
                                           src = cms.InputTag("leptonicV"),
@@ -140,10 +77,9 @@ process.bestLeptonicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("leptonicVSelector"),
                                           maxNumber = cms.uint32(1) )
 
-process.hadronicVFilter = cms.EDFilter(   "CandViewCountFilter",
-                                          src = cms.InputTag("hadronicV"),
-                                          minNumber = cms.uint32(1),
-                                          filter = cms.bool(True) )
+
+process.corrJetsProducer.isData = True
+
 
 process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("hadronicV"),
@@ -152,7 +88,7 @@ process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
 process.graviton = cms.EDProducer(        "CandViewCombiner",
                                           decay = cms.string("bestLeptonicV bestHadronicV"),
                                           checkCharge = cms.bool(False),
-                                          cut = cms.string("mass > 400"),
+                                          cut = cms.string(" "),
                                           roles = cms.vstring('leptonicV', 'hadronicV') )
 
 process.gravitonFilter =  cms.EDFilter(   "CandViewCountFilter",
@@ -160,18 +96,19 @@ process.gravitonFilter =  cms.EDFilter(   "CandViewCountFilter",
                                           minNumber = cms.uint32(1),
                                           filter = cms.bool(True) )
 
+#### The luminosity is calculated with brilcalc
 process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isGen           = cms.bool    (  False                     ),
-                                          isData          = cms.bool    (  False                     ),
+                                          isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  1263.88                    ),
+                                          targetLumiInvPb = cms.double  (  1263.88                   ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
-                                                     
+
 #************************************** SELECT GEN OR RECO ******************************************# 
 
 option = 'RECO' # 'GEN' 
@@ -190,32 +127,32 @@ if option == 'GEN':
 
 ### RECO level studies
 if option == 'RECO':
-    process.load("ExoDiBosonResonances.EDBRCommon.hltFilterZnu_cff")
-    process.load("ExoDiBosonResonances.EDBRCommon.METFilters_cff")
-    process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
+    process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
+    process.load("ExoDiBosonResonances.EDBRCommon.hltFilterZnu_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
+#    process.load("ExoDiBosonResonances.EDBRCommon.METFilters_cff")
     process.hadronicV.cut = cms.string('pt > 200. '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
-    ##-----  FOR NOW NO CUT IN MET -------------##
+
+    ##-----  FOR NOW CUT IN MET --------------##
     process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
 
-process.leptonSequence = cms.Sequence(    process.leptonicVSequence +
+process.leptonSequence = cms.Sequence(    process.leptonicVSequence + 
                                           process.leptonicVFilter   +
                                           process.leptonicVSelector + 
                                           process.bestLeptonicV     )
 
 process.jetSequence = cms.Sequence(       process.fatJetsSequence   +
                                           process.hadronicV         +
-                                          process.hadronicVFilter   +
                                           process.bestHadronicV     )
 
 process.gravitonSequence = cms.Sequence(  process.graviton          +
@@ -226,8 +163,9 @@ process.analysis = cms.Path(              process.leptonSequence    +
                                           process.gravitonSequence  +
                                           process.treeDumper        )
 
+
 if option=='RECO':
-   if VZ_semileptonic == True :    
+   if VZ_semileptonic == True :
       process.load("ExoDiBosonResonances.EDBRCommon.hltFilter_cff")
       process.load("ExoDiBosonResonances.EDBRLeptons.goodLeptonsProducer_cff")
       from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -235,11 +173,11 @@ if option=='RECO':
       my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff']
       for idmod in my_id_modules:
           setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
-      process.analysis.replace(process.leptonSequence, 
+      process.analysis.replace(process.leptonSequence,
                                process.hltSequence              +
-                               process.egmGsfElectronIDSequence + 
-                               process.goodLeptonsProducer      +  
-                               process.leptonSequence           ) 
+                               process.egmGsfElectronIDSequence +
+                               process.goodLeptonsProducer      +
+                               process.leptonSequence           )
 
 #************************************ TRIGGER REPORT ANALYZER ***************************************#
 #                                                                                                    #
@@ -257,22 +195,23 @@ if VZ_semileptonic == True :
 #                                                                                                    #
 #****************************************************************************************************#
 
+
 #***************************************** FILTER MODE **********************************************#
 #                                                                                                    #
 # True : Events are filtered before the analyzer. TTree is filled with good valudes only             #
 # False: Events are filtered inside the analyzed. TTree is filled with dummy values when numCands==0 #
 #                                                                                                    #
-filterMode = True
+filterMode = True       
 ### If you're running in signal, you may want to not filter at this level
 ### but only later at the tree analysis.
 if filterMode == False:
     process.hltFilter.triggerConditions = ('*',)
     process.goodLeptons.filter = False
-    process.goodElectrons.cut = ""
-    process.goodMuons.cut = ""
     process.leptonicVSelector.cut = '70. < mass < 110.'
     process.graviton.cut = ''
 #                                                                                                    #
+#****************************************************************************************************#
+
 #****************************************************************************************************#
 
 ####################################################################################################
@@ -280,8 +219,7 @@ if filterMode == False:
 ####################################################################################################
 
 if VZ_JetMET == True :
- 
-    process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
+#    process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
     ## Why the best hadronicV candidate has the largest pt?
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
@@ -290,11 +228,11 @@ if VZ_JetMET == True :
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
-    process.jetSequence.replace(    process.fatJetsSequence, 
-                                    process.fatJetsNuSequence          *
-                                    process.hadronicVnuSequence        )
+    process.jetSequence.replace(    process.fatJetsSequence,
+                                    process.fatJetsNuSequence       *
+                                    process.hadronicVnuSequence     )
 
-    process.jetSequence.remove(process.hadronicV) 
+    process.jetSequence.remove(process.hadronicV)
 
     from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
     switchOnVIDElectronIdProducer(process, DataFormat.MiniAOD)
@@ -303,24 +241,70 @@ if VZ_JetMET == True :
     for idmod in my_el_modules:
         setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
+###   THERE IS NO PHOTON ID FOR 25 ns (solo MVA) we are using still for 50 ns 
+
     switchOnVIDPhotonIdProducer(process, DataFormat.MiniAOD)
-#    my_pho_modules = ['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_PHYS14_PU20bx25_V2_cff']
     my_pho_modules = ['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring15_50ns_V1_cff']
     for idmod in my_pho_modules:
         setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+    ###---------------- MET FILTERS DATA ---------------------------------------------###
+    ###-------------------------------------------------------------------------------###
+    process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+    process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+    process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
+    process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
+
+    process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+       inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+       reverseDecision = cms.bool(False)
+    )
+
+    process.ApplyBaselineHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
+       inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHEIsoNoiseFilterResult'),
+       reverseDecision = cms.bool(False)
+    )
+
+    process.eeBadScFilter = cms.EDFilter("HLTHighLevel",
+        TriggerResultsTag  = cms.InputTag("TriggerResults","","RECO"),
+        HLTPaths           = cms.vstring("Flag_eeBadScFilter"),
+        eventSetupPathsKey = cms.string(''),
+        andOr              = cms.bool(True),
+        throw              = cms.bool(True)
+    )
+
+
+    process.CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
+        TriggerResultsTag  = cms.InputTag("TriggerResults","","RECO"),
+        HLTPaths           = cms.vstring("Flag_CSCTightHaloFilter"),
+        eventSetupPathsKey = cms.string(''),
+        andOr              = cms.bool(True),
+        throw              = cms.bool(True)
+    )
 
 
 
+    ## goodVertex is run after this sequence
+
+
+    process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
+                                                process.ApplyBaselineHBHENoiseFilter      *
+                                                process.ApplyBaselineHBHEIsoNoiseFilter   *
+                                                process.eeBadScFilter                     *
+                                                process.CSCTightHaloFilter
+                                             )
+
+
+###--------------------------------------------------------------------------------------###
     process.analysis.replace(       process.jetSequence,
                                     process.hltSequenceZnu           *
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *
-                                    process.metSequence              *  
-                                    process.egmGsfElectronIDs        *    
+                                    process.metSequence              *
+                                    process.egmGsfElectronIDs        *
                                     process.VETOSelectEvents         *
                                     process.egmPhotonIDs             *
                                     process.photonvetoSequence       *
@@ -329,13 +313,14 @@ if VZ_JetMET == True :
                             )
 
     process.analysis.remove(process.leptonSequence)
-   
+
 ###################################################################################################
+
 
 print "++++++++++ CUTS ++++++++++\n"
 print "Graviton cut = "+str(process.graviton.cut)
 if VZ_semileptonic == True :
-   print "Leptonic V cut = "+str(process.leptonicVSelector.cut) 
+   print "Leptonic V cut = "+str(process.leptonicVSelector.cut)
    print "Hadronic V cut = "+str(process.hadronicV.cut)
 if VZ_JetMET == True :
    print "Hadronic V cut = "+str(process.hadronicVnu.cut)
@@ -343,8 +328,6 @@ if VZ_JetMET == True :
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+"v3.root")
                                   )
-
-
 
