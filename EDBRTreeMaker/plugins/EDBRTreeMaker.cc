@@ -126,6 +126,7 @@ private:
   std::vector<double> ak4jets_phi;
   std::vector<double> ak4jets_mass;
 
+  edm::InputTag niceak4JetTags_;
   //------------ THE MET FILTER FUNCTION --------------------------------------------
   bool Pass_Filter(edm::Handle<edm::TriggerResults> triggerResults, const edm::TriggerNames & triggerNames, std::string triggPath);
   bool is_HBHENoiseFilter_Fired;
@@ -203,10 +204,10 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   gravitonSrc_      (                                   iConfig.getParameter<std::string>   ( "gravitonSrc"     ) ),
   metSrc_           (                                   iConfig.getParameter<std::string>   ( "metSrc"          ) ),
   vertexToken_      ( consumes<reco::VertexCollection>( iConfig.getParameter<edm::InputTag> ( "vertex"        ) ) ),
-  niceak4JetTags_   (                                   iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"  ) ),
 //  metnohfToken_     (                                   iConfig.getParameter<edm::InputTag> ( "metnohf"         ) ),
 //  ak4jetscorrToken_ (                                   iConfig.getParameter<edm::InputTag> ( "ak4jetscorr"     ) ),
-  payload_          (                                   iConfig.getParameter<std::string>   ( "payload"         ) )
+  payload_          (                                   iConfig.getParameter<std::string>   ( "payload"          ) ),
+  niceak4JetTags_   (                                   iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )
 {
   if(EDBRChannel_ == "VZ_CHANNEL")
     channel=VZ_CHANNEL;
