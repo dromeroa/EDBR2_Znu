@@ -1,3 +1,4 @@
+
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process( "TEST" )
@@ -40,7 +41,6 @@ VZ_JetMET       = True
 #SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
 
 ### ------- TTJets ------------------
-#SAMPLE="TTJets_25ns_madgraph"
 #SAMPLE="TTjets_25ns_powheg" 
 
 ### ------- Dibosons ---------------
@@ -73,11 +73,14 @@ configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
                 "ZJetsToNuNu_HT-200To400_25ns"         : 78.36,
                 "ZJetsToNuNu_HT-400To600_25ns"         : 10.944,
                 "ZJetsToNuNu_HT-600ToInf_25ns"         : 4.203,
-                "WJetsToLNu_HT-100To200_25ns"          : 1292,
-                "WJetsToLNu_HT-200To400_25ns"          : 385.9,
-                "WJetsToLNu_HT-400To600_25ns"          : 47.9,
-                "WJetsToLNu_HT-600ToInf_25ns"          : 19.9,
+                "WJetsToLNu_HT-100To200_25ns"          : 1347,
+                "WJetsToLNu_HT-200To400_25ns"          : 360,
+                "WJetsToLNu_HT-400To600_25ns"          : 48.9,
+                "WJetsToLNu_HT-600ToInf_25ns"          : 18.77,
                 "WW_25ns"                              : 118.7,
+                "ZZ_25ns"                              : 16.5,
+                "WZ_25ns"                              : 47.13, 
+                "TTjets_25ns_powheg"                   : 831.76,
                 "QCD_HT100to200_25ns"                  : 80093092,
                 "QCD_HT200to300_25ns"                  : 1735000.0, 
                 "QCD_HT300to500_25ns"                  : 366800.0,
@@ -100,7 +103,10 @@ configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
                  "WJetsToLNu_HT-400To600_25ns"          : 1901705,
                  "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
                  "WW_25ns"                              : 994416,
-                 "QCD_HT100to200_25ns"                  : 27540000.0,
+                 "ZZ_25ns"                              : 996168,
+                 "WZ_25ns"                              : 991232, 
+                 "TTjets_25ns_powheg"                   : 19665194,
+                 "QCD_HT100to200_25ns"                  : 27540000,
                  "QCD_HT200to300_25ns"                  : 18717349,
                  "QCD_HT300to500_25ns"                  : 20086103,
                  "QCD_HT500to700_25ns"                  : 19542847,
@@ -149,6 +155,15 @@ process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("hadronicV"),
                                           maxNumber = cms.uint32(1) )
 
+
+if VZ_JetMET == True :
+   process.niceak4JetsSelector = cms.EDFilter(  "CandViewSelector",
+                                                src = cms.InputTag("niceak4Jets"),
+                                                cut = cms.string( "" ),
+                                                filter = cms.bool(True)
+                                       )
+
+
 process.graviton = cms.EDProducer(        "CandViewCombiner",
                                           decay = cms.string("bestLeptonicV bestHadronicV"),
                                           checkCharge = cms.bool(False),
@@ -169,6 +184,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
+                                          niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
@@ -195,6 +211,7 @@ if option == 'RECO':
     process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
+    process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
     process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
@@ -217,6 +234,10 @@ process.jetSequence = cms.Sequence(       process.fatJetsSequence   +
                                           process.hadronicV         +
                                           process.hadronicVFilter   +
                                           process.bestHadronicV     )
+
+if VZ_JetMET == True :
+   process.ak4jetSequence = cms.Sequence(        process.ak4JetsNuSequence     +
+                                                 process.niceak4JetsSelector   )
 
 process.gravitonSequence = cms.Sequence(  process.graviton          +
                                           process.gravitonFilter    )
@@ -319,6 +340,7 @@ if VZ_JetMET == True :
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *
+                                    process.ak4jetSequence           *
                                     process.metSequence              *  
                                     process.egmGsfElectronIDs        *    
                                     process.VETOSelectEvents         *
@@ -345,6 +367,3 @@ print "\n++++++++++++++++++++++++++"
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("treeEDBR_"+SAMPLE+".root")
                                   )
-
-
-
