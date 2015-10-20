@@ -292,7 +292,7 @@ if VZ_JetMET == True :
 ### FOR NOW NO HBHE ISO FILTER
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
                                                 process.ApplyBaselineHBHENoiseFilter      *
-#                                                process.ApplyBaselineHBHEIsoNoiseFilter   *
+                                                process.ApplyBaselineHBHEIsoNoiseFilter   *
                                                 process.eeBadScFilter                     *
                                                 process.CSCTightHaloFilter
                                              )
