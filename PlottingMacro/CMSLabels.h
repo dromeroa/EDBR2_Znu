@@ -70,6 +70,18 @@ TMathText* makeCMSPreliminaryTop(int energy = 7, double x = 0.15, double y = 0.9
   return tex;
 }
 
+TMathText* makeCMSWorkTop(int energy = 13, double x = 0.15, double y = 0.94) {
+  char buffer[256];
+  sprintf(buffer,"\\hbox{CMS Work in Progress  }\\sqrt{s}\\hbox{ = %i TeV}",energy);
+  TMathText* tex = new TMathText(x,y,buffer);
+  tex->SetNDC();
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.04);
+  tex->Draw();
+  return tex;
+}
+
+
 TMathText* makeCMSLumi(double lumi = 5.0, double x = 0.666, double y = 0.72) {
   char buffer[256];
   sprintf(buffer,"\\int L dt = %4.2lf pb^{-1}",lumi);

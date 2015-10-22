@@ -365,16 +365,21 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
     cout << "WJetsScaleFactor " << WJetsScaleFactor << endl;
   }
 
-  for (size_t i = 0; i != filesMC.size(); ++i) {
-    TH1D* histo = (TH1D*)(filesMC.at(i)->Get(histoName.c_str())->Clone(labels.at(i).c_str()));
-    histo->SetDirectory(0);
-    histo->SetFillColor(getFillColor(i));
-
+//**********************************************************************************************
+//// Esta parte es donde pinta los histograms de MC
+////***********************************************************************************************
+for (size_t i = 0; i != filesMC.size(); ++i) {
+      TH1D* histo = (TH1D*)(filesMC.at(i)->Get(histoName.c_str())->Clone(labels.at(i).c_str()));
+      histo->SetDirectory(0);
+      histo->SetFillColor(getFillColor(i));
+      //// para graficar las diferentes componetes del mismo color
+    histo->SetLineColor(getFillColor(i));     
     TString filename = filesMC.at(i)->GetName();
     histo->Scale(kFactorsMC_.at(i));
     if (filename.Contains("WJets"))histo->Scale(WJetsScaleFactor);
     histosMC.push_back(histo);
   }
+
 
 
 
@@ -478,6 +483,7 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   hs->Draw("HIST");
   hs->GetXaxis()->SetTitle(histoName.c_str());
   hs->GetYaxis()->SetTitle("Events");
+//  hs->GetYaxis()->SetTitle("Normalized to Luminosity");
   hs->GetYaxis()->SetTitleOffset(1.15);
   hs->GetYaxis()->CenterTitle();
   double maximumMC = 1.15 * sumMC->GetMaximum();
@@ -509,8 +515,11 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   }
   sumMC->Draw("HISTO SAME");
 
-  if (histoName.find("candMass") != std::string::npos) {
-    double limInt0 = 400.0;
+
+//// WE CHANGE THIS FOR THE CAND T MASS
+  //if (histoName.find("candMass") != std::string::npos) {
+    if (histoName.find("candTMass") != std::string::npos) {
+    double limInt0 = 600.0;
     //double limInt1 = 1400.0; //Not used right now
     double limInt2 = 2400.0;
     int binInt0 = sumMC->FindBin(limInt0);
@@ -526,15 +535,47 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   }
 
   // For the legend, we have to tokenize the name "histos_XXX.root"
-  TLegend* leg = new TLegend(0.62, 0.61, 0.86, 0.88);
+  TLegend* leg = new TLegend(0.58, 0.75, 0.93, 0.9);
   leg->SetMargin(0.4);
-  leg->SetTextSize(0.038);
   if (isDataPresent_)
     leg->AddEntry(sumDATA, "Data", "p");
-  for (int i = histosMC.size()-1; i != -1; --i)
-    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+
+//// We change the labels for mant MC samples of the same class
+//// In the furure we have to improve this
+//// we change this 
+//  for (size_t i = 0; i != histosMC.size(); ++i)
+//    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+////---------------------------------------------------------------
+    for (size_t i = 0; i != histosMC.size(); ++i){
+         if (i<1){ 
+                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                   i= i+3;
+         }
+         if (i==3){
+                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                   i= i+1;
+         }
+         if (i<5){
+                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                   i= i+4;
+         } 
+         if (i<9){
+                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                   i= i+4;
+         }
+         if (i<14){
+                  leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                   i= i+3;
+        }
+
+    }               
+//// NOTE THAT IN THIS CASE AS THE SUM GOES FROM 0 -> 11
+//// WE ONLY NEED TO SUM 3 IN THE LAST
+
+////----------------------------------------------------------------
   if (histosMCSig.size() > 0) {
     char rescalingLabel[64];
+
     for (size_t i = 0; i != histosMCSig.size(); ++i) {
       sprintf(rescalingLabel, " (x%g)", kFactorsSig_.at(i));
       std::string rescalingStr(rescalingLabel);
@@ -546,13 +587,12 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   leg->SetFillColor(kWhite);
   leg->Draw();
 
-  // Nice labels
-  TMathText* t = makeCMSPreliminaryTop(13, 0.15, 0.93);
-  TMathText* c = makeChannelLabel(1, flavour_, true, 0.2, 0.83);
-  TMathText* l = makeCMSLumi(40.86, 0.2, 0.76);
-  t->Draw();
-  c->Draw();
+  //// Nice labels
+   TMathText* l = makeCMSWorkTop(13, 0.10, 0.935);
   l->Draw();
+
+  //l = makeCMSLumi(13, 19.8, 0.5, 0.935);
+  //l = makeChannelLabel(wantNXJets_, flavour_, isZZchannel_);
   
   /*
   //============ Save the full background histogram ============
@@ -659,11 +699,11 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
     lineAtZero->Draw();
     lineAtPlusTwo = new TLine(sumMC->GetXaxis()->GetXmin(), 2, sumMC->GetXaxis()->GetXmax(), 2);
     lineAtPlusTwo->SetLineColor(2);
-    lineAtPlusTwo->SetLineStyle(2);
+    lineAtPlusTwo->SetLineStyle(1);
     lineAtPlusTwo->Draw();
     lineAtMinusTwo = new TLine(sumMC->GetXaxis()->GetXmin(), -2, sumMC->GetXaxis()->GetXmax(), -2);
     lineAtMinusTwo->SetLineColor(2);
-    lineAtMinusTwo->SetLineStyle(2);
+    lineAtMinusTwo->SetLineStyle(1);
     lineAtMinusTwo->Draw();
   }
 

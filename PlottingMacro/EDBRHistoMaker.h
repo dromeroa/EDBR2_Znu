@@ -90,8 +90,29 @@ class EDBRHistoMaker {
    Double_t        deltaRlepjet;
    Double_t        delPhijetmet;
    Double_t        candMass;
+   Double_t        candTMass;
+   Double_t        puweight;
+   Int_t           numjets;
+   Double_t        massjet1;
+   Double_t        softjet1;
+   Double_t        prunedjet;
+   Double_t        metpt;
+   Double_t        metpx;
+   Double_t        metpy;
+   Double_t        metphi;
+   Double_t        HT;
+   Double_t        MHT;
+   Double_t        MHTx;
+   Double_t        MHTy;
+   Double_t        metnomu;
+   Double_t        deltaPhijetjetabs;
+   Double_t        chf;
+   Double_t        nhf;
+   Double_t        cef;
+   Double_t        nef;
+   Int_t           nch; 
+   Int_t           nconstituents;
 
-   // List of branches
    TBranch        *b_event;   //!
    TBranch        *b_nVtx;   //!
    TBranch        *b_ptVlep;   //!
@@ -129,8 +150,32 @@ class EDBRHistoMaker {
    TBranch        *b_deltaRlepjet;   //!
    TBranch        *b_delPhijetmet;   //!
    TBranch        *b_candMass;   //!
+   TBranch        *b_candTMass;   //!
+   TBranch        *b_numjets;   //!
+   TBranch        *b_massjet1;   //!
+   TBranch        *b_softjet1;   //!
+   TBranch        *b_prunedjet;   //!
+   TBranch        *b_metpt;   //!
+   TBranch        *b_metpx;   //!
+   TBranch        *b_metpy;   //!
+   TBranch        *b_metphi;   //!
+   TBranch        *b_HT;   //!
+   TBranch        *b_MHT;   //!
+   TBranch        *b_MHTx;   //!
+   TBranch        *b_MHTy;   //!
+   TBranch        *b_metnomu;   //!
+   TBranch        *b_deltaPhijetjetabs;   //!
+   TBranch        *b_chf;  //!
+   TBranch        *b_nhf;  //!
+   TBranch        *b_cef;  //!
+   TBranch        *b_nef;  //!
+   TBranch        *b_nch;  //!
+   TBranch        *b_nconstituents;  //!
+   TBranch        *b_puweight;  //!
 
-  // Basic functions directly from MakeClass
+
+
+ // Basic functions directly from MakeClass
   Int_t    GetEntry(Long64_t entry);
   Long64_t LoadTree(Long64_t entry);
   void     Init(TTree *tree);
@@ -157,6 +202,15 @@ class EDBRHistoMaker {
   bool eventPassesRegionCut();
   bool eventPassesCut(double ptZ_threshold, double ptlep1_threshold );
   bool eventPassesVBFCut();
+
+  ////***********************************************************************
+  ////                    HERE DEFINE THE Znunu CUTS
+  ////***********************************************************************
+  bool eventPassesnumJetsCut(int numjets_threshold);
+  bool eventPassesdeltaPhiJetCut(double deltaPhiJet_threshold);
+  bool eventPassestau21Cut(double tau21_threshold);
+  bool eventPassescandTMassCut(double candTMass_threshold);
+  bool eventPassesCutZnu1(int numjets_threshold, double deltaPhiJet_threshold, double tau21_threshold, double candTMass_threshold);
 
   double deltaPhi(const double& phi1, const double& phi2)
   { 
@@ -274,6 +328,28 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("deltaRlepjet", &deltaRlepjet, &b_deltaRlepjet);
    fChain->SetBranchAddress("delPhijetmet", &delPhijetmet, &b_delPhijetmet);
    fChain->SetBranchAddress("candMass", &candMass, &b_candMass);
+   fChain->SetBranchAddress("candTMass", &candTMass, &b_candTMass);
+   fChain->SetBranchAddress("numjets", &numjets, &b_numjets);
+   fChain->SetBranchAddress("massjet1", &massjet1, &b_massjet1);
+   fChain->SetBranchAddress("softjet1", &softjet1, &b_softjet1);
+   fChain->SetBranchAddress("prunedjet", &prunedjet, &b_prunedjet);
+   fChain->SetBranchAddress("metpt", &metpt, &b_metpt);
+   fChain->SetBranchAddress("metpx", &metpx, &b_metpx);
+   fChain->SetBranchAddress("metpy", &metpy, &b_metpy);
+   fChain->SetBranchAddress("metphi", &metphi, &b_metphi);
+   fChain->SetBranchAddress("HT", &HT, &b_HT);
+   fChain->SetBranchAddress("MHT", &MHT, &b_MHT);
+   fChain->SetBranchAddress("MHTx", &MHTx, &b_MHTx);
+   fChain->SetBranchAddress("MHTy", &MHTy, &b_MHTy);
+   fChain->SetBranchAddress("metnomu", &metnomu, &b_metnomu);
+   fChain->SetBranchAddress("deltaPhijetjetabs", &deltaPhijetjetabs, &b_deltaPhijetjetabs);
+   fChain->SetBranchAddress("chf", &chf, &b_chf);
+   fChain->SetBranchAddress("nhf", &nhf, &b_nhf);
+   fChain->SetBranchAddress("cef", &cef, &b_cef);
+   fChain->SetBranchAddress("nef", &nef, &b_nef);
+   fChain->SetBranchAddress("nch", &nch, &b_nch);
+   fChain->SetBranchAddress("nconstituents", &nconstituents, &b_nconstituents);
+   fChain->SetBranchAddress("puweight", &puweight, &b_puweight);
 }
 
 EDBRHistoMaker::EDBRHistoMaker(TTree* tree, 
@@ -333,34 +409,48 @@ void EDBRHistoMaker::createAllHistos() {
   /// in the beginning of this file.
   /// Much simpler to create histos now: just add them to
   /// hs with hs.setHisto(name,nbins,min,max);
-  hs.setHisto("nVtx", 40, -0.5, 39.5);
-  hs.setHisto("ptZll",50,0,1000); // 20 GeV bins
-  hs.setHisto("ptZjj",50,0,1000); // 20 GeV bins
-  hs.setHisto("yZll",56,-2.8,2.8);
-  hs.setHisto("yZjj",56,-2.8,2.8);
-  hs.setHisto("phiZll",74,-3.7,3.7);
-  hs.setHisto("phiZjj",74,-3.7,3.7);
-  hs.setHisto("massZll",50,50,150); // 2 GeV bins 
-  hs.setHisto("massZjj",35,0,140); // 2 GeV bins  
-  hs.setHisto("tau21",50,0,1);
-  hs.setHisto("ptlep1",40,0,800); 
-  hs.setHisto("ptlep2",50,0,500);
-  hs.setHisto("ptjet1",120,0,1200);
-  hs.setHisto("etalep1",50,-2.5,2.5);
-  hs.setHisto("etalep2",50,-2.5,2.5);
-  hs.setHisto("etajet1",50,-2.5,2.5);
-  hs.setHisto("philep1",74,-3.7,3.7);
-  hs.setHisto("philep2",74,-3.7,3.7);
-  hs.setHisto("phijet1",74,-3.7,3.7);
-  hs.setHisto("lep",30,-0.5,29.5);
-  hs.setHisto("region",3,-1.5,1.5); 
-  hs.setHisto("triggerWeight",50,0,5); 
-  hs.setHisto("lumiWeight",70,0,7);
-  hs.setHisto("pileupWeight",70,0,7);
-  hs.setHisto("deltaRleplep",70,0,3.5); 
-  hs.setHisto("deltaRlepjet",70,0,7); 
-  hs.setHisto("candMass", 56,200,3000); // 50 GeV bins...
+  hs.setHisto("nVtx", 30,0,30);
+//  hs.setHisto("ptZll",50,0,1000); // 20 GeV bins
+  hs.setHisto("ptZjj",25,0,2000); // 20 GeV bins
+//  hs.setHisto("yZll",56,-2.8,2.8);
+  hs.setHisto("yZjj",40,-2.8,2.8);
+//  hs.setHisto("phiZll",74,-3.7,3.7);
+  hs.setHisto("phiZjj",40,-3.7,3.7);
+//  hs.setHisto("massZll",50,50,150); // 2 GeV bins 
+  hs.setHisto("massZjj",40,30,130); // 2 GeV bins  
+  hs.setHisto("tau21",30,0,1);
+//  hs.setHisto("ptlep1",40,0,800); 
+//  hs.setHisto("ptlep2",50,0,500);
+//  hs.setHisto("ptjet1",50,0,1000);
+//  hs.setHisto("etalep1",50,-2.5,2.5);
+//  hs.setHisto("etalep2",50,-2.5,2.5);
+//  hs.setHisto("etajet1",50,-2.5,2.5);
+//  hs.setHisto("philep1",74,-3.7,3.7);
+//  hs.setHisto("philep2",74,-3.7,3.7);
+//  hs.setHisto("phijet1",74,-3.7,3.7);
+//  hs.setHisto("lep",30,-0.5,29.5);
+  hs.setHisto("region",5,-1.5,3.5); 
+//  hs.setHisto("triggerWeight",50,0,5); 
+//  hs.setHisto("lumiWeight",70,0,7);
+//  hs.setHisto("pileupWeight",70,0,7);
+//  hs.setHisto("deltaRleplep",70,0,3.5); 
+//  hs.setHisto("deltaRlepjet",70,0,7); 
+//  hs.setHisto("candMass", 40,100,2100); // 50 GeV bins...
   //but to have the signal spread around 4 bins maybe we want 25 GeV bins?
+  hs.setHisto("candTMass", 40,100,2100);
+  hs.setHisto("metpt", 30, 0, 2000);
+  hs.setHisto("metphi", 30, -3.7, 3.7);
+  hs.setHisto("HT", 30, 0, 1600);
+  hs.setHisto("MHT", 30, 0, 1600);
+  hs.setHisto("deltaPhijetjetabs", 30, 0, 3.7);
+  hs.setHisto("chf", 30, 0 ,1.2);
+  hs.setHisto("nhf", 30, 0, 1.2);
+  hs.setHisto("cef", 30, 0, 1.2);
+  hs.setHisto("nef", 30, 0, 1.2);
+  hs.setHisto("nch", 30, 0, 100);
+  hs.setHisto("nconstituents", 30, 0, 100);
+//  hs.setHisto("puweight", 70, 0, 20);
+
   
   char buffer[256];
   char buffer2[256];
@@ -503,6 +593,61 @@ bool EDBRHistoMaker::eventPassesCut(double ptZ_threshold, double ptlep1_threshol
   return result;
 }
 
+////*******************************************************************************
+////                               Znunu CUTS
+////******************************************************************************
+
+////----------- CUT IN THE NUMBER OF ak4Jets------------------------------------
+bool EDBRHistoMaker::eventPassesnumJetsCut(int numjets_threshold) {
+     bool pass = false;
+     pass = (numjets <=  numjets_threshold);
+     return pass;
+}
+
+////---------- CUT IN DELTA PHI BETWEEN TWO ak4 JETS (for only 2 jets)--------------------
+// then have to change the the condition...
+bool EDBRHistoMaker::eventPassesdeltaPhiJetCut(double deltaPhiJet_threshold) {
+     bool pass = false;
+     pass = (deltaPhijetjetabs >=  deltaPhiJet_threshold || numjets == 1 || numjets == 0);
+     return pass;
+}
+
+////---------------- CUT IN TAU21 ---------------------------------------------------------
+bool EDBRHistoMaker::eventPassestau21Cut(double tau21_threshold) {
+     bool pass = false;
+     pass = (tau21 <  tau21_threshold );
+     return pass;
+}
+
+////------------- CUT IN THE TRANSVERSE MASS ----------------------------------------------
+bool EDBRHistoMaker::eventPassescandTMassCut(double candTMass_threshold) {
+     bool pass = false;
+     pass = (candTMass >  candTMass_threshold );
+     return pass;
+}
+
+////---------- NEW CUT COMBINING THE OTHERS ------------------------------------------------
+bool EDBRHistoMaker::eventPassesCutZnu1(int numjets_threshold, double deltaPhiJet_threshold, double tau21_threshold, double candTMass_threshold ) {
+          bool passesdeltaPhiJet  = eventPassesdeltaPhiJetCut(deltaPhiJet_threshold) ;
+          bool passesNumJets  = eventPassesnumJetsCut(numjets_threshold);
+          bool passestau21 = eventPassestau21Cut(tau21_threshold);
+          bool passesTmass = eventPassescandTMassCut(candTMass_threshold);
+          if(false) {
+                       printf("passesdeltaPhiJet: %i\n",passesdeltaPhiJet);
+                       printf("passesNumJets: %i\n",passesNumJets);
+                       printf("passesTmass: %i\n",passesTmass);
+                       printf("passestau21: %i\n",passestau21);
+          }
+
+          bool result =
+               passesdeltaPhiJet &&
+               passesNumJets &&
+               passesTmass &&
+               passestau21;
+
+  return result;
+}
+
 ///----------------------------------------------------------------
 /// This is the important function, the loop over all events.
 /// Here we fill the histograms according to cuts, weights,
@@ -533,7 +678,7 @@ void EDBRHistoMaker::Loop(std::string outFileName){
 
     // We calculate a weight here.
     //double actualWeight = weight;
-    double actualWeight = triggerWeight*lumiWeight*pileupWeight;
+    double actualWeight = triggerWeight*lumiWeight*puweight;
     if(setUnitaryWeights_) {
       if(jentry==0)printf("Unitary weights set!\n");
       actualWeight=1.0;
@@ -545,7 +690,10 @@ void EDBRHistoMaker::Loop(std::string outFileName){
     // Single / Double jet ...) 
 
     // Remember: bool eventPassesCut(double ptZ_threshold, double ptlep1_threshold );
-    if(eventPassesCut(20, 20)){
+
+//    if(eventPassesCut(20, 20)){
+//    if(eventPassesCutZnu1(2, 0, 0.6, 400)){
+
       
       // In case we need particular events
       //if(candMass>2400.0)
@@ -561,31 +709,43 @@ void EDBRHistoMaker::Loop(std::string outFileName){
       */
       
       (theHistograms["nVtx"])->Fill(nVtx,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["ptlep1"])->Fill(ptlep1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["ptlep2"])->Fill(ptlep2,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["ptjet1"])->Fill(ptjet1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["etalep1"])->Fill(etalep1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["etalep2"])->Fill(etalep2,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["etajet1"])->Fill(etajet1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["philep1"])->Fill(philep1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["philep2"])->Fill(philep2,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["phijet1"])->Fill(phijet1,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["ptZll"])->Fill(ptVlep,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["ptlep1"])->Fill(ptlep1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["ptlep2"])->Fill(ptlep2,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["ptjet1"])->Fill(ptjet1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["etalep1"])->Fill(etalep1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["etalep2"])->Fill(etalep2,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["etajet1"])->Fill(etajet1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["philep1"])->Fill(philep1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["philep2"])->Fill(philep2,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["phijet1"])->Fill(phijet1,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["ptZll"])->Fill(ptVlep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["ptZjj"])->Fill(ptVhad,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["phiZll"])->Fill(phiVlep,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["phiZll"])->Fill(phiVlep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["phiZjj"])->Fill(phiVhad,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["yZll"])->Fill(yVlep,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["yZll"])->Fill(yVlep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["yZjj"])->Fill(yVhad,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["deltaRleplep"])->Fill(deltaRleplep,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["deltaRlepjet"])->Fill(deltaRlepjet,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["massZll"])->Fill(massVlep,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["deltaRleplep"])->Fill(deltaRleplep,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["deltaRlepjet"])->Fill(deltaRlepjet,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["massZll"])->Fill(massVlep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["massZjj"])->Fill(massVhad,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["tau21"])->Fill(tau21,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["candMass"])->Fill(candMass,actualWeight);//printf("line number %i\n",__LINE__);
-      (theHistograms["lep"])->Fill(lep,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["candTMass"])->Fill(candTMass,actualWeight);//printf("line number %i\n",__LINE__);
+//      (theHistograms["lep"])->Fill(lep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["region"])->Fill(region,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["metpt"])->Fill(metpt,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["metphi"])->Fill(metphi,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["HT"])->Fill(HT,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["MHT"])->Fill(MHT,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["deltaPhijetjetabs"])->Fill(deltaPhijetjetabs,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["chf"])->Fill(chf,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["nhf"])->Fill(nhf,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["cef"])->Fill(cef,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["nef"])->Fill(nef,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["nch"])->Fill(nch,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["nconstituents"])->Fill(nconstituents,actualWeight);//printf("line number %i\n",__LINE__);
+
       
-      }//end if eventPassesCut
+//      }//end if eventPassesCutZnu1
     
   }//end loop over entries
   

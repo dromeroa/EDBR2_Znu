@@ -19,9 +19,9 @@ void loopPlot(){
   
   //#####################EDIT THE OPTIONS##############################
   /// Boolean flags to steer the histogram making
-  bool wantElectrons = true; // Will make histograms for electrons
+  bool wantElectrons = false; // Will make histograms for electrons
   bool wantMuons     = false; // Will make histograms for muons
-  bool wantSideband  = true; // Will make histograms for sideband region
+  bool wantSideband  = false; // Will make histograms for sideband region
   bool wantSignal    = true; // Will make histograms for signal region
   bool wantFullRange = true; // Will not check signal or sideband, ie, pick all jet mass range
   int  wantNXJets    = 1; // Will make histograms for 1 or 2 jet topology
@@ -32,53 +32,70 @@ void loopPlot(){
   /// Luminosity value in fb^-1
   /// Scale histograms (line 403 EDBRHistoPloter.h) 
   /// Use lumiValue = 1. if actualWeights (lines 562-585 EDBRHistoMaker.h) were consistently defined in the EDBRTreeMaker 
-  double lumiValue = 1.; 
+  double lumiValue = 1263.88/1000; 
   /// Should we scale the histograms to data?
-  bool scaleToData = true;
+   bool scaleToData = true; 
+//  bool scaleToData = false;
   // Should we scale only wjets to make total MC = DATA?
   bool scaleOnlyWJets = false;
   /// Should we plot the Data/Bkg and Data-Bkg/Error ratios?
-  bool makeRatio = false;
+  bool makeRatio =true;
   /// Should we REDO histograms?
-  bool redoHistograms = true;
+  bool redoHistograms =true ;
   /// Should we put the signal MC stacked on top of the background (or just plot the signal alone)?
   bool isSignalStackOnBkg = false;
 
-  /// Path to wherever the files with the trees are. 
-  std::string pathToTrees="../trees/";
 
-  /// Path to wherever you want to put the histograms (figures) in.
-  std::string outputDir = "../plots_ElectronChannel";
+////********************************************************************************
+////             1. THE FOLDER WHERE SAVE THE PLOTS AND LOAD THE TREES 
+////********************************************************************************
+    //// THE LOCATION OF THE TREES
+//    std::string pathToTrees="../EDBRTreeMaker/test/trees_Oct14/";
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_pu/";
+      std::string pathToTrees="../EDBRTreeMaker/test/trees_PU_Oct22/";
+    //// THE LOCATION WHERE SAVE THE PLOTS
+//    std::string outputDir = "./plots_test_Run2_Oct14"; 
+//    std::string outputDir = "./plots_test_Run2_Oct14_withjetIDcut1";
+      std::string outputDir = "./plots_test_Run2_PU_Oct22"; 
+///********************************************************************************
+///              2. SETUP THE NAMES OF THE DATA FILES FOR TREES   
+///********************************************************************************
+    const int nDATA=1;
+    std::string dataLabels[nDATA]={"MET_Run2015D_merge"};   
+    //const int nDATA=0;//set to zero if you don't want to plot
+    //std::string dataLabels[nDATA]={};
+    std::vector<std::string> fData;
  
+    for(int ii=0;ii<nDATA;ii++){
+       fData.push_back(pathToTrees+"treeEDBR_"+dataLabels[ii]+".root");
+    }
 
-  /// Setup names of data files for trees.
+////******************************************************************************
+////            3. SETUP NAMES OF MC FILES FOR TREES 
+////*****************************************************************************
+  //const int nMC=0;
+  const int nMC=17;//set to zero if you don't want to plot
+  //std::string mcLabels[nMC]={};
+  std::string mcLabels[nMC]={  "WW_25ns",
+                               "ZZ_25ns",
+                               "WZ_25ns",
+                               "TTjets_25ns_powheg",                               
+                               "WJetsToLNu_HT-100To200_25ns",
+                               "WJetsToLNu_HT-200To400_25ns",
+                               "WJetsToLNu_HT-400To600_25ns",
+                               "WJetsToLNu_HT-600ToInf_25ns",
+                               "ZJetsToNuNu_HT-100To200_25ns",   
+                               "ZJetsToNuNu_HT-200To400_25ns",
+                               "ZJetsToNuNu_HT-400To600_25ns",
+                               "ZJetsToNuNu_HT-600ToInf_25ns",
+                               "QCD_HT500to700_25ns",
+                               "QCD_HT700to1000_25ns",
+                               "QCD_HT1000to1500_25ns",
+                               "QCD_HT1500to2000_25ns",
+                               "QCD_HT2000toInf_25ns"};
 
-  /*
-  const int nDATA=4;
-  std::string dataLabels[nDATA]={"DoubleMu_Run2012A_22Jan2013",
-				 "DoubleMuParked_Run2012B_22Jan2013",
-				 "DoubleMuParked_Run2012C_22Jan2013",
-				 "DoubleMuParked_Run2012D_22Jan2013"};
-  */
-  const int nDATA=2;//set to zero if you don't want to plot
-  std::string dataLabels[nDATA]={"SingleMuon_Run2015B",
-                                 "SingleElectron_Run2015B"};
-  std::vector<std::string> fData;
-  
-  for(int ii=0;ii<nDATA;ii++){
-    fData.push_back(pathToTrees+"treeEDBR_"+dataLabels[ii]+".root");
-  }
-
-  /// Setup names of MC files for trees.
-
-  const int nMC=3;//set to zero if you don't want to plot
-  std::string mcLabels[nMC]={ 
-                             "T_T",
-                             "Di_boson",
-                             "DYJets_ToLL",
-			    };
-
-  double kFactorsMC_array[nMC] = {1, 1, 1};
+  //// THE FACTORS FOR MC
+  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
   
   std::vector<std::string> fMC;
   for(int ii=0;ii<nMC;ii++){
@@ -92,15 +109,16 @@ void loopPlot(){
       //std::cout << kFactorsMC_array[index] << std::endl;
       kFactorsMC.push_back( kFactorsMC_array[index] );	
     }
+  
 
-  /// Setup names of MC signal files for trees.
-  const int nMCSig=0;//set to zero if you don't want to plot
+  const int nMCSig=0;
   std::string mcLabelsSig[nMCSig]={};
-  //std::string mcLabelsSig[nMCSig]={//"BulkGravToZZToZlepZhad_M-1000",
-  //                                 "BulkGrav_M_2000"
-  //                                };
-  double kFactorsSig_array[nMCSig]={};
-  //double kFactorsSig_array[nMCSig] = {1e6};
+  //// UNCOMMENT THIS TO PLOT THE SIGNAL MC
+  //const int nMCSig=1;
+  //std::string mcLabelsSig[nMCSig]={"RSGravToZZ_kMpl01_M-2000_25ns"};
+
+  double kFactorsSig_array[nMCSig] = {};
+  //double kFactorsSig_array[nMCSig] = {10};
 
   std::vector<double> kFactorsMCSig;
   for (int index=0; index<nMCSig; index++)
@@ -122,9 +140,9 @@ void loopPlot(){
   printf("All strings set\n");
 
 
-  /// ----------------------------------------------------------------
-  /// This first part is the loop over trees to create histogram files 
-  /// ----------------------------------------------------------------
+//// ********************************************************************************
+////        4. THIS PART IS THE LOOP OVER THE DATA TREES TO CREATE HISTOGRMS FILES 
+//// *********************************************************************************
 
   /// The EDBRHistoMaker, for reference
   ///
@@ -167,7 +185,10 @@ void loopPlot(){
 
   printf("Loop over data done\n");
  
-  //loop over MC files and make histograms individually for each of them
+
+////*************************************************************************************
+////     5. LOOP OVER MC FILES AND MAKE HISTOGRAMS INDIVIDUALLY FOR EACH OF THEM
+////************************************************************************************
   for(int i=0;i<nMC;i++){
     std::cout<<"\n-------\nRunning over "<<mcLabels[i].c_str()<<std::endl;
     std::cout<<"The file is " <<fMC.at(i)<<std::endl;    
@@ -285,13 +306,57 @@ void loopPlot(){
     // For ZZ
   ////// {DYJetsToLL_HT-100to200,DYJetsToLL_HT-200to400,DYJetsToLL_HT-200to400,DYJetsToLL_HT-600toInf}
   std::vector<int> fColorsMC;
+
+  fColorsMC.push_back(kRed-10);
+  fColorsMC.push_back(kRed-10);
+  fColorsMC.push_back(kRed-10);
+
+  fColorsMC.push_back(kAzure-5);
+
+  fColorsMC.push_back(kRed-4);
+  fColorsMC.push_back(kRed-4);
+  fColorsMC.push_back(kRed-4);
+  fColorsMC.push_back(kRed-4);
+
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
+
+  fColorsMC.push_back(kYellow-7);
+  fColorsMC.push_back(kYellow-7);
+  fColorsMC.push_back(kYellow-7);
+  fColorsMC.push_back(kYellow-7);
+  fColorsMC.push_back(kYellow-7);
+
+
+//  fColorsMC.push_back(kTeal-8);
+//  fColorsMC.push_back(kYellow-5);
+
+//  fColorsMC.push_back(kYellow-7);
+//  fColorsMC.push_back(kYellow-7);
+//  fColorsMC.push_back(kYellow-7);
+//  fColorsMC.push_back(kYellow-7);
+/*
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+*/
+//  fColorsMC.push_back(kRed+2);
+
+//  fColorsMC.push_back(kAzure-5);
+//  fColorsMC.push_back(kAzure-5);
+//  fColorsMC.push_back(kAzure-5);
+//  fColorsMC.push_back(kAzure-5);
+//  fColorsMC.push_back(kBlue+3); 
+//  fColorsMC.push_back(kBlue+3);
+//  fColorsMC.push_back(kBlue+3);
+//  fColorsMC.push_back(kBlue+3); 
   //fColorsMC.push_back(kRed+3);
   //fColorsMC.push_back(kRed);
-  //fColorsMC.push_back(kAzure+1);
-  //fColorsMC.push_back(kAzure+2);
-  fColorsMC.push_back(kGreen-7);
-  fColorsMC.push_back(kRed-7);
-  fColorsMC.push_back(kAzure-7);
+//  fColorsMC.push_back(kRed-10);
+//  fColorsMC.push_back(kRed-4);
   
   ////// {"BulkG_WW_lvjj_c1p0_M600_xww","BulkG_WW_lvjj_c1p0_M1000_xww","BulkG_WW_lvjj_c1p0_M1500_xww"};
   std::vector<int> fColorsMCSig;
