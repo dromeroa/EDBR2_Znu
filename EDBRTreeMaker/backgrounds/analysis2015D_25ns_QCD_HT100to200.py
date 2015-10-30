@@ -25,7 +25,7 @@ VZ_JetMET       = True
 ### CHOOSE THE SAMPLE :                                                                   
 
 ###-------- RSGRrav------------------
-#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns_v2"
+#SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 
 ###------   Z +JETS  -----------
 #SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
@@ -67,7 +67,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
 configXsecs = { 
-                "RSGravToZZ_kMpl01_M-2000_25ns_v2"        : 1,
+                "BulkGrav_ZZ_M2000_25ns_v2"               : 1,
                 "ZJetsToNuNu_HT-100To200_25ns_v2"         : 280.47,
                 "ZJetsToNuNu_HT-200To400_25ns_v2"         : 78.36,
                 "ZJetsToNuNu_HT-400To600_25ns_v2"         : 10.944,
@@ -77,7 +77,7 @@ configXsecs = {
                 "WJetsToLNu_HT-400To600_25ns_v2"          : 48.91,
                 "WJetsToLNu_HT-600ToInf_25ns_v2"          : 18.77,
                 "WW_25ns_v2"                              : 118.7,
-                "ZZ_25ns_v2"                              : 16.5,
+                "ZZ_25ns_v2"                              : 16.523,
                 "WZ_25ns_v2"                              : 47.13, 
                 "TTbar_25ns_powheg_v2"                    : 831.76,
                 "QCD_HT100to200_25ns_v2"                  : 27540000.0	,
@@ -91,28 +91,28 @@ configXsecs = {
 
               }
 
-configNevents = {"WJetsToLNu_25ns_inclusive"            : 24089991,
-                 "RSGravToZZ_kMpl01_M-2000_25ns"        : 29751,
-                 "ZJetsToNuNu_HT-100To200_25ns"         : 5148193,
-                 "ZJetsToNuNu_HT-200To400_25ns"         : 5032927,
-                 "ZJetsToNuNu_HT-400To600_25ns"         : 1014139,
-                 "ZJetsToNuNu_HT-600ToInf_25ns"         : 1015904,
-                 "WJetsToLNu_HT-100To200_25ns"          : 10142187,
-                 "WJetsToLNu_HT-200To400_25ns"          : 5231856,
-                 "WJetsToLNu_HT-400To600_25ns"          : 1901705,
-                 "WJetsToLNu_HT-600ToInf_25ns"          : 1036108,
-                 "WW_25ns"                              : 994416,
-                 "ZZ_25ns"                              : 996168,
-                 "WZ_25ns"                              : 991232, 
-                 "TTbar_25ns_powheg"                    : 19757190,
-                 "QCD_HT100to200_25ns"                  : 81637494,
-                 "QCD_HT200to300_25ns"                  : 18718905,
-                 "QCD_HT300to500_25ns"                  : 19826197,
-                 "QCD_HT500to700_25ns"                  : 19664159,
-                 "QCD_HT700to1000_25ns"                 : 15356448,
-                 "QCD_HT1000to1500_25ns"                : 4963895, 
-                 "QCD_HT1500to2000_25ns"                : 3868886,  
-                 "QCD_HT2000toInf_25ns"                 : 1912529,
+configNevents = {
+                 "BulkGrav_ZZ_M2000_25ns_v2"               : 99400,
+                 "ZJetsToNuNu_HT-100To200_25ns_v2"         : 5148193,
+                 "ZJetsToNuNu_HT-200To400_25ns_v2"         : 5032927,
+                 "ZJetsToNuNu_HT-400To600_25ns_v2"         : 1014139,
+                 "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 1015904,
+                 "WJetsToLNu_HT-100To200_25ns_v2"          : 10142187,
+                 "WJetsToLNu_HT-200To400_25ns_v2"          : 5231856,
+                 "WJetsToLNu_HT-400To600_25ns_v2"          : 1901705,
+                 "WJetsToLNu_HT-600ToInf_25ns_v2"          : 1036108,
+                 "WW_25ns_v2"                              : 993640,
+                 "ZZ_25ns_v2"                              : 996944,
+                 "WZ_25ns_v2"                              : 978512, 
+                 "TTbar_25ns_powheg_v2"                    : 19757190,
+                 "QCD_HT100to200_25ns_v2"                  : 81637494,
+                 "QCD_HT200to300_25ns_v2"                  : 18718905,
+                 "QCD_HT300to500_25ns_v2"                  : 19826197,
+                 "QCD_HT500to700_25ns_v2"                  : 19664159,
+                 "QCD_HT700to1000_25ns_v2"                 : 15356448,
+                 "QCD_HT1000to1500_25ns_v2"                : 4963895, 
+                 "QCD_HT1500to2000_25ns_v2"                : 3868886,  
+                 "QCD_HT2000toInf_25ns_v2"                 : 1912529,
 
                 }
 
