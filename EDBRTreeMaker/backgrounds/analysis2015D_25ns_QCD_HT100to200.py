@@ -25,41 +25,40 @@ VZ_JetMET       = True
 ### CHOOSE THE SAMPLE :                                                                   
 
 ###-------- RSGRrav------------------
-#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns"
+#SAMPLE="RSGravToZZ_kMpl01_M-2000_25ns_v2"
 
 ###------   Z +JETS  -----------
-#SAMPLE="ZJetsToNuNu_HT-100To200_25ns"
-#SAMPLE="ZJetsToNuNu_HT-200To400_25ns"
-#SAMPLE="ZJetsToNuNu_HT-400To600_25ns"
-#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
+#SAMPLE="ZJetsToNuNu_HT-200To400_25ns_v2"
+#SAMPLE="ZJetsToNuNu_HT-400To600_25ns_v2"
+#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns_v2"
 
 ###-----   W + jets-------------------
-#SAMPLE="WJetsToLNu_25ns_inclusive"
-#SAMPLE="WJetsToLNu_HT-100To200_25ns"
-#SAMPLE="WJetsToLNu_HT-200To400_25ns"
-#SAMPLE="WJetsToLNu_HT-400To600_25ns"
-SAMPLE="WJetsToLNu_HT-600ToInf_25ns"
+#SAMPLE="WJetsToLNu_HT-100To200_25ns_v2"
+#SAMPLE="WJetsToLNu_HT-200To400_25ns_v2"
+#SAMPLE="WJetsToLNu_HT-400To600_25ns_v2"
+#SAMPLE="WJetsToLNu_HT-600ToInf_25ns_v2"
 
 ### ------- TTJets ------------------
-#SAMPLE="TTjets_25ns_powheg" 
+#SAMPLE="TTjets_25ns_powheg_v2" 
 
 ### ------- Dibosons ---------------
-#SAMPLE="WW_25ns"
-#SAMPLE="WZ_25ns"
-#SAMPLE="ZZ_25ns"
+#SAMPLE="WW_25ns_v2"
+#SAMPLE="WZ_25ns_v2"
+#SAMPLE="ZZ_25ns_v2"
 
 ###-------- QCD ------------------
-#SAMPLE="QCD_HT2000toInf_25ns"
-#SAMPLE="QCD_HT1500to2000_25ns"
-#SAMPLE="QCD_HT1000to1500_25ns"
-#SAMPLE="QCD_HT700to1000_25ns"
-#SAMPLE="QCD_HT500to700_25ns"
-#SAMPLE="QCD_HT300to500_25ns"
-#SAMPLE="QCD_HT200to300_25ns"
-#SAMPLE="QCD_HT100to200_25ns"
+#SAMPLE="QCD_HT2000toInf_25ns_v2"
+#SAMPLE="QCD_HT1500to2000_25ns_v2"
+#SAMPLE="QCD_HT1000to1500_25ns_v2"
+#SAMPLE="QCD_HT700to1000_25ns_v2"
+#SAMPLE="QCD_HT500to700_25ns_v2"
+#SAMPLE="QCD_HT300to500_25ns_v2"
+#SAMPLE="QCD_HT200to300_25ns_v2"
+#SAMPLE="QCD_HT100to200_25ns_v2"
 
 ### Source
-process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X."+SAMPLE)
+process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
 #process.maxEvents.input = -1
 process.maxEvents.input = 100000
 
@@ -67,28 +66,28 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
-configXsecs = { "WJetsToLNu_25ns_inclusive"            : 61526.7,
-                "RSGravToZZ_kMpl01_M-2000_25ns"        : 1,
-                "ZJetsToNuNu_HT-100To200_25ns"         : 280.47,
-                "ZJetsToNuNu_HT-200To400_25ns"         : 78.36,
-                "ZJetsToNuNu_HT-400To600_25ns"         : 10.944,
-                "ZJetsToNuNu_HT-600ToInf_25ns"         : 4.203,
-                "WJetsToLNu_HT-100To200_25ns"          : 1629.87,
-                "WJetsToLNu_HT-200To400_25ns"          : 435.6,
-                "WJetsToLNu_HT-400To600_25ns"          : 59.169,
-                "WJetsToLNu_HT-600ToInf_25ns"          : 22.7117,
-                "WW_25ns"                              : 118.7,
-                "ZZ_25ns"                              : 16.5,
-                "WZ_25ns"                              : 47.13, 
-                "TTjets_25ns_powheg"                   : 831.76,
-                "QCD_HT100to200_25ns"                  : 80093092,
-                "QCD_HT200to300_25ns"                  : 1735000.0, 
-                "QCD_HT300to500_25ns"                  : 366800.0,
-                "QCD_HT500to700_25ns"                  : 29370.0,
-                "QCD_HT700to1000_25ns"                 : 6524.0,
-                "QCD_HT1000to1500_25ns"                : 1064.0,
-                "QCD_HT1500to2000_25ns"                : 121.5,   
-                "QCD_HT2000toInf_25ns"                 : 25.42,    
+configXsecs = { 
+                "RSGravToZZ_kMpl01_M-2000_25ns_v2"        : 1,
+                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 280.47,
+                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 78.36,
+                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 10.944,
+                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 4.203,
+                "WJetsToLNu_HT-100To200_25ns_v2"          : 1345,
+                "WJetsToLNu_HT-200To400_25ns_v2"          : 359.7,
+                "WJetsToLNu_HT-400To600_25ns_v2"          : 48.91,
+                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 18.77,
+                "WW_25ns_v2"                              : 118.7,
+                "ZZ_25ns_v2"                              : 16.5,
+                "WZ_25ns_v2"                              : 47.13, 
+                "TTjets_25ns_powheg_v2"                   : 831.76,
+                "QCD_HT100to200_25ns_v2"                  : 80093092,
+                "QCD_HT200to300_25ns_v2"                  : 1735000.0, 
+                "QCD_HT300to500_25ns_v2"                  : 366800.0,
+                "QCD_HT500to700_25ns_v2"                  : 29370.0,
+                "QCD_HT700to1000_25ns_v2"                 : 6524.0,
+                "QCD_HT1000to1500_25ns_v2"                : 1064.0,
+                "QCD_HT1500to2000_25ns_v2"                : 121.5,   
+                "QCD_HT2000toInf_25ns_v2"                 : 25.42,    
 
               }
 
