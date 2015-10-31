@@ -361,7 +361,7 @@ if VZ_JetMET == True :
 
 
 
-   process.HBHEmetfilterSequence = cms.Sequence( process.HBHENoiseFilterResultProducer *
+    process.HBHEmetfilterSequence = cms.Sequence( process.HBHENoiseFilterResultProducer *
                                                  process.ApplyBaselineHBHENoiseFilter *
                                                  process.ApplyBaselineHBHEIsoNoiseFilter
                               
