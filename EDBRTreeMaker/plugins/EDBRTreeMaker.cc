@@ -101,7 +101,7 @@ private:
 
   //-----------------------MET FROM GRAVITON ----------------------------------------
   double metpt, metphi, metpx, metpy, metnomu;
-
+  double sumET, rawmetpt, rawmetphi, rawsumET, genmetpt, genmetphi, calometpt, calometphi, calometsumET;
   //---------------------- AK8 JETS --------------------------------------------------
   int    numfatjets;
   double tau1,     tau2,     tau3,     tau21;
@@ -358,6 +358,15 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/D"           );
   outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/D"           );
   outTree_->Branch("metnomu"         ,&metnomu        ,"metnomu/D"        );
+  outTree_->Branch("sumET"           ,&sumET          ,"sumET/D"          );
+  outTree_->Branch("rawmetpt"        ,&rawmetpt       ,"rawmetpt/D"       );
+  outTree_->Branch("rawmetphi"       ,&rawmetphi      ,"rawmetphi/D"      );
+  outTree_->Branch("rawsumET"        ,&rawsumET       ,"rawsumET/D"       );
+  outTree_->Branch("genmetpt"        ,&genmetpt       ,"genmetpt/D"       );
+  outTree_->Branch("genmetphi"       ,&genmetphi      ,"genmetphi/D"      );
+  outTree_->Branch("calometpt"       ,&calometpt      ,"calometpt/D"      );
+  outTree_->Branch("calometphi"      ,&calometphi     ,"calometphi/D"     );
+  outTree_->Branch("calometsumET"    ,&calometsumET   ,"calometsumET/D"   );
   // ak4 jets
   outTree_->Branch("ak4jets_pt"      ,&ak4jets_pt                         );
   outTree_->Branch("ak4jets_eta"     ,&ak4jets_eta                        );
@@ -725,18 +734,18 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    metphi  = goodMET.phi();
                    metpx   = goodMET.px();
                    metpy   = goodMET.py();
-                   //sumET   = goodMET.sumEt(); 
+                   sumET   = goodMET.sumEt(); 
                    //// The Uncorrected MET (how access change with the release)
-                   //rawmetpt  =  goodMET.uncorPt();
-                   //rawmetphi =  goodMET.uncorPhi();
-                   //rawsumET  =  goodMET.uncorSumEt();
+                   rawmetpt  =  goodMET.uncorPt();
+                   rawmetphi =  goodMET.uncorPhi();
+                   rawsumET  =  goodMET.uncorSumEt();
                    //// The Gen MET
-                   //genmetpt   =  goodMET.genMET()->pt();
-                   //genmetphi  =  goodMET.genMET()->phi();
+                   genmetpt   =  goodMET.genMET()->pt();
+                   genmetphi  =  goodMET.genMET()->phi();
                    //// The Calo MET
-                   //calometpt     =   goodMET.caloMETPt();
-                   //calometphi    =   goodMET.caloMETPhi();
-                   //calometsumET  =   goodMET.caloMETSumEt();
+                   calometpt     =   goodMET.caloMETPt();
+                   calometphi    =   goodMET.caloMETPhi();
+                   calometsumET  =   goodMET.caloMETSumEt();
                       
 
                    ////--------------------  MET NO MU (TO FIX)--------------------////
@@ -833,11 +842,9 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        if( massVhad > 40. and massVhad < 65. )
            reg = lowerSB;
        if( massVhad > 65. and massVhad < 105. )
-           reg = excluded; 
-           // (blind) lowerSIG;
+           reg = lowerSIG;
        if( massVhad > 105. and massVhad < 135. )
-           reg = excluded;
-           // (blind) upperSIG;
+           reg = upperSIG;
        if( massVhad > 135. )
            reg = upperSB;  
 
@@ -996,6 +1003,15 @@ void EDBRTreeMaker::setDummyValues() {
      trackerMu2     = -1e4;
      highPtMu1      = -1e4;
      highPtMu2      = -1e4;
+     sumET          = -1e4;
+     rawmetpt       = -1e4;
+     rawmetphi      = -1e4;
+     rawsumET       = -1e4;
+     genmetpt       = -1e4;
+     genmetphi      = -1e4;
+     calometpt      = -1e4;
+     calometphi     = -1e4;
+     calometsumET   = -1e4;
      HT             = -1e4;
      MHT            = -1e4;
      MHTx           = -1e4;
