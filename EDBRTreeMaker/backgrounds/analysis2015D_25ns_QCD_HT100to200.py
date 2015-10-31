@@ -330,12 +330,40 @@ if VZ_JetMET == True :
         setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
 
 
+
+
+    ###---------------- MET FILTERS for MINIAOD v2 -----------------------------------###
+    ###-------------------------------------------------------------------------------###
+    process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+    process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+    process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False)
+    process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
+
+    process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+       inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+       reverseDecision = cms.bool(False)
+    )
+
+    process.ApplyBaselineHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
+    inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHEIsoNoiseFilterResult'),
+    reverseDecision = cms.bool(False)
+    )
+
+
+
+
+   process.HBHEmetfilterSequence = cms.Sequence( process.HBHENoiseFilterResultProducer *
+                                                 process.ApplyBaselineHBHENoiseFilter *
+                                                 process.ApplyBaselineHBHEIsoNoiseFilter
+                              
+   )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 
 
     process.analysis.replace(       process.jetSequence,
                                     process.hltSequenceZnu           *
+                                    process.HBHEmetfilterSequence    *  
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *

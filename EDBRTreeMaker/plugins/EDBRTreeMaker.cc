@@ -720,11 +720,26 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////---------------------------------------------------------------------------------////
                    ////------------------------------  MET ---------------------------------------------////
                    ////---------------------------------------------------------------------------------////
+                   //// THE TypeI PF MET
                    metpt   = goodMET.pt();
                    metphi  = goodMET.phi();
                    metpx   = goodMET.px();
                    metpy   = goodMET.py();
-                   ////--------------------  MET NO MU --------------------////
+                   //sumET   = goodMET.sumEt(); 
+                   //// The Uncorrected MET (how access change with the release)
+                   //rawmetpt  =  goodMET.uncorPt();
+                   //rawmetphi =  goodMET.uncorPhi();
+                   //rawsumET  =  goodMET.uncorSumEt();
+                   //// The Gen MET
+                   //genmetpt   =  goodMET.genMET()->pt();
+                   //genmetphi  =  goodMET.genMET()->phi();
+                   //// The Calo MET
+                   //calometpt     =   goodMET.caloMETPt();
+                   //calometphi    =   goodMET.caloMETPhi();
+                   //calometsumET  =   goodMET.caloMETSumEt();
+                      
+
+                   ////--------------------  MET NO MU (TO FIX)--------------------////
                    double metnomu_x = metpx;
                    double metnomu_y = metpy;
                    edm::Handle<pat::MuonCollection> muons;
@@ -818,10 +833,12 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        if( massVhad > 40. and massVhad < 65. )
            reg = lowerSB;
        if( massVhad > 65. and massVhad < 105. )
-           reg = lowerSIG;
-       if( massVhad > 105. and massVhad < 145. )
-           reg = upperSIG;
-       if( massVhad > 145. )
+           reg = excluded; 
+           // (blind) lowerSIG;
+       if( massVhad > 105. and massVhad < 135. )
+           reg = excluded;
+           // (blind) upperSIG;
+       if( massVhad > 135. )
            reg = upperSB;  
 
    

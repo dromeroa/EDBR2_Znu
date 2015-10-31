@@ -1,13 +1,13 @@
 import FWCore.ParameterSet.Config as cms
 
-
-HBHENoiseFilter = cms.EDFilter("HLTHighLevel",
-           TriggerResultsTag  = cms.InputTag("TriggerResults","","PAT"),
-           HLTPaths           = cms.vstring("Flag_HBHENoiseFilter"),
-           eventSetupPathsKey = cms.string(''),
-           andOr              = cms.bool(True),
-           throw              = cms.bool(True)
-)
+#### We don't need this for miniAOD v2 
+#HBHENoiseFilter = cms.EDFilter("HLTHighLevel",
+#           TriggerResultsTag  = cms.InputTag("TriggerResults","","PAT"),
+#           HLTPaths           = cms.vstring("Flag_HBHENoiseFilter"),
+#           eventSetupPathsKey = cms.string(''),
+#           andOr              = cms.bool(True),
+#           throw              = cms.bool(True)
+#)
 
 
 
@@ -38,7 +38,8 @@ CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
 
 
 
-metfilterSequence = cms.Sequence( HBHENoiseFilter       +
+metfilterSequence = cms.Sequence( 
+#                                  HBHENoiseFilter       +
                                   goodVertices          +
                                   eeBadScFilter         +
                                   CSCTightHaloFilter    )
