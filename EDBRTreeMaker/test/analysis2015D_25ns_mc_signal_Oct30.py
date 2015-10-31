@@ -25,7 +25,7 @@ VZ_JetMET       = True
 ### CHOOSE THE SAMPLE :                                                                   
 
 ###-------- RSGRrav------------------
-#SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
+SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 
 ###------   Z +JETS  -----------
 #SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
