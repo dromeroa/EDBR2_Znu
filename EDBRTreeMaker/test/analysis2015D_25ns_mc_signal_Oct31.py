@@ -27,8 +27,6 @@ else :
    JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
 #************************************ CHOOSE YOUR HLT *******************************************#
 
-
-
 #*********************************** THE SAMPLES ****************************************************#
 ### CHOOSE THE SAMPLE :                                                                   
 
@@ -68,7 +66,7 @@ SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
 #process.maxEvents.input = -1
-process.maxEvents.input = 100000
+process.maxEvents.input = 8000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -227,7 +225,7 @@ if option == 'RECO':
     process.hadronicV.cut = cms.string('pt > 200. '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
-    ##-----  FOR NOW NO CUT IN MET -------------##
+    ##-----  FOR NOW JUST CUT IN MET -------------##
     process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
@@ -315,6 +313,7 @@ if VZ_JetMET == True :
     ## Why the best hadronicV candidate has the largest pt?
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
+
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
     process.graviton.cut    =  cms.string("")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
@@ -340,12 +339,40 @@ if VZ_JetMET == True :
         setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
 
 
+
+
+    ###---------------- MET FILTERS for MINIAOD v2 -----------------------------------###
+    ###-------------------------------------------------------------------------------###
+    process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+    process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+    process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False)
+    process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
+
+    process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+       inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+       reverseDecision = cms.bool(False)
+    )
+
+    process.ApplyBaselineHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
+    inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHEIsoNoiseFilterResult'),
+    reverseDecision = cms.bool(False)
+    )
+
+
+
+
+   process.HBHEmetfilterSequence = cms.Sequence( process.HBHENoiseFilterResultProducer *
+                                                 process.ApplyBaselineHBHENoiseFilter *
+                                                 process.ApplyBaselineHBHEIsoNoiseFilter
+                              
+   )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 
 
     process.analysis.replace(       process.jetSequence,
                                     process.hltSequenceZnu           *
+                                    process.HBHEmetfilterSequence    *  
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *
