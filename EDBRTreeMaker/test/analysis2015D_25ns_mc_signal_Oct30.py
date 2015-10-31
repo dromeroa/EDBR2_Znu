@@ -19,6 +19,14 @@ VZ_semileptonic = False
 VZ_JetMET       = True
 #                                                                                                    #
 #****************************************************************************************************#
+#*************************************** BLIND ANALYSIS *********************************************#
+isBlinded = True
+if isBlinded == True :
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65.'
+else :
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
+#************************************ CHOOSE YOUR HLT *******************************************#
+
 
 
 #*********************************** THE SAMPLES ****************************************************#
@@ -300,6 +308,8 @@ if filterMode == False:
 ####################################################################################################
 
 if VZ_JetMET == True :
+
+    process.hadronicV.cut = cms.string( JETMASSCUT )
  
     process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
     ## Why the best hadronicV candidate has the largest pt?
