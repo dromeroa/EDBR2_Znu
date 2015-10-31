@@ -209,6 +209,13 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   payload_          (                                   iConfig.getParameter<std::string>   ( "payload"          ) ),
   niceak4JetTags_   (                                   iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )
 {
+
+   if( iConfig.existsAs<bool>("isData") )
+        isData_ = iConfig.getParameter<bool> ("isData");
+   else isData_ = true;
+
+
+
   if(EDBRChannel_ == "VZ_CHANNEL")
     channel=VZ_CHANNEL;
   else if(EDBRChannel_ == "VW_CHANNEL")
@@ -796,13 +803,27 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        double targetEvents = targetLumiInvPb_*crossSectionPb_;
        lumiWeight = targetEvents/originalNEvents_;
 
-       /// FIXME: these should NOT be hardcoded
-       if(massVhad < 50 or massVhad > 110)
-	   reg = -1;
-       if(massVhad > 50 and massVhad < 70)
-	   reg = 0;
-       if(massVhad > 70 and massVhad < 110)
-	   reg = 1;
+
+       enum {
+              excluded = -1,
+              lowerSB,
+              lowerSIG,
+              upperSIG,
+              upperSB,
+       };
+
+      
+       if( massVhad < 40. )
+           reg = excluded;
+       if( massVhad > 40. and massVhad < 65. )
+           reg = lowerSB;
+       if( massVhad > 65. and massVhad < 105. )
+           reg = lowerSIG;
+       if( massVhad > 105. and massVhad < 145. )
+           reg = upperSIG;
+       if( massVhad > 145. )
+           reg = upperSB;  
+
    
        outTree_->Fill();
    }
