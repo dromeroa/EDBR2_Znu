@@ -55,8 +55,8 @@ usedNevents = configNevents[SAMPLE]
 import FWCore.PythonUtilities.LumiList as LumiList
 process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-259891_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
 #***********************************  EVENTS TO SKIP ******************************************************************#
-import FWCore.Utilities.FileUtils as FileUtils
-process.source.eventsToSkip =cms.untracked.VEventRange(FileUtils.loadListFromFile ('eventstoskip.txt'))
+#import FWCore.Utilities.FileUtils as FileUtils
+#process.source.eventsToSkip =cms.untracked.VEventRange(FileUtils.loadListFromFile ('eventstoskip.txt'))
 #************************************************************************************************************************#
 
 
