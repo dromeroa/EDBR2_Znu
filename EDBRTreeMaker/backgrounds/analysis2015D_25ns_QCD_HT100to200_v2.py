@@ -46,7 +46,7 @@ else :
 #SAMPLE="WJetsToLNu_HT-600ToInf_25ns_v2"
 
 ### ------- TTJets ------------------
-#SAMPLE="TTjets_25ns_powheg_v2" 
+#SAMPLE="TTbar_25ns_powheg_v2" 
 
 ### ------- Dibosons ---------------
 #SAMPLE="WW_25ns_v2"
