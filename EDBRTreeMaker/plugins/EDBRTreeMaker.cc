@@ -30,6 +30,8 @@
 
 #include "RecoEgamma/EgammaTools/interface/EffectiveAreas.h"
 
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
+
 #include "EDBRChannels.h"
 #include "TAxis.h"
 #include "TEfficiency.h"
@@ -81,6 +83,7 @@ private:
   int nevent, run, lumisec;
   int channel, lep, reg;
   double triggerWeight, lumiWeight, pileupWeight;
+  double totalWeight;
 
   bool isGen_;
   bool isData_; 
@@ -89,6 +92,7 @@ private:
   double targetLumiInvPb_;
   std::string EDBRChannel_;
   std::string gravitonSrc_, metSrc_;
+  edm::FileInPath puWeights_;
   edm::EDGetTokenT<reco::VertexCollection> vertexToken_;
   edm::EDGetTokenT<edm::View<pat::MET> > metnohfToken_;
   edm::EDGetTokenT<pat::JetCollection> jetToken_;
@@ -189,6 +193,8 @@ private:
 
   void setDummyValues();
 
+  TFile *f1;
+  TH1D *h1;
 };
 
 //
@@ -214,6 +220,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
         isData_ = iConfig.getParameter<bool> ("isData");
    else isData_ = true;
 
+   if( iConfig.existsAs<edm::FileInPath>("puWeights") )
+        puWeights_ = iConfig.getParameter<edm::FileInPath>("puWeights") ;
 
 
   if(EDBRChannel_ == "VZ_CHANNEL")
@@ -377,6 +385,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
   outTree_->Branch("lumiWeight"      ,&lumiWeight     ,"lumiWeight/D"     );
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
+  outTree_->Branch("totalWeight"     ,&totalWeight    ,"totalWeight/D"    );
   outTree_->Branch("deltaRleplep"    ,&deltaRleplep   ,"deltaRleplep/D"   );
   outTree_->Branch("delPhilepmet"    ,&delPhilepmet   ,"delPhilepmet/D"   );
   outTree_->Branch("deltaRlepjet"    ,&deltaRlepjet   ,"deltaRlepjet/D"   );
@@ -683,15 +692,20 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////-------------------  HADRONS ---------------------------------------------------////
                    ////--------------------------------------------------------------------------------////
                    ////------- FLAG FOR MET FILTER -----////
-                   edm::Handle<edm::TriggerResults> trigResults2;
-                   //// This configuration is for data, in case of MC, check if RECO have to change
-                   //// For Data
-                   //edm::InputTag trigResultsTag2("TriggerResults","","RECO");
-                   //// For MC
-                   edm::InputTag trigResultsTag2("TriggerResults","","PAT");
-                   iEvent.getByLabel(trigResultsTag2,trigResults2);
-                   const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2); 
-                   is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");
+                   if ( isData_ ){
+                                  edm::Handle<edm::TriggerResults> trigResults2;
+                                  edm::InputTag trigResultsTag2("TriggerResults","","RECO");
+                                  iEvent.getByLabel(trigResultsTag2,trigResults2);
+                                  const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2);
+                                  is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");
+                   }
+                   else{ 
+                                  edm::Handle<edm::TriggerResults> trigResults2; 
+                                  edm::InputTag trigResultsTag2("TriggerResults","","PAT");
+                                  iEvent.getByLabel(trigResultsTag2,trigResults2);
+                                  const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2); 
+                                  is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");
+                   }
                    ////----------- FOR JET ID  --------////
                    chf = 0.0;
                    nhf = 0.0;
@@ -740,8 +754,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    rawmetphi =  goodMET.uncorPhi();
                    rawsumET  =  goodMET.uncorSumEt();
                    //// The Gen MET
-                   genmetpt   =  goodMET.genMET()->pt();
-                   genmetphi  =  goodMET.genMET()->phi();
+                   if ( !isData_ ){
+                        genmetpt   =  goodMET.genMET()->pt();
+                        genmetphi  =  goodMET.genMET()->phi();
+                   }  
                    //// The Calo MET
                    calometpt     =   goodMET.caloMETPt();
                    calometphi    =   goodMET.caloMETPhi();
@@ -820,12 +836,33 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //	   nVtx = 0;
 //       }
 
-       /// For the time being, set these to 1
-       triggerWeight=1.0;
-       pileupWeight=1.0;
+//------------------------------------------
 
-       double targetEvents = targetLumiInvPb_*crossSectionPb_;
-       lumiWeight = targetEvents/originalNEvents_;
+        /// For data, all weights are equal to 1
+        triggerWeight = 1.0;
+        pileupWeight = 1.0;
+        lumiWeight = 1.0;
+        if( !isData_ ) {
+              // pileup reweight
+              Handle<std::vector< PileupSummaryInfo > > puInfo;
+              iEvent.getByLabel("slimmedAddPileupInfo", puInfo);
+              std::vector<PileupSummaryInfo>::const_iterator PVI;
+              for(PVI = puInfo->begin(); PVI != puInfo->end(); ++PVI) {
+                  int BX = PVI->getBunchCrossing();
+                  if( BX == 0 ){
+                          int bin = h1->FindBin(PVI->getTrueNumInteractions());
+                          pileupWeight = h1->GetBinContent(bin);
+                          continue;
+                  }
+              }
+              // lumi weight
+              double targetEvents = targetLumiInvPb_*crossSectionPb_;
+              lumiWeight = targetEvents/originalNEvents_;
+         }
+         
+         totalWeight = triggerWeight*pileupWeight*lumiWeight;
+
+//-----------------------------------------
 
 
        enum {
@@ -901,6 +938,7 @@ void EDBRTreeMaker::setDummyValues() {
      triggerWeight  = -1e4;
      pileupWeight   = -1e4;
      lumiWeight     = -1e4;
+     totalWeight    = -1e4;
      candMass       = -1e4;
      ptVlep         = -1e4;
      ptVhad         = -1e4;
@@ -1026,8 +1064,11 @@ void EDBRTreeMaker::setDummyValues() {
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void EDBRTreeMaker::beginJob()
-{
+void EDBRTreeMaker::beginJob(){
+    if ( !isData_ ){
+         f1 = new TFile( puWeights_.fullPath().c_str() );
+         h1 = (TH1D*)f1->Get("pileupWeights");
+    }
 }
 
 // ------------ method called once each job just after ending the event loop  ------------

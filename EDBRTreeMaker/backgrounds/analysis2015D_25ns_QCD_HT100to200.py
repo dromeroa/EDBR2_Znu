@@ -65,8 +65,8 @@ else :
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
-#process.maxEvents.input = -1
-process.maxEvents.input = 100000
+process.maxEvents.input = -1
+#process.maxEvents.input = 100000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -185,12 +185,13 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  False                     ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  1546.719                  ),
+                                          targetLumiInvPb = cms.double  (  1560.0                    ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
+                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/PUWeights/pileupWeights72mb.root"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
