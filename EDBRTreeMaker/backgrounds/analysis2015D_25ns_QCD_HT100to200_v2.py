@@ -61,7 +61,7 @@ else :
 #SAMPLE="QCD_HT500to700_25ns_v2"
 #SAMPLE="QCD_HT300to500_25ns_v2"
 #SAMPLE="QCD_HT200to300_25ns_v2"
-#SAMPLE="QCD_HT100to200_25ns_v2"
+SAMPLE="QCD_HT100to200_25ns_v2"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
