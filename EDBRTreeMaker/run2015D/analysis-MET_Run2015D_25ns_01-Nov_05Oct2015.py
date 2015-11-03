@@ -29,7 +29,7 @@ else :
 #*********************************** THE SAMPLES ****************************************************#
 # choose the sample                                                                     
 
-SAMPLE="MET_Run2015D_v4"
+SAMPLE="MET_Run2015D_05Oct2015"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
@@ -40,10 +40,10 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
-configXsecs = {   "MET_Run2015D_v4"      : 1.0,
+configXsecs = {   "MET_Run2015D_05Oct2015"      : 1.0,
               }
 
-configNevents = { "MET_Run2015D_v4"       :1,
+configNevents = { "MET_Run2015D_05Oct2015"       :1,
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -242,7 +242,7 @@ if filterMode == False:
 
 if VZ_JetMET == True :
 
-    process.hadronicV.cut = cms.string( JETMASSCUT )
+    process.hadronicVnu.cut = cms.string( JETMASSCUT )
 
 #    process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
     ## Why the best hadronicV candidate has the largest pt?
