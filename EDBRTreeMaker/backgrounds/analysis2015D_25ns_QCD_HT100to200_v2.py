@@ -191,7 +191,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
-                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/PUWeights/pileupWeights72mb.root"),
+                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights72mb.root"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
