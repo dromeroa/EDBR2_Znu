@@ -216,7 +216,9 @@ void EDBRHistoPlotter::makeLabels()
     TObjArray* tokens = s1.Tokenize(s2);
     std::string aLabel  = ((TObjString*)(tokens->At(1)))->String().Data();
     std::string aLabel2 = ((TObjString*)(tokens->At(2)))->String().Data();
-    labels.push_back(aLabel + aLabel2);
+//    labels.push_back(aLabel + aLabel2);
+//// To save the correct label
+    labels.push_back(aLabel);
   }
   std::cout << "Labels MC done" << std::endl;
 
@@ -534,44 +536,43 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
     }
   }
 
-  // For the legend, we have to tokenize the name "histos_XXX.root"
-  TLegend* leg = new TLegend(0.58, 0.75, 0.93, 0.9);
-  leg->SetMargin(0.4);
-  if (isDataPresent_)
-    leg->AddEntry(sumDATA, "Data", "p");
-
-//// We change the labels for mant MC samples of the same class
+  //// For the legend, we have to tokenize the name "histos_XXX.root"
+  ////  HERE WE DEFINE THE OPTIONS OF THE LABELS--------------------
+    TLegend* leg = new TLegend(0.68, 0.65, 0.93, 0.9);
+    leg->SetMargin(0.2);
+    leg->SetTextSize(0.027);
+    if (isDataPresent_)
+       leg->AddEntry(sumDATA, "Data", "p");
+ 
+//// We change the labels for MC samples of the same class
 //// In the furure we have to improve this
 //// we change this 
 //  for (size_t i = 0; i != histosMC.size(); ++i)
 //    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
 ////---------------------------------------------------------------
-    for (size_t i = 0; i != histosMC.size(); ++i){
-         if (i<1){ 
-                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                   i= i+3;
+    //// TO INVERT THE LABELS ORDER
+   for (int i = histosMC.size()-1; i>0; --i){
+  
+          if(i>15){
+           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+           i= i-5;
+          }
+          if (i>10 ){
+           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+           i = i-4;
+          }
+         if (i>6 ){
+           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+           i = i-4;
          }
-         if (i==3){
-                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                   i= i+1;
+         if (i==3 ){
+           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+           i = i-1;
          }
-         if (i<5){
-                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                   i= i+4;
-         } 
-         if (i<9){
-                   leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                   i= i+4;
+         if (i>1 ){
+           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
          }
-         if (i<14){
-                  leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                   i= i+3;
-        }
-
-    }               
-//// NOTE THAT IN THIS CASE AS THE SUM GOES FROM 0 -> 11
-//// WE ONLY NEED TO SUM 3 IN THE LAST
-
+   }   
 ////----------------------------------------------------------------
   if (histosMCSig.size() > 0) {
     char rescalingLabel[64];
