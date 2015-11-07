@@ -55,8 +55,16 @@ usedNevents = configNevents[SAMPLE]
 import FWCore.PythonUtilities.LumiList as LumiList
 process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-259891_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
 #***********************************  EVENTS TO SKIP ******************************************************************#
-#import FWCore.Utilities.FileUtils as FileUtils
-#process.source.eventsToSkip =cms.untracked.VEventRange(FileUtils.loadListFromFile ('eventstoskip.txt'))
+listEventsToSkip = []
+## REMEMBER TO CHANGE THE PATH TO YOUR ACTUAL LOCATION
+fileEventsToSkip = open("/afs/cern.ch/work/d/dromeroa/private/crab_test_03Nov/CMSSW_7_4_15_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/eventstoskip.txt","r")
+
+for line in fileEventsToSkip:
+    cleanLine = line.rstrip()
+    listEventsToSkip.append(cleanLine+"-"+cleanLine)
+
+rangeEventsToSkip = cms.untracked.VEventRange(listEventsToSkip)
+process.source.eventsToSkip = rangeEventsToSkip
 #************************************************************************************************************************#
 
 
@@ -301,13 +309,14 @@ if VZ_JetMET == True :
     )
 
 
-    process.CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
-        TriggerResultsTag  = cms.InputTag("TriggerResults","","RECO"),
-        HLTPaths           = cms.vstring("Flag_CSCTightHaloFilter"),
-        eventSetupPathsKey = cms.string(''),
-        andOr              = cms.bool(True),
-        throw              = cms.bool(True)
-    )
+    ## WE ARE USING THE TXT FILES POR NOW
+#    process.CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
+#        TriggerResultsTag  = cms.InputTag("TriggerResults","","RECO"),
+#        HLTPaths           = cms.vstring("Flag_CSCTightHaloFilter"),
+#        eventSetupPathsKey = cms.string(''),
+#        andOr              = cms.bool(True),
+#        throw              = cms.bool(True)
+#    )
 
 
 
@@ -317,8 +326,8 @@ if VZ_JetMET == True :
     process.metfilterSequence = cms.Sequence(   process.HBHENoiseFilterResultProducer     *
                                                 process.ApplyBaselineHBHENoiseFilter      *
                                                 process.ApplyBaselineHBHEIsoNoiseFilter   *
-                                                process.eeBadScFilter                     *
-                                                process.CSCTightHaloFilter
+                                                process.eeBadScFilter                     
+#                                                process.CSCTightHaloFilter
                                              )
 
 
