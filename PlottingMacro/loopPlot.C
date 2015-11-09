@@ -32,10 +32,10 @@ void loopPlot(){
   /// Luminosity value in fb^-1
   /// Scale histograms (line 403 EDBRHistoPloter.h) 
   /// Use lumiValue = 1. if actualWeights (lines 562-585 EDBRHistoMaker.h) were consistently defined in the EDBRTreeMaker 
-  double lumiValue = 1263.88/1000; 
+  double lumiValue = 1546.938/1000;; 
   /// Should we scale the histograms to data?
-   bool scaleToData = true; 
-//  bool scaleToData = false;
+//   bool scaleToData = true; 
+  bool scaleToData = false;
   // Should we scale only wjets to make total MC = DATA?
   bool scaleOnlyWJets = false;
   /// Should we plot the Data/Bkg and Data-Bkg/Error ratios?
@@ -52,16 +52,17 @@ void loopPlot(){
     //// THE LOCATION OF THE TREES
 //    std::string pathToTrees="../EDBRTreeMaker/test/trees_Oct14/";
 //      std::string pathToTrees="../EDBRTreeMaker/test/trees_pu/";
-      std::string pathToTrees="../EDBRTreeMaker/test/trees_PU_Oct22/";
+      std::string pathToTrees="../EDBRTreeMaker/test/trees_09Nov/";
     //// THE LOCATION WHERE SAVE THE PLOTS
 //    std::string outputDir = "./plots_test_Run2_Oct14"; 
 //    std::string outputDir = "./plots_test_Run2_Oct14_withjetIDcut1";
-      std::string outputDir = "./plots_test_Run2_PU_Oct22"; 
+      std::string outputDir = "./plots_09Nov"; 
 ///********************************************************************************
 ///              2. SETUP THE NAMES OF THE DATA FILES FOR TREES   
 ///********************************************************************************
-    const int nDATA=1;
-    std::string dataLabels[nDATA]={"MET_Run2015D_merge"};   
+     const int nDATA=2;
+     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015",
+                                   "MET_Run2015D_v4_04Nov"}; 
     //const int nDATA=0;//set to zero if you don't want to plot
     //std::string dataLabels[nDATA]={};
     std::vector<std::string> fData;
@@ -75,31 +76,31 @@ void loopPlot(){
 ////*****************************************************************************
   //const int nMC=0;
   const int nMC=17;//set to zero if you don't want to plot
-  //std::string mcLabels[nMC]={};
-  std::string mcLabels[nMC]={  "WW_25ns",
-                               "ZZ_25ns",
-                               "WZ_25ns",
-                               "TTjets_25ns_powheg",                               
-                               "WJetsToLNu_HT-100To200_25ns",
-                               "WJetsToLNu_HT-200To400_25ns",
-                               "WJetsToLNu_HT-400To600_25ns",
-                               "WJetsToLNu_HT-600ToInf_25ns",
-                               "ZJetsToNuNu_HT-100To200_25ns",   
-                               "ZJetsToNuNu_HT-200To400_25ns",
-                               "ZJetsToNuNu_HT-400To600_25ns",
-                               "ZJetsToNuNu_HT-600ToInf_25ns",
-                               "QCD_HT500to700_25ns",
-                               "QCD_HT700to1000_25ns",
-                               "QCD_HT1000to1500_25ns",
-                               "QCD_HT1500to2000_25ns",
-                               "QCD_HT2000toInf_25ns"};
+  std::string mcLabels[nMC]={  "WW",
+                               "ZZ",
+                               "VV",
+                               "TTbar",
+                               "WJetsToLNu_HT-100To200",
+                               "WJetsToLNu_HT-200To400",
+                               "WJetsToLNu_HT-400To600",
+                               "W+Jets",
+                               "QCD_HT500to700",
+                               "QCD_HT700to1000",
+                               "QCD_HT1000to1500",
+                               "QCD_HT1500to2000",
+                               "QCD",
+                               "ZJetsToNuNu_HT-100To200",
+                               "ZJetsToNuNu_HT-200To400",
+                               "ZJetsToNuNu_HT-400To600",
+                               "Z+Jets"};
+
 
   //// THE FACTORS FOR MC
   double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
   
   std::vector<std::string> fMC;
   for(int ii=0;ii<nMC;ii++){
-    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+".root");
+    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+"_25ns_v2.root");
   }
 
   std::vector<double> kFactorsMC;
@@ -318,17 +319,16 @@ void loopPlot(){
   fColorsMC.push_back(kRed-4);
   fColorsMC.push_back(kRed-4);
 
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
-
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
 
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kTeal-8);
 
 //  fColorsMC.push_back(kTeal-8);
 //  fColorsMC.push_back(kYellow-5);

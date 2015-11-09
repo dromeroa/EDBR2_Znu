@@ -210,7 +210,21 @@ class EDBRHistoMaker {
   bool eventPassesdeltaPhiJetCut(double deltaPhiJet_threshold);
   bool eventPassestau21Cut(double tau21_threshold);
   bool eventPassescandTMassCut(double candTMass_threshold);
+  bool eventPasseschfCut(double chf_threshold); // charged hadron fraction
+  bool eventPassesnhfCut(double nhf_threshold); // neutral hadron fraction
+  bool eventPassesnefCut(double nef_threshold); // neutral electromagnetic fraction
+  bool eventPassesnchCut(int nch_threshold); // charged multiplicity 
+  bool eventPassescefCut(double cef_threshold); // charged electromagnetic fraction
+  bool eventPassesnconstituentsCut(int nconstituents_threshold);  // number of contituents
+
+  //// COMBINATIONS
   bool eventPassesCutZnu1(int numjets_threshold, double deltaPhiJet_threshold, double tau21_threshold, double candTMass_threshold);
+  bool eventPassesCutZnu2(double chf_threshold, int nch_threshold, double cef_threshold, int nconstituents_threshold );
+  bool eventPassesCutZnu3(double chf_threshold, double nhf_threshold, double nef_threshold, int nch_threshold, double cef_threshold, int nconstituents_threshold );
+  bool eventPassesCutZnu4(double massVhad_threshold1, double massVhad_threshold2);
+
+
+
 
   double deltaPhi(const double& phi1, const double& phi2)
   { 
@@ -349,7 +363,6 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("nef", &nef, &b_nef);
    fChain->SetBranchAddress("nch", &nch, &b_nch);
    fChain->SetBranchAddress("nconstituents", &nconstituents, &b_nconstituents);
-   fChain->SetBranchAddress("puweight", &puweight, &b_puweight);
 }
 
 EDBRHistoMaker::EDBRHistoMaker(TTree* tree, 
@@ -419,6 +432,7 @@ void EDBRHistoMaker::createAllHistos() {
 //  hs.setHisto("massZll",50,50,150); // 2 GeV bins 
   hs.setHisto("massZjj",40,30,130); // 2 GeV bins  
   hs.setHisto("tau21",30,0,1);
+  hs.setHisto("numjets", 20, -0.5, 19.5);
 //  hs.setHisto("ptlep1",40,0,800); 
 //  hs.setHisto("ptlep2",50,0,500);
 //  hs.setHisto("ptjet1",50,0,1000);
@@ -449,7 +463,6 @@ void EDBRHistoMaker::createAllHistos() {
   hs.setHisto("nef", 30, 0, 1.2);
   hs.setHisto("nch", 30, 0, 100);
   hs.setHisto("nconstituents", 30, 0, 100);
-//  hs.setHisto("puweight", 70, 0, 20);
 
   
   char buffer[256];
@@ -605,10 +618,9 @@ bool EDBRHistoMaker::eventPassesnumJetsCut(int numjets_threshold) {
 }
 
 ////---------- CUT IN DELTA PHI BETWEEN TWO ak4 JETS (for only 2 jets)--------------------
-// then have to change the the condition...
 bool EDBRHistoMaker::eventPassesdeltaPhiJetCut(double deltaPhiJet_threshold) {
      bool pass = false;
-     pass = (deltaPhijetjetabs >=  deltaPhiJet_threshold || numjets == 1 || numjets == 0);
+     pass = (deltaPhijetjetabs <=  deltaPhiJet_threshold || numjets == 1 || numjets == 0);
      return pass;
 }
 
@@ -625,6 +637,51 @@ bool EDBRHistoMaker::eventPassescandTMassCut(double candTMass_threshold) {
      pass = (candTMass >  candTMass_threshold );
      return pass;
 }
+
+
+////------------- CUT IN THE CHARGED HADRON FRACTION ----------------------------------------------
+bool EDBRHistoMaker::eventPasseschfCut(double chf_threshold) {
+     bool pass = false;
+          pass = (chf >  chf_threshold );
+               return pass;
+}
+
+////------------- CUT IN THE NEUTRAL HADRON FRACTION ----------------------------------------------
+bool EDBRHistoMaker::eventPassesnhfCut(double nhf_threshold) {
+     bool pass = false;
+          pass = (nhf <  nhf_threshold );
+                 return pass;
+}
+
+////------------- CUT IN THE NEUTRAL ELECTROMAGNETIC FRACTION ----------------------------------------------
+bool EDBRHistoMaker::eventPassesnefCut(double nef_threshold) {
+     bool pass = false;
+          pass = (nef <  nef_threshold );
+                 return pass;
+}
+
+////------------- CUT IN CHARGED MULTIPLICITY ----------------------------------------------
+bool EDBRHistoMaker::eventPassesnchCut(int nch_threshold) {
+     bool pass = false;
+          pass = (nch >  nch_threshold );
+                 return pass;
+}
+
+////------------- CUT IN CHARGED ELECTROMAGNETIC FRACTION -------------------------------------------
+bool EDBRHistoMaker::eventPassescefCut(double cef_threshold) {
+     bool pass = false;
+          pass = (cef <  cef_threshold );
+                 return pass;
+}
+
+////------------- CUT IN THE NUMBER OF CONSTITUENTS  ------------------------------------------
+bool EDBRHistoMaker::eventPassesnconstituentsCut(int nconstituents_threshold) {
+     bool pass = false;
+          pass = (nconstituents > nconstituents_threshold );
+                 return pass;
+}
+
+
 
 ////---------- NEW CUT COMBINING THE OTHERS ------------------------------------------------
 bool EDBRHistoMaker::eventPassesCutZnu1(int numjets_threshold, double deltaPhiJet_threshold, double tau21_threshold, double candTMass_threshold ) {
@@ -644,6 +701,57 @@ bool EDBRHistoMaker::eventPassesCutZnu1(int numjets_threshold, double deltaPhiJe
                passesNumJets &&
                passesTmass &&
                passestau21;
+
+  return result;
+}
+
+//// chf, nch, cef, nconstituents
+bool EDBRHistoMaker::eventPassesCutZnu2(double chf_threshold, int nch_threshold, double cef_threshold, int nconstituents_threshold ) {
+     bool passeschf  = eventPasseschfCut(chf_threshold);
+     bool passesnch  = eventPassesnchCut(nch_threshold);
+     bool passescef  = eventPassescefCut(cef_threshold);
+     bool passesnconstituents  = eventPassesnconstituentsCut(nconstituents_threshold);
+
+     if(false) {
+                       printf("passeschf: %i\n",passeschf);
+                       printf("passesnch: %i\n",passesnch);
+                       printf("passescef: %i\n",passescef);
+                       printf("passesnconstituents: %i\n",passesnconstituents);
+     }
+
+    bool result =
+         passeschf &&
+         passesnch &&
+         passescef &&
+         passesnconstituents;
+
+  return result;
+}
+
+//// chf, nhf, nef, nch, cef, nconstituents
+bool EDBRHistoMaker::eventPassesCutZnu3(double chf_threshold, double nhf_threshold, double nef_threshold, int nch_threshold, double cef_threshold, int nconstituents_threshold ) {
+     bool passeschf  = eventPasseschfCut(chf_threshold);
+     bool passesnhf  = eventPassesnhfCut(nhf_threshold);
+     bool passesnef  = eventPassesnefCut(nef_threshold);
+     bool passesnch  = eventPassesnchCut(nch_threshold);
+     bool passescef  = eventPassescefCut(cef_threshold);
+     bool passesnconstituents  = eventPassesnconstituentsCut(nconstituents_threshold);
+     if(false) {
+                       printf("passeschf: %i\n",passeschf);
+                       printf("passesnhf: %i\n",passesnhf);
+                       printf("passesnef: %i\n",passesnef);
+                       printf("passesnch: %i\n",passesnch);
+                       printf("passescef: %i\n",passescef);
+                       printf("passesnconstituents: %i\n",passesnconstituents);
+     }
+
+    bool result =
+         passeschf &&
+         passesnhf &&
+         passesnef &&
+         passesnch &&
+         passescef &&
+         passesnconstituents;
 
   return result;
 }
@@ -677,8 +785,9 @@ void EDBRHistoMaker::Loop(std::string outFileName){
     }
 
     // We calculate a weight here.
-    //double actualWeight = weight;
-    double actualWeight = triggerWeight*lumiWeight*puweight;
+    // THE ACTUAL WEIGHT
+    double actualWeight = triggerWeight*lumiWeight*pileupWeight;
+
     if(setUnitaryWeights_) {
       if(jentry==0)printf("Unitary weights set!\n");
       actualWeight=1.0;
@@ -691,9 +800,11 @@ void EDBRHistoMaker::Loop(std::string outFileName){
 
     // Remember: bool eventPassesCut(double ptZ_threshold, double ptlep1_threshold );
 
-//    if(eventPassesCut(20, 20)){
-//    if(eventPassesCutZnu1(2, 0, 0.6, 400)){
+    //// THE QCD CUTS
+    if(eventPassesCutZnu1(2, 2.7, 0.5, 600)){
 
+    //// THE JET ID CUTS
+    if(eventPassesCutZnu2(0.1, 0, 0.99, 1)){
       
       // In case we need particular events
       //if(candMass>2400.0)
@@ -732,6 +843,7 @@ void EDBRHistoMaker::Loop(std::string outFileName){
       (theHistograms["candTMass"])->Fill(candTMass,actualWeight);//printf("line number %i\n",__LINE__);
 //      (theHistograms["lep"])->Fill(lep,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["region"])->Fill(region,actualWeight);//printf("line number %i\n",__LINE__);
+      (theHistograms["numjets"])->Fill(numjets,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["metpt"])->Fill(metpt,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["metphi"])->Fill(metphi,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["HT"])->Fill(HT,actualWeight);//printf("line number %i\n",__LINE__);
@@ -744,8 +856,11 @@ void EDBRHistoMaker::Loop(std::string outFileName){
       (theHistograms["nch"])->Fill(nch,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["nconstituents"])->Fill(nconstituents,actualWeight);//printf("line number %i\n",__LINE__);
 
+
       
-//      }//end if eventPassesCutZnu1
+      }//end if eventPassesCutZnu1
+
+   }//end if eventPassesCutZnu2
     
   }//end loop over entries
   

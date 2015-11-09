@@ -274,9 +274,13 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   TPad* fPads2 = NULL;
   TPad* fPads3 = NULL;
 
+   // FOR NOW WE ARE GOING TO USE ONLY TWO PADS
+
   if (makeRatio_ && isDataPresent_) {
-    fPads1 = new TPad("pad1", "", 0.00, 0.40, 0.99, 0.99);
-    fPads2 = new TPad("pad2", "", 0.00, 0.20, 0.99, 0.40);
+//    fPads1 = new TPad("pad1", "", 0.00, 0.40, 0.99, 0.99);
+     fPads1 = new TPad("pad1", "", 0.00, 0.19, 0.99, 0.99); 
+//    fPads2 = new TPad("pad2", "", 0.00, 0.20, 0.99, 0.40);
+    fPads2 = new TPad("pad2", "", 0.00, 0.00, 0.99, 0.20);
     fPads3 = new TPad("pad3", "", 0.00, 0.00, 0.99, 0.20);
     fPads1->SetFillColor(0);
     fPads1->SetLineColor(0);
@@ -286,7 +290,8 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
     fPads3->SetLineColor(0);
     fPads1->Draw();
     fPads2->Draw();
-    fPads3->Draw();
+// FOR NOW WE ONLY WANT DATA/BACK RATIO
+//    fPads3->Draw();
   }
 
   //============ Data vs MC plots ==============
@@ -540,7 +545,7 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
   ////  HERE WE DEFINE THE OPTIONS OF THE LABELS--------------------
     TLegend* leg = new TLegend(0.68, 0.65, 0.93, 0.9);
     leg->SetMargin(0.2);
-    leg->SetTextSize(0.027);
+    leg->SetTextSize(0.028);
     if (isDataPresent_)
        leg->AddEntry(sumDATA, "Data", "p");
  
@@ -551,28 +556,28 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
 //    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
 ////---------------------------------------------------------------
     //// TO INVERT THE LABELS ORDER
-   for (int i = histosMC.size()-1; i>0; --i){
-  
-          if(i>15){
-           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-           i= i-5;
-          }
-          if (i>10 ){
-           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-           i = i-4;
-          }
-         if (i>6 ){
-           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-           i = i-4;
-         }
-         if (i==3 ){
-           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-           i = i-1;
-         }
-         if (i>1 ){
-           leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-         }
-   }   
+for (int i = histosMC.size()-1; i>0; --i){
+     if(i>15){
+               leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+               i= i-4;
+     }
+     if (i>11 ){
+                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                i = i-5;
+     }
+     if (i>6 ){
+               leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+               i = i-4;
+     }
+     if (i==2 ){
+                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+                i = i-1;
+     }
+     if (i>1 ){
+                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+     }
+}
+    
 ////----------------------------------------------------------------
   if (histosMCSig.size() > 0) {
     char rescalingLabel[64];
