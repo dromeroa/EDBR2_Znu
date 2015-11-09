@@ -3,6 +3,7 @@ from CRABClient.UserUtilities import config
 config = config()
 
 config.General.transferOutputs = True
+config.General.transferLogs = True
 
 ## General options
 
