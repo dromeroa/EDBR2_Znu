@@ -22,7 +22,7 @@ VZ_JetMET       = True
 #*************************************** BLIND ANALYSIS *********************************************#
 isBlinded = True
 if isBlinded == True :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65.'
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 135'
 else :
    JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
 #************************************ CHOOSE YOUR HLT *******************************************#
@@ -191,7 +191,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
-                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights72mb.root"),
+                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
@@ -227,7 +227,8 @@ if option == 'RECO':
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
     ##-----  FOR NOW JUST CUT IN MET -------------##
-    process.goodMET.cut = "pt > 250"
+    ## NO CUT FOR NOW, WE IMPOSE THIS AFTER PRODUCE THE TREE
+    #process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
 
@@ -372,7 +373,7 @@ if VZ_JetMET == True :
 
 
     process.analysis.replace(       process.jetSequence,
-                                    process.hltSequenceZnu           *
+#                                    process.hltSequenceZnu           *
                                     process.HBHEmetfilterSequence    *  
                                     process.metfilterSequence        *
                                     process.VertexSequence           *

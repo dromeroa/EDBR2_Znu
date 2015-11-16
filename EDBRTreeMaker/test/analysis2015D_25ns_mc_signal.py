@@ -143,6 +143,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
+                                          puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
@@ -177,7 +178,7 @@ if option == 'RECO':
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
     ##-----  FOR NOW CUT IN MET  --------------##
-    process.goodMET.cut = "pt > 250"
+    #process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
 
@@ -288,7 +289,7 @@ if VZ_JetMET == True :
 
 
     process.analysis.replace(       process.jetSequence,
-                                    process.hltSequenceZnu           *
+#                                    process.hltSequenceZnu           *
                                     process.metfilterSequence        *
                                     process.VertexSequence           *
                                     process.jetSequence              *

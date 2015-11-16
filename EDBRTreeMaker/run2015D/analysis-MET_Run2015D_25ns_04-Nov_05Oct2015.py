@@ -23,7 +23,7 @@ VZ_JetMET       = True
 #****************************************************************************************************#
 isBlinded = True
 if isBlinded == True :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65.'
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 135. '
 else :
    JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
 #*********************************** THE SAMPLES ****************************************************#
@@ -167,7 +167,8 @@ if option == 'RECO':
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
 
     ##-----  FOR NOW CUT IN MET --------------##
-    process.goodMET.cut = "pt > 250"
+    ## NO CUT FOR NOW, WE IMPOSE THIS AFTER PRODUCE THE TREE
+    #process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
 
