@@ -51,9 +51,9 @@ usedNevents = configNevents[SAMPLE]
 
 #*********************************** JSON file ****************************************************#
 # https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
-# last modified 30-Oct-2015 
+# last modified 17-Nov-2015 
 import FWCore.PythonUtilities.LumiList as LumiList
-process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-259891_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
 #***********************************  EVENTS TO SKIP ******************************************************************#
 listEventsToSkip = []
 ## REMEMBER TO CHANGE THE PATH TO YOUR ACTUAL LOCATION
@@ -125,7 +125,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  1546.719                   ),
+                                          targetLumiInvPb = cms.double  (  1.                        ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -340,12 +340,12 @@ if VZ_JetMET == True :
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
                                     process.metSequence              *
-                                    process.egmGsfElectronIDs        *
-                                    process.VETOSelectEvents         *
+#                                    process.egmGsfElectronIDs        *
+#                                    process.VETOSelectEvents         *
                                     process.egmPhotonIDs             *
-                                    process.photonvetoSequence       *
-                                    process.muonsVetoSequence        *
-                                    process.tausVetoSequence
+                                    process.photonvetoSequence       
+#                                    process.muonsVetoSequence        *
+#                                    process.tausVetoSequence
                             )
 
     process.analysis.remove(process.leptonSequence)
