@@ -317,7 +317,7 @@ if VZ_JetMET == True :
 
 
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string("")
+    process.graviton.cut    =  cms.string("mass > 600")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
@@ -380,12 +380,12 @@ if VZ_JetMET == True :
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
                                     process.metSequence              *  
-                                    process.egmGsfElectronIDs        *    
-                                    process.VETOSelectEvents         *
+#                                   process.egmGsfElectronIDs        *    
+#                                    process.VETOSelectEvents         *
                                     process.egmPhotonIDs             *
-                                    process.photonvetoSequence       *
-                                    process.muonsVetoSequence        *
-                                    process.tausVetoSequence
+                                    process.photonvetoSequence       
+#                                    process.muonsVetoSequence        *
+#                                    process.tausVetoSequence
                             )
 
     process.analysis.remove(process.leptonSequence)

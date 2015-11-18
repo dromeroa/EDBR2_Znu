@@ -258,7 +258,7 @@ if VZ_JetMET == True :
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string("")
+    process.graviton.cut    =  cms.string(" mass > 600")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
