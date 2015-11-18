@@ -333,6 +333,8 @@ if VZ_JetMET == True :
 
 
 ###--------------------------------------------------------------------------------------###
+    ## NOW WE ARE SAVING THE VETO AND ID IN THE FLAGS 
+    
     process.analysis.replace(       process.jetSequence,
                                     process.hltSequenceZnu           *
                                     process.metfilterSequence        *

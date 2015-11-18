@@ -125,7 +125,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  True                       ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  1546.719                   ),
+                                          targetLumiInvPb = cms.double  (  1.                        ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -340,12 +340,12 @@ if VZ_JetMET == True :
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
                                     process.metSequence              *
-                                    process.egmGsfElectronIDs        *
-                                    process.VETOSelectEvents         *
+#                                    process.egmGsfElectronIDs        *
+#                                    process.VETOSelectEvents         *
                                     process.egmPhotonIDs             *
-                                    process.photonvetoSequence       *
-                                    process.muonsVetoSequence        *
-                                    process.tausVetoSequence
+                                    process.photonvetoSequence       
+#                                   process.muonsVetoSequence        *
+#                                    process.tausVetoSequence
                             )
 
     process.analysis.remove(process.leptonSequence)
