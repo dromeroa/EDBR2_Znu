@@ -24,7 +24,7 @@ VZ_JetMET       = True
 #****************************************************************************************************#
 isBlinded = True
 if isBlinded == True :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 135. '
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. || userFloat("ak8PFJetsCHSCorrPrunedMass") > 135. '
 else :
    JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
 #*********************************** THE SAMPLES ****************************************************#
@@ -141,7 +141,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
                                           phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-loose"),
                                           phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-medium"),
-                                          phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-tight"),
+                                          phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-tight"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
 
 #************************************** SELECT GEN OR RECO ******************************************# 
