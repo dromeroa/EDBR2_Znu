@@ -10,7 +10,8 @@ process.load("Configuration.Geometry.GeometryIdeal_cff")
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 # find the global tag in the DAS under the Configs for given dataset
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
-process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v2'
+## FROM Nov 19 2015
+process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
@@ -74,26 +75,26 @@ process.MessageLogger.cerr.FwkReport.limit = 99999999
 
 configXsecs = { 
                 "BulkGrav_ZZ_M2000_25ns_v2"               : 1,
-                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 344.9781,
-                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 96.3828,
-                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 13.46112,
-                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 5.16969,
-                "WJetsToLNu_HT-100To200_25ns_v2"          : 1627.45,
-                "WJetsToLNu_HT-200To400_25ns_v2"          : 435.237,
-                "WJetsToLNu_HT-400To600_25ns_v2"          : 59.1811,
-                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 22.7117,
+                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 280.5, ## LO
+                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 77.7, ## LO
+                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 10.71, ## LO
+                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 4.098,  ## LO
+                "WJetsToLNu_HT-100To200_25ns_v2"          : 1343, ## LO
+                "WJetsToLNu_HT-200To400_25ns_v2"          : 359.6, ## LO
+                "WJetsToLNu_HT-400To600_25ns_v2"          : 48.85, ## LO
+                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 18.91, ## LO
                 "WW_25ns_v2"                              : 118.7,
                 "ZZ_25ns_v2"                              : 16.523,
                 "WZ_25ns_v2"                              : 47.13, 
                 "TTbar_25ns_powheg_v2"                    : 831.76,
-                "QCD_HT100to200_25ns_v2"                  : 27850000,
-                "QCD_HT200to300_25ns_v2"                  : 1717000, 
-                "QCD_HT300to500_25ns_v2"                  : 351300,
-                "QCD_HT500to700_25ns_v2"                  : 31630,
-                "QCD_HT700to1000_25ns_v2"                 : 6802,
-                "QCD_HT1000to1500_25ns_v2"                : 1206,
-                "QCD_HT1500to2000_25ns_v2"                : 120.4,   
-                "QCD_HT2000toInf_25ns_v2"                 : 25.24,    
+                "QCD_HT100to200_25ns_v2"                  : 27500000 ## LO,
+                "QCD_HT200to300_25ns_v2"                  : 1735000, ## LO 
+                "QCD_HT300to500_25ns_v2"                  : 367000, ## LO
+                "QCD_HT500to700_25ns_v2"                  : 29370, ## LO
+                "QCD_HT700to1000_25ns_v2"                 : 6524, ## LO
+                "QCD_HT1000to1500_25ns_v2"                : 1064, ## LO
+                "QCD_HT1500to2000_25ns_v2"                : 121.5, ## LO   
+                "QCD_HT2000toInf_25ns_v2"                 : 25.42, ## LO    
 
               }
 
@@ -192,6 +193,12 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
                                           puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
+                                          eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
+                                          eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+                                          eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+                                          phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
+                                          phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
+                                          phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
@@ -317,7 +324,7 @@ if VZ_JetMET == True :
 
 
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string("mass > 600")
+    process.graviton.cut    =  cms.string("")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
@@ -380,10 +387,10 @@ if VZ_JetMET == True :
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
                                     process.metSequence              *  
-#                                   process.egmGsfElectronIDs        *    
+                                    process.egmGsfElectronIDs        *    
 #                                    process.VETOSelectEvents         *
-                                    process.egmPhotonIDs             *
-                                    process.photonvetoSequence       
+                                    process.egmPhotonIDs             
+#                                    process.photonvetoSequence       
 #                                    process.muonsVetoSequence        *
 #                                    process.tausVetoSequence
                             )

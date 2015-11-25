@@ -12,7 +12,8 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 ### new global tag with new JEC
 ###  Taken from the MINIAOD https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD#Run2015D_PromptReco_v4_Data_2015 and
 ### https://twiki.cern.ch/twiki/bin/view/CMS/JECDataMC#Recommended_for_MC
-process.GlobalTag.globaltag = '74X_dataRun2_reMiniAOD_v0'
+## NEW FROM NOV 19 2015
+process.GlobalTag.globaltag = '74X_dataRun2_v5'
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
@@ -131,6 +132,12 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
+                                          eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
+                                          eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+                                          eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+                                          phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
+                                          phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
+                                          phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
 
 #************************************** SELECT GEN OR RECO ******************************************# 
@@ -258,7 +265,7 @@ if VZ_JetMET == True :
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string(" mass > 600")
+    process.graviton.cut    =  cms.string("")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
@@ -340,10 +347,10 @@ if VZ_JetMET == True :
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
                                     process.metSequence              *
-#                                    process.egmGsfElectronIDs        *
+                                    process.egmGsfElectronIDs        *
 #                                    process.VETOSelectEvents         *
-                                    process.egmPhotonIDs             *
-                                    process.photonvetoSequence       
+                                    process.egmPhotonIDs             
+#                                    process.photonvetoSequence       
 #                                   process.muonsVetoSequence        *
 #                                    process.tausVetoSequence
                             )
