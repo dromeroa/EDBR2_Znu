@@ -62,7 +62,13 @@ else :
 #SAMPLE="QCD_HT500to700_25ns_v2"
 #SAMPLE="QCD_HT300to500_25ns_v2"
 #SAMPLE="QCD_HT200to300_25ns_v2"
-SAMPLE="QCD_HT100to200_25ns_v2"
+#SAMPLE="QCD_HT100to200_25ns_v2"
+
+###-------- DRELL YAN------------
+#SAMPLE="DYJetsToLL_M_50_HT_100to200"
+#SAMPLE="DYJetsToLL_M_50_HT_200to400"
+#SAMPLE="DYJetsToLL_M_50_HT_400to600"
+#SAMPLE="DYJetsToLL_M_50_HT_600toInf"
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
@@ -95,7 +101,11 @@ configXsecs = {
                 "QCD_HT1000to1500_25ns_v2"                : 1064, ## LO
                 "QCD_HT1500to2000_25ns_v2"                : 121.5, ## LO   
                 "QCD_HT2000toInf_25ns_v2"                 : 25.42, ## LO    
-
+                "DYJetsToLL_M_50_HT_100to200"             : 139.4, ## LO
+                "DYJetsToLL_M_50_HT_200to400"             : 42.75, ## LO
+                "DYJetsToLL_M_50_HT_400to600"             : 5.497, ## LO
+                "DYJetsToLL_M_50_HT_600toInf"             : 2.21, ## LO
+                 
               }
 
 configNevents = {
@@ -120,7 +130,11 @@ configNevents = {
                  "QCD_HT1000to1500_25ns_v2"                : 4963895, 
                  "QCD_HT1500to2000_25ns_v2"                : 3868886,  
                  "QCD_HT2000toInf_25ns_v2"                 : 1912529,
-
+                 "DYJetsToLL_M_50_HT_100to200"             : 2725655,
+                 "DYJetsToLL_M_50_HT_200to400"             : 973937,
+                 "DYJetsToLL_M_50_HT_400to600"             : 1067758,
+                 "DYJetsToLL_M_50_HT_600toInf"             : 998912, 
+             
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -186,7 +200,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  False                     ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  1546.938                  ),
+                                          targetLumiInvPb = cms.double  (  2086.097                  ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -195,6 +209,8 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                           eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
                                           eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+                                          eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
+                                          eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
                                           eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
                                           phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
                                           phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
