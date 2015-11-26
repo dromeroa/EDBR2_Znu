@@ -224,9 +224,12 @@ private:
   edm::EDGetToken photonsToken_;
   std::vector<const pat::Muon*> vetomuons;
   std::vector<const pat::Muon*> seltightmuons;
+  std::vector<const pat::Muon*> loosemuons;
   std::vector<const pat::Tau*> seltaus;
   edm::EDGetTokenT<edm::ValueMap<bool> > eleVetoIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> > eleHEEPIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> > phoLooseIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> > phoMediumIdMapToken_;
@@ -236,8 +239,11 @@ private:
   std::vector<double> electronpt;
   std::vector<double> electroneta;
   std::vector<double> electronphi;
+  std::vector<double> electroncharge;
   std::vector<int> elepassVetoId_;
   std::vector<int> elepassTightId_;
+  std::vector<int> elepassLooseId_;
+  std::vector<int> elepassMediumId_;
   std::vector<int> elepassHEEPId_;
   std::vector<int> phopassLooseId_;
   std::vector<int> phopassMediumId_;
@@ -248,10 +254,13 @@ private:
   std::vector<double> muonpt;
   std::vector<double> muoneta;
   std::vector<double> muonphi; 
+  std::vector<int> muoncharge;
   std::vector<double> tauspt;
   std::vector<double> tauseta;
   std::vector<double> tausphi;
   
+  double InvMassMu;
+  double InvMassEle;
 
   int nElectrons_;
   int nMuons_;
@@ -263,6 +272,7 @@ private:
 
   int nvetomuons_;
   int nselmuons_;
+  int nloosemuons_;
   int nseltaus_;
 
 
@@ -294,6 +304,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   photonsToken_       ( mayConsume<edm::View<reco::Photon> >     ( iConfig.getParameter<edm::InputTag> ( "photons"        ) ) ),
   eleVetoIdMapToken_  ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleVetoIdMap"   ) ) ),
   eleTightIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleTightIdMap"  ) ) ),
+  eleLooseIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleLooseIdMap"  ) ) ),
+  eleMediumIdMapToken_( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleMediumIdMap" ) ) ),
   eleHEEPIdMapToken_  ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleHEEPIdMap"   ) ) ),
   phoLooseIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "phoLooseIdMap"  ) ) ),
   phoMediumIdMapToken_( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "phoMediumIdMap" ) ) ),
@@ -371,18 +383,25 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
 
   outTree_->Branch("nvetomuons"      ,&nvetomuons_    ,"nvetomuons_/I"    );
   outTree_->Branch("nselmuons"       ,&nselmuons_     ,"nselmuons_/I"     );
-  outTree_->Branch("nseltaus"        ,&nseltaus_      , "nseltaus_/I"     );
+  outTree_->Branch("nloosemuons"     ,&nloosemuons_   ,"nloosemuons_/I"   );
+  outTree_->Branch("nseltaus"        ,&nseltaus_      ,"nseltaus_/I"      );
   outTree_->Branch("elepassVetoId"   ,&elepassVetoId_                     );
   outTree_->Branch("elepassTightId"  ,&elepassTightId_                    );
+  outTree_->Branch("elepassLooseId"  ,&elepassLooseId_                    );
+  outTree_->Branch("elepassMediumId" ,&elepassMediumId_                   );
   outTree_->Branch("elepassHEEPId"   ,&elepassHEEPId_                     );
   outTree_->Branch("electronpt"      ,&electronpt                         );
   outTree_->Branch("electroneta"     ,&electroneta                        );
   outTree_->Branch("electronphi"     ,&electronphi                        ); 
+  outTree_->Branch("electroncharge"  ,&electroncharge                     );
+  outTree_->Branch("InvMassEle"      ,&InvMassEle      ,"InvMassEle/D"    );
   outTree_->Branch("nEle"            ,&nElectrons_     ,"nEle/I"          );
   outTree_->Branch("nMuons"          ,&nMuons_         ,"nMuons/I"        );
   outTree_->Branch("muonpt"          ,&muonpt                             );
   outTree_->Branch("muoneta"         ,&muoneta                            );
   outTree_->Branch("muonphi"         ,&muonphi                            );
+  outTree_->Branch("muoncharge"      ,&muoncharge                         );
+  outTree_->Branch("InvMassMu"       ,&InvMassMu       ,"InvMassMu/D"     );
   outTree_->Branch("nTaus"           ,&nTaus_          ,"nTaus/I"         );
   outTree_->Branch("tauspt"          ,&tauspt                             );
   outTree_->Branch("tauseta"         ,&tauseta                            );
@@ -513,8 +532,6 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("nef"   ,&nef  ,"nef/D"   );
   outTree_->Branch("nch"   ,&nch  ,"nch/I"   );
   outTree_->Branch("nconstituents"  ,&nconstituents  ,"nconstituents/I"   );
-  outTree_->Branch("Nmuonevent"  ,&Nmuonevent  ,"Nmuonevent/I"   );
-
 
 }
 
@@ -823,6 +840,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    }
                    ////------- ID FOR MUONS IN THE EVENT -----------------//// ???
                    vetomuons.clear();
+                   loosemuons.clear();
                    seltightmuons.clear();
                    edm::Handle<pat::MuonCollection> muons;
                    iEvent.getByToken(muonToken_, muons);
@@ -831,6 +849,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    muoneta.clear();
                    muonphi.clear();                  
 
+                   reco::Candidate::LorentzVector p4CMmu;
+                 
                    for (const pat::Muon &mu : *muons) {                      
                        if (mu.pt() < 20 ) continue;
                        if ( fabs(mu.eta()) > 2.5 ) continue;
@@ -838,7 +858,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                        nMuons_++;
                        muonpt.push_back( mu.pt() );
                        muoneta.push_back( mu.eta() );
-                       muonphi.push_back( mu.phi() );
+                       muonphi.push_back( mu.phi() ); 
+                       muoncharge.push_back( mu.charge() );
+
+                       ////Invariant mass of the  muons
+                       p4CMmu = p4CMmu + mu.p4();
 
                        //PF-based combined relative isolation with β correction, deltaR=0.4
                        double chpt = mu.pfIsolationR04().sumChargedHadronPt;
@@ -847,17 +871,26 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                        double den  = mu.pt();
                        double relIsomu = num/den;
 
-                       //VetoMuon Selection (based on Loose selection)
+                       //VetoMuon Selection 
                        if (!mu.isPFMuon()) continue;
                        if (! (mu.isGlobalMuon() || mu.isTrackerMuon() ) ) continue;
                        if (relIsomu > 0.25 ) continue;
                        vetomuons.push_back(&mu);
 
+                       // LooseMuon Selection
+                       if (!mu.isLooseMuon()) continue;
+                       loosemuons.push_back(&mu);
+
+
                        //TightMuon selection
                        if (!mu.isTightMuon(vertex)) continue;
                        if (relIsomu > 0.15 ) continue;
-                       seltightmuons.push_back(&mu);
+                       seltightmuons.push_back(&mu);    
+                                   
                    }
+  
+                   InvMassMu = p4CMmu.mass();  
+                    
 
                   
                    ////------- ID FOR ELECTRONS IN THE EVENT--------------////
@@ -867,9 +900,13 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    //// THE DECISIONS
                    edm::Handle<edm::ValueMap<bool> > eleveto_id_decisions;
                    edm::Handle<edm::ValueMap<bool> > eletight_id_decisions;
+                   edm::Handle<edm::ValueMap<bool> > eleloose_id_decisions;
+                   edm::Handle<edm::ValueMap<bool> > elemedium_id_decisions;
                    edm::Handle<edm::ValueMap<bool> > eleheep_id_decisions;
                    iEvent.getByToken(eleVetoIdMapToken_ ,eleveto_id_decisions);
                    iEvent.getByToken(eleTightIdMapToken_,eletight_id_decisions);
+                   iEvent.getByToken(eleLooseIdMapToken_ ,eleloose_id_decisions);
+                   iEvent.getByToken(eleMediumIdMapToken_,elemedium_id_decisions);                   
                    iEvent.getByToken(eleHEEPIdMapToken_ ,eleheep_id_decisions);
 
                    //// CLEAR THE VECTORS
@@ -879,7 +916,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    electronphi.clear();
                    elepassVetoId_ .clear();
                    elepassTightId_ .clear();
+                   elepassLooseId_ .clear();
+                   elepassMediumId_.clear();
                    elepassHEEPId_ .clear();
+
+                   reco::Candidate::LorentzVector p4CMEle; 
 
                    for (size_t i = 0; i < electrons->size(); ++i){
                          const auto el = electrons->ptrAt(i);
@@ -895,22 +936,32 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                muOverlap=true;
                           }
                           if (muOverlap) continue;
-
  
                          nElectrons_++; 
                           
                          electronpt.push_back( el->pt() );
                          electroneta.push_back( el->superCluster()->eta() );
                          electronphi.push_back( el->superCluster()->phi() );
+                         electroncharge.push_back( el->charge() );
+                         
+
 
                          bool isPassVeto = (*eleveto_id_decisions)[el];
                          bool isPassTight = (*eletight_id_decisions)[el];
+                         bool isPassLoose = (*eleloose_id_decisions)[el];
+                         bool isPassMedium = (*elemedium_id_decisions)[el];
                          bool isPassHEEP = (*eleheep_id_decisions)[el];
                          elepassVetoId_.push_back ( (int)isPassVeto );
                          elepassTightId_.push_back ( (int)isPassTight );
+                         elepassLooseId_.push_back ( (int)isPassLoose );
+                         elepassMediumId_.push_back( (int)isPassMedium);
                          elepassHEEPId_.push_back ( (int)isPassHEEP );
+
+                         //// Invariant Mass Electron     
+                         p4CMEle = p4CMEle + el->p4();                        
                     }
 
+                    InvMassEle = p4CMEle.mass();
 
                     ////-------- ID FOR TAUS IN THE EVENT ------------////
                     seltaus.clear(); 
@@ -986,11 +1037,13 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     //// ---  SORT OBJECTS BY pT ---------------------------------------------//// 
                     std::sort(vetomuons.begin(),vetomuons.end(),RefGreaterByPt<pat::Muon>());
                     std::sort(seltightmuons.begin(),seltightmuons.end(),RefGreaterByPt<pat::Muon>());
+                    std::sort(loosemuons.begin(),loosemuons.end(),RefGreaterByPt<pat::Muon>());
                     std::sort(seltaus.begin(),seltaus.end(),RefGreaterByPt<pat::Tau>());
 
                     ////-------------------------------------------
                     nvetomuons_=vetomuons.size();
                     nselmuons_=seltightmuons.size();
+                    nloosemuons_ = loosemuons.size(); 
                     nseltaus_=seltaus.size();
 
                    ////----------- FOR JET ID  --------////
@@ -1346,12 +1399,15 @@ void EDBRTreeMaker::setDummyValues() {
      nef            = -1e4;
      nch            = -1e4; 
      nconstituents  = -1e4;
-     nvetomuons_    =    0;
-     nselmuons_     =    0;
-     nseltaus_      =    0;
-     nElectrons_    =    0;
-     nMuons_        =    0;
-     nTaus_         =    0;
+     InvMassMu      = -1e4;
+     InvMassEle     = -1e4;     
+     nvetomuons_    = -1e4;
+     nselmuons_     = -1e4;
+     nloosemuons_   = -1e4;
+     nseltaus_      = -1e4;
+     nElectrons_    = -1e4;
+     nMuons_        = -1e4;
+     nTaus_         = -1e4;
 
 
 }
