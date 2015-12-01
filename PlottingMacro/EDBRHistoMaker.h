@@ -112,6 +112,22 @@ class EDBRHistoMaker {
    Double_t        nef;
    Int_t           nch; 
    Int_t           nconstituents;
+   Int_t           nvetomuons;
+   Int_t           nselmuons;
+   Int_t           nloosemuons;
+   Int_t           nseltaus; 
+   Int_t           InvMassEle;
+   Int_t           nEle;
+   Int_t           nMuons;
+   Int_t           InvMassMu;
+   Int_t           nTaus;
+   Int_t           nPho; 
+   Double_t        sumET;
+   Double_t        rawmetpt;
+   Double_t        rawmetphi;
+   Double_t        rawsumET;  
+
+
 
    TBranch        *b_event;   //!
    TBranch        *b_nVtx;   //!
@@ -172,6 +188,58 @@ class EDBRHistoMaker {
    TBranch        *b_nch;  //!
    TBranch        *b_nconstituents;  //!
    TBranch        *b_puweight;  //!
+
+   //new
+   TBranch        *b_nvetomuons;
+   TBranch        *b_nselmuons;
+   TBranch        *b_nloosemuons;
+   TBranch        *b_nseltaus;
+   TBranch        *b_elepassVetoId;
+   TBranch        *b_elepassTightId;
+   TBranch        *b_elepassLooseId;
+   TBranch        *b_elepassMediumId;
+   TBranch        *b_elepassHEEPId; 
+   TBranch        *b_electronpt;
+   TBranch        *b_electroneta;
+   TBranch        *b_electronphi; 
+   TBranch        *b_electroncharge;
+   TBranch        *b_InvMassEle;
+   TBranch        *b_nEle;
+   TBranch        *b_nMuons;
+   TBranch        *b_muonpt;
+   TBranch        *b_muoneta;
+   TBranch        *b_muonphi;
+   TBranch        *b_muoncharge;
+   TBranch        *b_InvMassMu;
+   TBranch        *b_nTaus;
+   TBranch        *b_tauspt;
+   TBranch        *b_tauseta;
+   TBranch        *b_tausphi;
+   TBranch        *b_nPho;
+   TBranch        *b_photonspt;
+   TBranch        *b_photonseta;
+   TBranch        *b_photonsphi;
+   TBranch        *b_phopassLooseId;
+   TBranch        *b_phopassMediumId;
+   TBranch        *b_phopassTightId;
+   TBranch        *b_sumET;
+   TBranch        *b_rawmetpt;
+   TBranch        *b_rawmetphi;
+   TBranch        *b_rawsumET;
+   TBranch        *b_ak4jets_pt;
+   TBranch        *b_ak4jets_phi;
+   TBranch        *b_ak4jets_mass;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -355,7 +423,7 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("MHT", &MHT, &b_MHT);
    fChain->SetBranchAddress("MHTx", &MHTx, &b_MHTx);
    fChain->SetBranchAddress("MHTy", &MHTy, &b_MHTy);
-   fChain->SetBranchAddress("metnomu", &metnomu, &b_metnomu);
+   fChain->SetBranchAddress("metnomu", &metnomu, &b_metnomu); 
    fChain->SetBranchAddress("deltaPhijetjetabs", &deltaPhijetjetabs, &b_deltaPhijetjetabs);
    fChain->SetBranchAddress("chf", &chf, &b_chf);
    fChain->SetBranchAddress("nhf", &nhf, &b_nhf);
@@ -376,6 +444,33 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("electronpt", &electronpt, &b_electronpt);
    fChain->SetBranchAddress("electroneta", &electroneta, &b_electroneta);
    fChain->SetBranchAddress("electronphi", &electronphi, &b_electronphi);
+   fChain->SetBranchAddress("electroncharge", &electroncharge, &b_electroncharge);
+   fChain->SetBranchAddress("InvMassEle", &InvMassEle, &b_InvMassEle);
+   fChain->SetBranchAddress("nEle", &nEle, &b_nEle);
+   fChain->SetBranchAddress("nMuons", &nMuons, &b_nMuons);
+   fChain->SetBranchAddress("muonpt", &muonpt, &b_muonpt);
+   fChain->SetBranchAddress("muoneta", &muoneta, &b_muoneta);
+   fChain->SetBranchAddress("muonphi", &muonphi, &b_muonphi);
+   fChain->SetBranchAddress("muoncharge", &muoncharge, &b_muoncharge);
+   fChain->SetBranchAddress("InvMassMu", &InvMassMu, &b_InvMassMu);
+   fChain->SetBranchAddress("nTaus", &nTaus, &b_nTaus);
+   fChain->SetBranchAddress("tauspt", &tauspt, &b_tauspt);
+   fChain->SetBranchAddress("tauseta", &tauseta, &b_tauseta);
+   fChain->SetBranchAddress("tausphi", &tausphi, &b_tausphi);
+   fChain->SetBranchAddress("nPho", &nPho, &b_nPho);
+   fChain->SetBranchAddress("photonspt", &photonspt, &b_photonspt);
+   fChain->SetBranchAddress("photonseta", &photonseta, &b_photonseta);
+   fChain->SetBranchAddress("photonsphi", &photonsphi, &b_photonsphi);
+   fChain->SetBranchAddress("phopassLooseId", &phopassLooseId, &b_phopassLooseId);
+   fChain->SetBranchAddress("phopassMediumId", &phopassMediumId, &b_phopassMediumId);
+   fChain->SetBranchAddress("phopassTightId", &phopassTightId, &b_phopassTightId);
+   fChain->SetBranchAddress("sumET", &sumET, &b_sumET);
+   fChain->SetBranchAddress("rawmetpt", &rawmetpt, &b_rawmetpt);
+   fChain->SetBranchAddress("rawmetphi", &rawmetphi, &b_rawmetphi);
+   fChain->SetBranchAddress("rawsumET", &rawsumET, &b_rawsumET);
+   fChain->SetBranchAddress("ak4jets_pt", &ak4jets_pt, &b_ak4jets_pt);
+   fChain->SetBranchAddress("ak4jets_eta", &ak4jets_eta, &b_ak4jets_eta);
+   fChain->SetBranchAddress("ak4jets_mass", &ak4jets_mass, &b_ak4jets_mass);
 
 
 
