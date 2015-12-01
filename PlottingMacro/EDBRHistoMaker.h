@@ -363,6 +363,25 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("nef", &nef, &b_nef);
    fChain->SetBranchAddress("nch", &nch, &b_nch);
    fChain->SetBranchAddress("nconstituents", &nconstituents, &b_nconstituents);
+   //// News
+   fChain->SetBranchAddress("nvetomuons", &nvetomuons, &b_nvetomuons);
+   fChain->SetBranchAddress("nselmuons", &nselmuons, &b_nselmuons);
+   fChain->SetBranchAddress("nloosemuons", &nloosemuons, &b_nloosemuons);
+   fChain->SetBranchAddress("nseltaus", &nseltaus, &b_nseltaus);
+   fChain->SetBranchAddress("elepassVetoId", &elepassVetoId, &b_elepassVetoId);
+   fChain->SetBranchAddress("elepassTightId", &elepassTightId, &b_elepassTightId);
+   fChain->SetBranchAddress("elepassLooseId", &elepassLooseId, &b_elepassLooseId);
+   fChain->SetBranchAddress("elepassMediumId", &elepassMediumId, &b_elepassMediumId);
+   fChain->SetBranchAddress("elepassHEEPId", &elepassHEEPId, &b_elepassHEEPId);
+   fChain->SetBranchAddress("electronpt", &electronpt, &b_electronpt);
+   fChain->SetBranchAddress("electroneta", &electroneta, &b_electroneta);
+   fChain->SetBranchAddress("electronphi", &electronphi, &b_electronphi);
+
+
+
+
+   
+
 }
 
 EDBRHistoMaker::EDBRHistoMaker(TTree* tree, 
