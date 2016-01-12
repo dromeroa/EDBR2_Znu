@@ -23,7 +23,7 @@ VZ_JetMET       = True
 #*************************************** BLIND ANALYSIS *********************************************#
 isBlinded = True
 if isBlinded == True :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 135'
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. || userFloat("ak8PFJetsCHSCorrPrunedMass") > 135'
 else :
    JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
 #************************************ CHOOSE YOUR HLT *******************************************#
@@ -35,7 +35,7 @@ else :
 #SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 
 ###------   Z +JETS  -----------
-#SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
+SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns_v2"
@@ -72,8 +72,9 @@ else :
 
 ### Source
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
-process.maxEvents.input = -1
-#process.maxEvents.input = 100000
+#process.maxEvents.input = -1
+### NUMBER OF EVENTS
+process.maxEvents.input = 1000000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -93,7 +94,7 @@ configXsecs = {
                 "ZZ_25ns_v2"                              : 16.523,
                 "WZ_25ns_v2"                              : 47.13, 
                 "TTbar_25ns_powheg_v2"                    : 831.76,
-                "QCD_HT100to200_25ns_v2"                  : 27500000 ## LO,
+                "QCD_HT100to200_25ns_v2"                  : 27500000, ## LO,
                 "QCD_HT200to300_25ns_v2"                  : 1735000, ## LO 
                 "QCD_HT300to500_25ns_v2"                  : 367000, ## LO
                 "QCD_HT500to700_25ns_v2"                  : 29370, ## LO
@@ -207,14 +208,6 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           niceak4JetsSrc  = cms.InputTag( "niceak4Jets"              ),
                                           vertex          = cms.InputTag( "goodOfflinePrimaryVertex" ),
                                           puWeights       = cms.FileInPath( "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
-                                          eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
-                                          eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
-                                          eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
-                                          eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
-                                          eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
-                                          phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
-                                          phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
-                                          phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight"),
                                           payload         = cms.string  ( "AK8PFchs"                 ))
                                                      
 #************************************** SELECT GEN OR RECO ******************************************# 
@@ -251,7 +244,7 @@ if option == 'RECO':
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
     ##-----  FOR NOW JUST CUT IN MET -------------##
     ## NO CUT FOR NOW, WE IMPOSE THIS AFTER PRODUCE THE TREE
-    #process.goodMET.cut = "pt > 250"
+    process.goodMET.cut = "pt > 250"
 
 #***************************************** SEQUENCES **********************************************# 
 
@@ -338,9 +331,11 @@ if VZ_JetMET == True :
     ## Why the best hadronicV candidate has the largest pt?
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
+    TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
+
 
     process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string("")
+    process.graviton.cut    =  cms.string(TRANSVERSEMASSCUT)
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
@@ -404,11 +399,11 @@ if VZ_JetMET == True :
                                     process.ak4jetSequence           *
                                     process.metSequence              *  
                                     process.egmGsfElectronIDs        *    
-#                                    process.VETOSelectEvents         *
-                                    process.egmPhotonIDs             
-#                                    process.photonvetoSequence       
-#                                    process.muonsVetoSequence        *
-#                                    process.tausVetoSequence
+                                    process.VETOSelectEvents         *
+                                    process.egmPhotonIDs             * 
+                                    process.photonvetoSequence       *
+                                    process.muonsVetoSequence        *
+                                    process.tausVetoSequence
                             )
 
     process.analysis.remove(process.leptonSequence)
