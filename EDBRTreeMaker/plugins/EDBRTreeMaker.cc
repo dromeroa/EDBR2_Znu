@@ -136,6 +136,7 @@ private:
   //-----------------------MET FROM GRAVITON ----------------------------------------
   double metpt, metphi, metpx, metpy, metnomu;
   double sumET, rawmetpt, rawmetphi, rawsumET, genmetpt, genmetphi, calometpt, calometphi, calometsumET;
+  double metcorrptup, metcorrptdown;
   //---------------------- AK8 JETS --------------------------------------------------
   int    numfatjets;
   double tau1,     tau2,     tau3,     tau21;
@@ -155,10 +156,10 @@ private:
   int numjets;
   double ak4jetspt , ak4jetseta, ak4jetsphi,  ak4jetsmass;
   double HT, MHTx, MHTy, MHT;
-  std::vector<double> ak4jets_pt;
-  std::vector<double> ak4jets_eta;
-  std::vector<double> ak4jets_phi;
-  std::vector<double> ak4jets_mass;
+//  std::vector<double> ak4jets_pt;
+//  std::vector<double> ak4jets_eta;
+//  std::vector<double> ak4jets_phi;
+//  std::vector<double> ak4jets_mass;
 
   edm::InputTag niceak4JetTags_;
   //------------ THE MET FILTER FUNCTION --------------------------------------------
@@ -218,62 +219,9 @@ private:
   //Leptons ID 
   int    highPtMu1,      highPtMu2;
   int    trackerMu1,     trackerMu2;
-  edm::EDGetTokenT<pat::MuonCollection> muonToken_;
-  edm::EDGetToken electronToken_; 
-  edm::EDGetTokenT<pat::TauCollection> tauToken_;
-  edm::EDGetToken photonsToken_;
-  std::vector<const pat::Muon*> vetomuons;
-  std::vector<const pat::Muon*> seltightmuons;
-  std::vector<const pat::Muon*> loosemuons;
-  std::vector<const pat::Tau*> seltaus;
-  edm::EDGetTokenT<edm::ValueMap<bool> > eleVetoIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > eleHEEPIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > phoLooseIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > phoMediumIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> > phoTightIdMapToken_;
-  //// THE CONVERSION COLLECTION
-  edm::EDGetTokenT<reco::ConversionCollection> conversionsToken_;
-  std::vector<double> electronpt;
-  std::vector<double> electroneta;
-  std::vector<double> electronphi;
-  std::vector<double> electroncharge;
-  std::vector<int> elepassVetoId_;
-  std::vector<int> elepassTightId_;
-  std::vector<int> elepassLooseId_;
-  std::vector<int> elepassMediumId_;
-  std::vector<int> elepassHEEPId_;
-  std::vector<int> phopassLooseId_;
-  std::vector<int> phopassMediumId_;
-  std::vector<int> phopassTightId_;
-  std::vector<double> photonspt;
-  std::vector<double> photonseta;
-  std::vector<double> photonsphi;
-  std::vector<double> muonpt;
-  std::vector<double> muoneta;
-  std::vector<double> muonphi; 
-  std::vector<int> muoncharge;
-  std::vector<double> tauspt;
-  std::vector<double> tauseta;
-  std::vector<double> tausphi;
-  
-  double InvMassMu;
-  double InvMassEle;
-
-  int nElectrons_;
-  int nMuons_;
-  int nTaus_;
-  int nPhotons_;
 
   double relIso;
   boost::shared_ptr<FactorizedJetCorrector> jecAK8_;
-
-  int nvetomuons_;
-  int nselmuons_;
-  int nloosemuons_;
-  int nseltaus_;
 
 
   void setDummyValues();
@@ -297,19 +245,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   metSrc_             (                                            iConfig.getParameter<std::string>   ( "metSrc"           ) ),
   vertexToken_        ( consumes<reco::VertexCollection>         ( iConfig.getParameter<edm::InputTag> ( "vertex"         ) ) ),
   payload_            (                                            iConfig.getParameter<std::string>   ( "payload"          ) ),
-  niceak4JetTags_     (                                            iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) ),
-  muonToken_          ( consumes<pat::MuonCollection>            ( iConfig.getParameter<edm::InputTag> ( "muons"          ) ) ),
-  electronToken_      ( mayConsume<edm::View<reco::GsfElectron> >( iConfig.getParameter<edm::InputTag> ( "electrons"      ) ) ),
-  tauToken_           ( consumes<pat::TauCollection>             ( iConfig.getParameter<edm::InputTag> ( "taus"           ) ) ),
-  photonsToken_       ( mayConsume<edm::View<reco::Photon> >     ( iConfig.getParameter<edm::InputTag> ( "photons"        ) ) ),
-  eleVetoIdMapToken_  ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleVetoIdMap"   ) ) ),
-  eleTightIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleTightIdMap"  ) ) ),
-  eleLooseIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleLooseIdMap"  ) ) ),
-  eleMediumIdMapToken_( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleMediumIdMap" ) ) ),
-  eleHEEPIdMapToken_  ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "eleHEEPIdMap"   ) ) ),
-  phoLooseIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "phoLooseIdMap"  ) ) ),
-  phoMediumIdMapToken_( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "phoMediumIdMap" ) ) ),
-  phoTightIdMapToken_ ( consumes<edm::ValueMap<bool> >           ( iConfig.getParameter<edm::InputTag> ( "phoTightIdMap"  ) ) )
+  niceak4JetTags_     (                                            iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )
 {
 
    if( iConfig.existsAs<bool>("isData") )
@@ -380,40 +316,6 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("trackerMu2"      ,&trackerMu2     ,"trackerMu2/I"     );
   outTree_->Branch("highPtMu1"       ,&highPtMu1      ,"highPtMu1/I"      );
   outTree_->Branch("highPtMu2"       ,&highPtMu2      ,"highPtMu2/I"      );
-
-  outTree_->Branch("nvetomuons"      ,&nvetomuons_    ,"nvetomuons_/I"    );
-  outTree_->Branch("nselmuons"       ,&nselmuons_     ,"nselmuons_/I"     );
-  outTree_->Branch("nloosemuons"     ,&nloosemuons_   ,"nloosemuons_/I"   );
-  outTree_->Branch("nseltaus"        ,&nseltaus_      ,"nseltaus_/I"      );
-  outTree_->Branch("elepassVetoId"   ,&elepassVetoId_                     );
-  outTree_->Branch("elepassTightId"  ,&elepassTightId_                    );
-  outTree_->Branch("elepassLooseId"  ,&elepassLooseId_                    );
-  outTree_->Branch("elepassMediumId" ,&elepassMediumId_                   );
-  outTree_->Branch("elepassHEEPId"   ,&elepassHEEPId_                     );
-  outTree_->Branch("electronpt"      ,&electronpt                         );
-  outTree_->Branch("electroneta"     ,&electroneta                        );
-  outTree_->Branch("electronphi"     ,&electronphi                        ); 
-  outTree_->Branch("electroncharge"  ,&electroncharge                     );
-  outTree_->Branch("InvMassEle"      ,&InvMassEle      ,"InvMassEle/D"    );
-  outTree_->Branch("nEle"            ,&nElectrons_     ,"nEle/I"          );
-  outTree_->Branch("nMuons"          ,&nMuons_         ,"nMuons/I"        );
-  outTree_->Branch("muonpt"          ,&muonpt                             );
-  outTree_->Branch("muoneta"         ,&muoneta                            );
-  outTree_->Branch("muonphi"         ,&muonphi                            );
-  outTree_->Branch("muoncharge"      ,&muoncharge                         );
-  outTree_->Branch("InvMassMu"       ,&InvMassMu       ,"InvMassMu/D"     );
-  outTree_->Branch("nTaus"           ,&nTaus_          ,"nTaus/I"         );
-  outTree_->Branch("tauspt"          ,&tauspt                             );
-  outTree_->Branch("tauseta"         ,&tauseta                            );
-  outTree_->Branch("tausphi"         ,&tausphi                            );
-  outTree_->Branch("nPho"            ,&nPhotons_        , "nPho/I"        );
-  outTree_->Branch("photonspt"       ,&photonspt                           );
-  outTree_->Branch("photonseta"      ,&photonseta                          );
-  outTree_->Branch("photonsphi"      ,&photonsphi                          );
-  outTree_->Branch("phopassLooseId" , &phopassLooseId_                    );
-  outTree_->Branch("phopassMediumId" ,&phopassMediumId_                   );
-  outTree_->Branch("phopassTightId" , &phopassTightId_                    );
-
 
 
   /// Electron ID quantities
@@ -496,7 +398,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("MHT"             ,&MHT            ,"MHT/D"            );
   outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/D"           );
   outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/D"           );
-  outTree_->Branch("metnomu"         ,&metnomu        ,"metnomu/D"        );
+//  outTree_->Branch("metnomu"         ,&metnomu        ,"metnomu/D"        );
   outTree_->Branch("sumET"           ,&sumET          ,"sumET/D"          );
   outTree_->Branch("rawmetpt"        ,&rawmetpt       ,"rawmetpt/D"       );
   outTree_->Branch("rawmetphi"       ,&rawmetphi      ,"rawmetphi/D"      );
@@ -506,11 +408,14 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("calometpt"       ,&calometpt      ,"calometpt/D"      );
   outTree_->Branch("calometphi"      ,&calometphi     ,"calometphi/D"     );
   outTree_->Branch("calometsumET"    ,&calometsumET   ,"calometsumET/D"   );
+  outTree_->Branch("metcorrptup"     ,&metcorrptup    ,"metcorrptup/D"    );
+  outTree_->Branch("metcorrptdown"   ,&metcorrptdown  ,"metcorrptdown/D"  );
+
   // ak4 jets
-  outTree_->Branch("ak4jets_pt"      ,&ak4jets_pt                         );
-  outTree_->Branch("ak4jets_eta"     ,&ak4jets_eta                        );
-  outTree_->Branch("ak4jets_phi"     ,&ak4jets_phi                        );
-  outTree_->Branch("ak4jets_mass"    ,&ak4jets_mass                       );
+//  outTree_->Branch("ak4jets_pt"      ,&ak4jets_pt                         );
+//  outTree_->Branch("ak4jets_eta"     ,&ak4jets_eta                        );
+//  outTree_->Branch("ak4jets_phi"     ,&ak4jets_phi                        );
+//  outTree_->Branch("ak4jets_mass"    ,&ak4jets_mass                       );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
@@ -838,213 +743,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                   const edm::TriggerNames& trigNames2 = iEvent.triggerNames(*trigResults2); 
                                   is_HBHENoiseFilter_Fired = Pass_Filter(trigResults2, trigNames2, "Flag_HBHENoiseFilter");
                    }
-                   ////------- ID FOR MUONS IN THE EVENT -----------------//// ???
-                   vetomuons.clear();
-                   loosemuons.clear();
-                   seltightmuons.clear();
-                   edm::Handle<pat::MuonCollection> muons;
-                   iEvent.getByToken(muonToken_, muons);
-                   nMuons_ = 0; 
-                   muonpt.clear();
-                   muoneta.clear();
-                   muonphi.clear();                  
-
-                   reco::Candidate::LorentzVector p4CMmu;
-                 
-                   for (const pat::Muon &mu : *muons) {                      
-                       if (mu.pt() < 20 ) continue;
-                       if ( fabs(mu.eta()) > 2.5 ) continue;
-
-                       nMuons_++;
-                       muonpt.push_back( mu.pt() );
-                       muoneta.push_back( mu.eta() );
-                       muonphi.push_back( mu.phi() ); 
-                       muoncharge.push_back( mu.charge() );
-
-                       ////Invariant mass of the  muons
-                       p4CMmu = p4CMmu + mu.p4();
-
-                       //PF-based combined relative isolation with β correction, deltaR=0.4
-                       double chpt = mu.pfIsolationR04().sumChargedHadronPt;
-                       double nhet = max(0., mu.pfIsolationR04().sumNeutralHadronEt + mu.pfIsolationR04().sumPhotonEt - 0.5*mu.pfIsolationR04().sumPUPt);
-                       double num  = chpt + nhet;
-                       double den  = mu.pt();
-                       double relIsomu = num/den;
-
-                       //VetoMuon Selection 
-                       if (!mu.isPFMuon()) continue;
-                       if (! (mu.isGlobalMuon() || mu.isTrackerMuon() ) ) continue;
-                       if (relIsomu > 0.25 ) continue;
-                       vetomuons.push_back(&mu);
-
-                       // LooseMuon Selection
-                       if (!mu.isLooseMuon()) continue;
-                       loosemuons.push_back(&mu);
-
-
-                       //TightMuon selection
-                       if (!mu.isTightMuon(vertex)) continue;
-                       if (relIsomu > 0.15 ) continue;
-                       seltightmuons.push_back(&mu);    
-                                   
-                   }
-  
-                   InvMassMu = p4CMmu.mass();  
-                    
-
-                  
-                   ////------- ID FOR ELECTRONS IN THE EVENT--------------////
-                   edm::Handle<edm::View<reco::GsfElectron> > electrons;
-                   iEvent.getByToken(electronToken_,electrons);
-
-                   //// THE DECISIONS
-                   edm::Handle<edm::ValueMap<bool> > eleveto_id_decisions;
-                   edm::Handle<edm::ValueMap<bool> > eletight_id_decisions;
-                   edm::Handle<edm::ValueMap<bool> > eleloose_id_decisions;
-                   edm::Handle<edm::ValueMap<bool> > elemedium_id_decisions;
-                   edm::Handle<edm::ValueMap<bool> > eleheep_id_decisions;
-                   iEvent.getByToken(eleVetoIdMapToken_ ,eleveto_id_decisions);
-                   iEvent.getByToken(eleTightIdMapToken_,eletight_id_decisions);
-                   iEvent.getByToken(eleLooseIdMapToken_ ,eleloose_id_decisions);
-                   iEvent.getByToken(eleMediumIdMapToken_,elemedium_id_decisions);                   
-                   iEvent.getByToken(eleHEEPIdMapToken_ ,eleheep_id_decisions);
-
-                   //// CLEAR THE VECTORS
-                   nElectrons_ = 0;
-                   electronpt.clear();
-                   electroneta.clear();
-                   electronphi.clear();
-                   elepassVetoId_ .clear();
-                   elepassTightId_ .clear();
-                   elepassLooseId_ .clear();
-                   elepassMediumId_.clear();
-                   elepassHEEPId_ .clear();
-
-                   reco::Candidate::LorentzVector p4CMEle; 
-
-                   for (size_t i = 0; i < electrons->size(); ++i){
-                         const auto el = electrons->ptrAt(i);
-
-                         //// THE BASIC SELECTION
-                         if( el->pt() < 20 ) continue;
-                         if( fabs(el->superCluster()->eta()) > 2.5 ) continue;
-
-                          //// REMOVE OVERLAPS WITH MUONS 
-                          bool muOverlap=false;
-                          BOOST_FOREACH(const pat::Muon* mu, seltightmuons) {
-                          if ( deltaR(el->p4(), mu->p4()) < 0.3)
-                               muOverlap=true;
-                          }
-                          if (muOverlap) continue;
- 
-                         nElectrons_++; 
-                          
-                         electronpt.push_back( el->pt() );
-                         electroneta.push_back( el->superCluster()->eta() );
-                         electronphi.push_back( el->superCluster()->phi() );
-                         electroncharge.push_back( el->charge() );
-                         
-
-
-                         bool isPassVeto = (*eleveto_id_decisions)[el];
-                         bool isPassTight = (*eletight_id_decisions)[el];
-                         bool isPassLoose = (*eleloose_id_decisions)[el];
-                         bool isPassMedium = (*elemedium_id_decisions)[el];
-                         bool isPassHEEP = (*eleheep_id_decisions)[el];
-                         elepassVetoId_.push_back ( (int)isPassVeto );
-                         elepassTightId_.push_back ( (int)isPassTight );
-                         elepassLooseId_.push_back ( (int)isPassLoose );
-                         elepassMediumId_.push_back( (int)isPassMedium);
-                         elepassHEEPId_.push_back ( (int)isPassHEEP );
-
-                         //// Invariant Mass Electron     
-                         p4CMEle = p4CMEle + el->p4();                        
-                    }
-
-                    InvMassEle = p4CMEle.mass();
-
-                    ////-------- ID FOR TAUS IN THE EVENT ------------////
-                    seltaus.clear(); 
-                    nTaus_ = 0;
-                    tauspt.clear();
-                    tauseta.clear();
-                    tausphi.clear();
-                    edm::Handle<pat::TauCollection> taus;
-                    iEvent.getByToken(tauToken_, taus);
-                    for (const pat::Tau &tau : *taus){
-    
-                        if (tau.pt() < 20) continue;
-                        if (fabs(tau.eta()) > 2.3) continue;
-
-                        nTaus_++; 
-                        tauspt.push_back( tau.pt() );
-                        tauseta.push_back( tau.eta() );
-                        tausphi.push_back( tau.phi() );                       
-
-                        ////  The tau passes the discriminator if tauID returns a value of 0.5 or greater
-                        ////  https://twiki.cern.ch/twiki/bin/view/CMS/TauIDRecommendation13TeV
-                        if (tau.tauID("decayModeFinding")<0.5)
-                           continue;
-                        if (tau.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits")<0.5)
-                          continue;
-                        if (tau.tauID("againstMuonLoose3")<0.5)
-                          continue;
-                        if (tau.tauID("againstElectronLooseMVA5")<0.5)
-                          continue;
-                        seltaus.push_back(&tau);
-                    }
-
-                    ////-------  ID FOR PHOTONS ----------------------------------------------////
-                    edm::Handle<edm::View<reco::Photon> > photons;
-                    iEvent.getByToken(photonsToken_, photons);
-
-                    edm::Handle<edm::ValueMap<bool> > pholoose_id_decisions;
-                    edm::Handle<edm::ValueMap<bool> > phomedium_id_decisions;
-                    edm::Handle<edm::ValueMap<bool> > photight_id_decisions;
-                    iEvent.getByToken(phoLooseIdMapToken_ ,pholoose_id_decisions);
-                    iEvent.getByToken(phoMediumIdMapToken_,phomedium_id_decisions);
-                    iEvent.getByToken(phoTightIdMapToken_ ,photight_id_decisions);
-
-                    nPhotons_ = 0;
-                    photonspt.clear();
-                    photonseta.clear();
-                    photonsphi.clear();
-                    phopassLooseId_ .clear();
-                    phopassMediumId_.clear();
-                    phopassTightId_ .clear();
-
-                    for (size_t i = 0; i < photons->size(); ++i){
-                          const auto pho = photons->ptrAt(i); 
-
-                          if( pho->pt() < 15 ) continue;
-                          if( fabs(pho->superCluster()->eta()) > 2.5 ) continue;
-
-                          nPhotons_++;
-
-                          photonspt.push_back( pho->pt() );
-                          photonseta.push_back( pho->superCluster()->eta() );
-                          photonsphi.push_back( pho->superCluster()->phi() ); 
-
-                          bool isPassLoosepho = (*pholoose_id_decisions)[pho];
-                          bool isPassMediumpho = (*phomedium_id_decisions)[pho];
-                          bool isPassTightpho = (*photight_id_decisions)[pho];
-                          phopassLooseId_.push_back ( (int)isPassLoosepho );
-                          phopassMediumId_.push_back( (int)isPassMediumpho);
-                          phopassTightId_.push_back ( (int)isPassTightpho );
-                    }
-
-
-                    //// ---  SORT OBJECTS BY pT ---------------------------------------------//// 
-                    std::sort(vetomuons.begin(),vetomuons.end(),RefGreaterByPt<pat::Muon>());
-                    std::sort(seltightmuons.begin(),seltightmuons.end(),RefGreaterByPt<pat::Muon>());
-                    std::sort(loosemuons.begin(),loosemuons.end(),RefGreaterByPt<pat::Muon>());
-                    std::sort(seltaus.begin(),seltaus.end(),RefGreaterByPt<pat::Tau>());
-
-                    ////-------------------------------------------
-                    nvetomuons_=vetomuons.size();
-                    nselmuons_=seltightmuons.size();
-                    nloosemuons_ = loosemuons.size(); 
-                    nseltaus_=seltaus.size();
 
                    ////----------- FOR JET ID  --------////
                    chf = 0.0;
@@ -1079,7 +777,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ///------------  JET MASS WITH CORRECTIONS  -------------////                        
                    softjet1     = hadronicVnu.userFloat("ak8PFJetsCHSSoftDropMass");
                    prunedjet1   = hadronicVnu.userFloat("ak8PFJetsCHSPrunedMass");
-                   massVhad = prunedjet1 * prunedMassCorrection( rho, nVtx, hadronicVnu, JetCorParColl ); 
+                   massVhad     = hadronicVnu.userFloat("ak8PFJetsCHSCorrPrunedMass");
+//                   massVhad = prunedjet1 * prunedMassCorrection( rho, nVtx, hadronicVnu, JetCorParColl ); 
                    ////---------------------------------------------------------------------------------////
                    ////------------------------------  MET ---------------------------------------------////
                    ////---------------------------------------------------------------------------------////
@@ -1102,19 +801,21 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    calometpt     =   goodMET.caloMETPt();
                    calometphi    =   goodMET.caloMETPhi();
                    calometsumET  =   goodMET.caloMETSumEt();
-                      
 
+                  /// MET UNCERTAINTIES                 
+                   metcorrptup   = goodMET.shiftedPt(pat::MET::JetEnUp); 
+                   metcorrptdown = goodMET.shiftedPt(pat::MET::JetEnDown);                  
                    ////--------------------  MET NO MU --------------------////
                    ////-- BOOST_FOREACH : It iterates over sequences for us, freeing us from having to deal directly with iterators or write predicates////
                    //// --http://www.boost.org/doc/libs/1_55_0/doc/html/foreach.html 
-                   Candidate::LorentzVector metnomuonsvec = goodMET.p4();
-                   BOOST_FOREACH(const pat::Muon* mu, seltightmuons) {
-                     metnomuonsvec+=mu->p4();
-                   }
+//                   Candidate::LorentzVector metnomuonsvec = goodMET.p4();
+//                   BOOST_FOREACH(const pat::Muon* mu, seltightmuons) {
+//                     metnomuonsvec+=mu->p4();
+//                   }
 
-                   double metnomu_x = metnomuonsvec.Px();
-                   double metnomu_y = metnomuonsvec.Py();                  
-                   metnomu = sqrt(metnomu_x*metnomu_x + metnomu_y*metnomu_y);
+//                   double metnomu_x = metnomuonsvec.Px();
+//                   double metnomu_y = metnomuonsvec.Py();                  
+//                   metnomu = sqrt(metnomu_x*metnomu_x + metnomu_y*metnomu_y);
 
                    ////-----------------------------------------------------------------------------------////
                    ////--------------------------------  AK4 JETS  ---------------------------------------////
@@ -1122,10 +823,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    edm::Handle<std::vector<pat::Jet>> jets;
                    iEvent.getByLabel(niceak4JetTags_, jets); 
                    ////jets( vector of kinematic variables)
-                   ak4jets_pt.clear();
-                   ak4jets_eta.clear();
-                   ak4jets_phi.clear();
-                   ak4jets_mass.clear(); 
+//                   ak4jets_pt.clear();
+//                   ak4jets_eta.clear();
+//                   ak4jets_phi.clear();
+//                   ak4jets_mass.clear(); 
                    ////--- NUMBER OF JETS ----//// 
                    numjets = jets->size();
                    ////--------  HT AND MHT  -------------////
@@ -1136,10 +837,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                          ak4jetseta =  j.eta();
                          ak4jetsphi =  j.phi();
                          ak4jetsmass = j.mass();
-                         ak4jets_pt.push_back(ak4jetspt);
-                         ak4jets_eta.push_back(ak4jetseta);
-                         ak4jets_phi.push_back(ak4jetsphi);
-                         ak4jets_mass.push_back(ak4jetsmass);
+//                         ak4jets_pt.push_back(ak4jetspt);
+//                         ak4jets_eta.push_back(ak4jetseta);
+//                         ak4jets_phi.push_back(ak4jetsphi);
+//                         ak4jets_mass.push_back(ak4jetsmass);
                          HT += ak4jetspt;
                          MHTx -= j.px();
                          MHTy -= j.py();
@@ -1235,6 +936,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    }
 
 }
+
+/*
 double EDBRTreeMaker::prunedMassCorrection( double rho,
                                             double nVtx,
                                             const pat::Jet& jet,
@@ -1260,6 +963,8 @@ double EDBRTreeMaker::prunedMassCorrection( double rho,
       jecAK8->setJetE ( jet.correctedP4(0).energy() );
       return jecAK8->getCorrection();
 }
+
+*/
 
 bool EDBRTreeMaker::Pass_Filter( edm::Handle<edm::TriggerResults> trigResults, 
                                  const edm::TriggerNames & trigNames,
@@ -1315,7 +1020,7 @@ void EDBRTreeMaker::setDummyValues() {
      metphi         = -1e4;
      metpx          = -1e4;
      metpy          = -1e4;
-     metnomu        = -1e4;
+//     metnomu        = -1e4;
      matchHlt1      = -1e4;
      matchHlt2      = -1e4;
      deltaRlep1Obj  = -1e4;
@@ -1399,16 +1104,8 @@ void EDBRTreeMaker::setDummyValues() {
      nef            = -1e4;
      nch            = -1e4; 
      nconstituents  = -1e4;
-     InvMassMu      = -1e4;
-     InvMassEle     = -1e4;     
-     nvetomuons_    = -1e4;
-     nselmuons_     = -1e4;
-     nloosemuons_   = -1e4;
-     nseltaus_      = -1e4;
-     nElectrons_    = -1e4;
-     nMuons_        = -1e4;
-     nTaus_         = -1e4;
-
+     metcorrptup    = -1e4;
+     metcorrptdown  = -1e4;
 
 }
 
