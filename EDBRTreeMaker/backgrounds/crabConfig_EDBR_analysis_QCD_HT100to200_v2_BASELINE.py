@@ -36,7 +36,7 @@ config.General.workArea = 'EDBR_crab_projects'
 # esta opcion es para que soporte EventBased
 #config.JobType.pluginName = 'PrivateMC'
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'analysis2015D_25ns_QCD_HT100to200_v2.py'
+config.JobType.psetName = 'analysis2015D_25ns_QCD_HT100to200_v2_BASELINE.py'
 
 ## Data options
 
