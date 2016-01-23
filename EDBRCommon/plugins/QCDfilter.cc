@@ -126,7 +126,7 @@ QCDfilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
                double phi2 = jet2.phi();
                double deltaPhijetjetabs = fabs(deltaPhi(phi1,phi2)); 
 
-               if (deltaPhijetjetabs <= deltaphi_threshold_){
+               if ((deltaPhijetjetabs <= deltaphi_threshold_) && (deltaPhijetjetabs>0)){
                    result = true;
                }
        }

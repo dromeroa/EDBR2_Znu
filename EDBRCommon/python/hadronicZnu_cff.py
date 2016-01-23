@@ -12,11 +12,10 @@ corrJetsProducer = cms.EDProducer ( "CorrJetsProducer",
                                      isData   =    cms.bool    ( False ))
 
 
+### We are not cut in jet mass for now (check this)
 hadronicVnu = cms.EDFilter(  "CandViewSelector",
                                src      =      cms.InputTag("corrJetsProducer:corrJets"),
-                               cut      =      cms.string('pt > 200. & '
-                                                          'userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & '
-                                                          'userFloat("ak8PFJetsCHSCorrPrunedMass") < 105.  '),
+                               cut      =      cms.string('pt > 200. &  abs(eta)<2.4'),
                                filter   =      cms.bool(True) )
 
 

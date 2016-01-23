@@ -28,6 +28,7 @@ eeBadScFilter = cms.EDFilter("HLTHighLevel",
         throw              = cms.bool(True)
 )
 
+### We remove this filter in the sequence
 CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
         TriggerResultsTag  = cms.InputTag("TriggerResults","","PAT"),
         HLTPaths           = cms.vstring("Flag_CSCTightHaloFilter"),
@@ -41,6 +42,6 @@ CSCTightHaloFilter = cms.EDFilter("HLTHighLevel",
 metfilterSequence = cms.Sequence( 
 #                                  HBHENoiseFilter       +
                                   goodVertices          +
-                                  eeBadScFilter         +
-                                  CSCTightHaloFilter    )
+#                                  CSCTightHaloFilter    +
+                                  eeBadScFilter         )
 
