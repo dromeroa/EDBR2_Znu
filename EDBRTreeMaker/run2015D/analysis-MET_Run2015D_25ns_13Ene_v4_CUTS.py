@@ -20,21 +20,22 @@ process.GlobalTag.globaltag = '74X_dataRun2_v5'
 CHANNEL         = "VZnu_CHANNEL"
 VZ_semileptonic = False
 VZ_JetMET       = True
+TYPE            = "CUTS"
 #                                                                                                    #
 #****************************************************************************************************#
-isBlinded = True
+isBlinded = False
 if isBlinded == True :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. || userFloat("ak8PFJetsCHSCorrPrunedMass") > 135. '
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 20. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. || userFloat("ak8PFJetsCHSCorrPrunedMass") > 135. '
 else :
-   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 40.'
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 20.'
 #*********************************** THE SAMPLES ****************************************************#
 # choose the sample                                                                     
 
 SAMPLE="MET_Run2015D_v4"
 
-### Source
+###Source
 process.load("ExoDiBosonResonances.EDBRCommon.PromptReco."+SAMPLE)
-#process.maxEvents.input =10000 
+#process.maxEvents.input =100000
 process.maxEvents.input = -1
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -49,16 +50,16 @@ configNevents = { "MET_Run2015D_v4"       :1,
 
 usedXsec = configXsecs[SAMPLE]
 usedNevents = configNevents[SAMPLE]
-
 #*********************************** JSON file ****************************************************#
 # https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
-# last modified 17-Nov-2015 
+# last modified 18-Dec-2015 
 import FWCore.PythonUtilities.LumiList as LumiList
-process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt').getVLuminosityBlockRange()
+JSON_NAME='Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt'
 #***********************************  EVENTS TO SKIP ******************************************************************#
 listEventsToSkip = []
 ## REMEMBER TO CHANGE THE PATH TO YOUR ACTUAL LOCATION
-fileEventsToSkip = open("/home/davidromero/LAST_FRAMEWORKS/CHANGE_ALL_06DEC/CMSSW_7_4_15_patch1/src/ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/eventstoskip.txt","r")
+fileEventsToSkip = open("/afs/cern.ch/work/d/dromeroa/private/CRAB_13enero/CMSSW_7_4_16_patch2/src/ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/eventstoskip.txt","r")
 
 for line in fileEventsToSkip:
     cleanLine = line.rstrip()
@@ -256,11 +257,10 @@ if VZ_JetMET == True :
 
     process.hadronicVnu.cut = cms.string( JETMASSCUT )
 
-#    process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
     ## Why the best hadronicV candidate has the largest pt?
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
-    process.graviton.decay  =  cms.string("goodMET hadronicVnu")
+    process.graviton.decay  =  cms.string("goodMET bestHadronicV")
     process.graviton.cut    =  cms.string("")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
@@ -354,7 +354,7 @@ if VZ_JetMET == True :
                                     process.VertexSequence           *
                                     process.jetSequence              *
                                     process.ak4jetSequence           *
-                                    process.Numberjetsak4QCDSequence *
+                                    process.Numberjetsak4QCDSequence *  ## INCLUDE THE QCD CUTS
                                     process.deltaPhiak4JetsSequence  *
                                     process.metSequence              *
                                     process.egmGsfElectronIDs        *
@@ -371,16 +371,21 @@ if VZ_JetMET == True :
 
 
 print "++++++++++ CUTS ++++++++++\n"
-print "Graviton cut = "+str(process.graviton.cut)
 if VZ_semileptonic == True :
+   print "Graviton cut = "+str(process.graviton.cut)
    print "Leptonic V cut = "+str(process.leptonicVSelector.cut)
    print "Hadronic V cut = "+str(process.hadronicV.cut)
 if VZ_JetMET == True :
+   print "CHANNEL = " +str(CHANNEL)
+   print "SAMPLE = " +str(SAMPLE)
+   print "IS BLINDED ?  = " +str(isBlinded)
+   print "Global Tag = " +str(process.GlobalTag.globaltag)
+   print "JSON file = " +str(JSON_NAME)
    print "Hadronic V cut = "+str(process.hadronicVnu.cut)
    print "MET cut = "+str(process.goodMET.cut)
+   print "Type of Analysis = " +str(TYPE)
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+".root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+"_CUTS.root")
                                   )
-

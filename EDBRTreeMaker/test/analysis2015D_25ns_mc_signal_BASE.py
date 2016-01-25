@@ -18,18 +18,25 @@ process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
 CHANNEL         = "VZnu_CHANNEL" 
 VZ_semileptonic = False
 VZ_JetMET       = True
+TYPE            = "BASELINE"
 #                                                                                                    #
 #****************************************************************************************************#
+#*************************************** BLIND ANALYSIS *********************************************#
+isBlinded = False
+if isBlinded == True :
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 20. & userFloat("ak8PFJetsCHSCorrPrunedMass") < 65. || userFloat("ak8PFJetsCHSCorrPrunedMass") > 135'
+else :
+   JETMASSCUT = 'pt>200. & userFloat("ak8PFJetsCHSCorrPrunedMass") > 20.'
 #************************************ CHOOSE YOUR HLT *******************************************#
 
 #*********************************** THE SAMPLES ****************************************************#
 ### CHOOSE THE SAMPLE :                                                                   
 
 ###-------- RSGRrav------------------
-#SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
+SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
+#SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-200To400_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-400To600_25ns_v2"
 #SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns_v2"
@@ -68,7 +75,7 @@ SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
 process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
 process.maxEvents.input = -1
 ### NUMBER OF EVENTS
-#process.maxEvents.input = 10000
+#process.maxEvents.input = 1000000
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -161,11 +168,6 @@ process.bestLeptonicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("leptonicVSelector"),
                                           maxNumber = cms.uint32(1) )
 
-process.hadronicVFilter = cms.EDFilter(   "CandViewCountFilter",
-                                          src = cms.InputTag("hadronicV"),
-                                          minNumber = cms.uint32(1),
-                                          filter = cms.bool(True) )
-
 process.bestHadronicV = cms.EDFilter(    "LargestPtCandSelector",
                                           src = cms.InputTag("hadronicV"),
                                           maxNumber = cms.uint32(1) )
@@ -195,7 +197,7 @@ process.treeDumper = cms.EDAnalyzer(      "EDBRTreeMaker",
                                           isData          = cms.bool    (  False                     ),
                                           originalNEvents = cms.int32   (  usedNevents               ),
                                           crossSectionPb  = cms.double  (  usedXsec                  ),
-                                          targetLumiInvPb = cms.double  (  2086.097                  ),
+                                          targetLumiInvPb = cms.double  (  2144                      ),
                                           EDBRChannel     = cms.string  (  CHANNEL                   ),
                                           gravitonSrc     = cms.string  ( "graviton"                 ),
                                           metSrc          = cms.string  ( "slimmedMETs"              ),
@@ -233,8 +235,6 @@ if option == 'RECO':
     process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
     process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-    process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
-    process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
     process.hadronicV.cut = cms.string('pt > 200. '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") > 50.) '
                                        '& (userFloat("ak8PFJetsCHSSoftDropMass") < 110.)')
@@ -251,7 +251,6 @@ process.leptonSequence = cms.Sequence(    process.leptonicVSequence +
 
 process.jetSequence = cms.Sequence(       process.fatJetsSequence   +
                                           process.hadronicV         +
-                                          process.hadronicVFilter   +
                                           process.bestHadronicV     )
 
 if VZ_JetMET == True :
@@ -321,16 +320,16 @@ if filterMode == False:
 
 if VZ_JetMET == True :
 
+    process.hadronicVnu.cut = cms.string( JETMASSCUT )
  
-    process.hadronicVFilter.src = cms.InputTag("hadronicVnu")
     ## Why the best hadronicV candidate has the largest pt?
     process.bestHadronicV.src   = cms.InputTag("hadronicVnu")
 
-    TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
+#    TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
 
 
-    process.graviton.decay  =  cms.string("goodMET hadronicVnu")
-    process.graviton.cut    =  cms.string(TRANSVERSEMASSCUT)
+    process.graviton.decay  =  cms.string("goodMET bestHadronicV")
+    process.graviton.cut    =  cms.string("")
     process.graviton.roles  =  cms.vstring('goodMET', 'hadronicVnu')
 
 
@@ -387,21 +386,18 @@ if VZ_JetMET == True :
 
     process.analysis.replace(       process.jetSequence,
 #                                    process.hltSequenceZnu           *
-                                    process.HBHEmetfilterSequence      *  
-                                    process.metfilterSequence          *
-                                    process.VertexSequence             *
-                                    process.jetSequence                *
-                                    process.ak4jetSequence             *
-                                    process.Numberjetsak4QCDSequence   *
-                                    process.deltaPhiak4JetsSequence    *   
-                                    process.metSequence                *  
-                                    process.egmGsfElectronIDs          *    
-                                    process.VETOSelectEvents           *
-                                    process.egmPhotonIDs               * 
-                                    process.photonvetoSequence         *
-                                    process.muonsVetoSequence          *
-                                    process.tausVetoSequence         
-                                     
+                                    process.HBHEmetfilterSequence    *  
+                                    process.metfilterSequence        *
+                                    process.VertexSequence           *
+                                    process.jetSequence              *
+                                    process.ak4jetSequence           *
+                                    process.metSequence              *  
+                                    process.egmGsfElectronIDs        *    
+                                    process.VETOSelectEvents         *
+                                    process.egmPhotonIDs             * 
+                                    process.photonvetoSequence       *
+                                    process.muonsVetoSequence        *
+                                    process.tausVetoSequence
                             )
 
     process.analysis.remove(process.leptonSequence)
@@ -414,10 +410,15 @@ if VZ_semileptonic == True :
    print "Leptonic V cut = "+str(process.leptonicVSelector.cut) 
    print "Hadronic V cut = "+str(process.hadronicV.cut)
 if VZ_JetMET == True :
+   print "CHANNEL = " +str(CHANNEL)
+   print "SAMPLE = " +str(SAMPLE)
+   print "IS BLINDED ?  = " +str(isBlinded)
    print "Hadronic V cut = "+str(process.hadronicVnu.cut)
    print "MET cut = "+str(process.goodMET.cut)
+   print "Type of Analysis = " +str(TYPE)
+
 print "\n++++++++++++++++++++++++++"
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("treeEDBR_"+SAMPLE+"_CUTS.root")
+                                   fileName = cms.string("treeEDBR_"+SAMPLE+"_BASE.root")
                                   )

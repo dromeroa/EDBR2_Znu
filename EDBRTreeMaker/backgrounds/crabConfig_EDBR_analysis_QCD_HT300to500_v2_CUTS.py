@@ -19,9 +19,9 @@ config.General.transferLogs = True
 #config.General.requestName = 'EDBR_ZZ_25ns'
 #config.General.requestName = 'EDBR_WW_25ns'
 #config.General.requestName = 'EDBR_WZ_25ns'
-config.General.requestName = 'EDBR_QCD_HT100to200_25ns'
+#config.General.requestName = 'EDBR_QCD_HT100to200_25ns'
 #config.General.requestName = 'EDBR_QCD_HT200to300_25ns'
-#config.General.requestName = 'EDBR_QCD_HT300to500_25ns'
+config.General.requestName = 'EDBR_QCD_HT300to500_25ns_CUTS'
 #config.General.requestName = 'EDBR_QCD_HT500to700_25ns'
 #config.General.requestName = 'EDBR_QCD_HT700to1000_25ns'
 #config.General.requestName = 'EDBR_QCD_HT1000to1500_25ns'
@@ -36,7 +36,7 @@ config.General.workArea = 'EDBR_crab_projects'
 # esta opcion es para que soporte EventBased
 #config.JobType.pluginName = 'PrivateMC'
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'analysis2015D_25ns_QCD_HT100to200_v2_BASELINE.py'
+config.JobType.psetName = 'analysis2015D_QCD_HT300to500_25ns_v2_CUTS.py'
 
 ## Data options
 
@@ -62,9 +62,9 @@ config.JobType.psetName = 'analysis2015D_25ns_QCD_HT100to200_v2_BASELINE.py'
 #config.Data.inputDataset ='/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'  
  
 ## QCD
-config.Data.inputDataset ='/QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
+#config.Data.inputDataset ='/QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
 #config.Data.inputDataset ='/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
-#config.Data.inputDataset ='/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
+config.Data.inputDataset ='/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
 #config.Data.inputDataset ='/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
 #config.Data.inputDataset ='/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
 #config.Data.inputDataset ='/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/MINIAODSIM'
