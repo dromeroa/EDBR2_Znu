@@ -32,7 +32,7 @@ void loopPlot(){
   /// Luminosity value in fb^-1
   /// Scale histograms (line 403 EDBRHistoPloter.h) 
   /// Use lumiValue = 1. if actualWeights (lines 562-585 EDBRHistoMaker.h) were consistently defined in the EDBRTreeMaker 
-  double lumiValue = 1546.938/1000;; 
+  double lumiValue = 1; 
   /// Should we scale the histograms to data?
 //   bool scaleToData = true; 
   bool scaleToData = false;
@@ -52,17 +52,30 @@ void loopPlot(){
     //// THE LOCATION OF THE TREES
 //    std::string pathToTrees="../EDBRTreeMaker/test/trees_Oct14/";
 //      std::string pathToTrees="../EDBRTreeMaker/test/trees_pu/";
-      std::string pathToTrees="../EDBRTreeMaker/test/trees_09Nov/";
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_19Ene2016_BASE/";
+      std::string pathToTrees="../EDBRTreeMaker/test/trees_22Ene2016_CUTS/";
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_23Ene2016_CUTS/";
+//        std::string pathToTrees="../EDBRTreeMaker/test/trees_19Ene2016_CUTS/";
+//        std::string pathToTrees="../EDBRTreeMaker/test/trees_14Ene2016_CUTS/";
     //// THE LOCATION WHERE SAVE THE PLOTS
 //    std::string outputDir = "./plots_test_Run2_Oct14"; 
 //    std::string outputDir = "./plots_test_Run2_Oct14_withjetIDcut1";
-      std::string outputDir = "./plots_09Nov"; 
+//      std::string outputDir = "./plots_19Ene2016_BASE"; 
+//      std::string outputDir = "./plots_19Ene2016_sincuts"; 
+//      std::string outputDir = "./plots_19Ene2016_CUTS";
+      std::string outputDir = "./plots_22Ene2016_CUTS";
+//      std::string outputDir = "./plots_23Ene2016_CUTS";
 ///********************************************************************************
 ///              2. SETUP THE NAMES OF THE DATA FILES FOR TREES   
 ///********************************************************************************
+
      const int nDATA=2;
-     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015",
-                                   "MET_Run2015D_v4_04Nov"}; 
+//     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015_BASELINE",
+//                                   "MET_Run2015D_v4_BASELINE"}; 
+
+     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015_CUTS",
+                                   "MET_Run2015D_v4_CUTS"};
+
     //const int nDATA=0;//set to zero if you don't want to plot
     //std::string dataLabels[nDATA]={};
     std::vector<std::string> fData;
@@ -75,7 +88,11 @@ void loopPlot(){
 ////            3. SETUP NAMES OF MC FILES FOR TREES 
 ////*****************************************************************************
   //const int nMC=0;
-  const int nMC=17;//set to zero if you don't want to plot
+
+
+//---------------------------------------------------------------------------------
+
+  const int nMC=18;//set to zero if you don't want to plot
   std::string mcLabels[nMC]={  "WW",
                                "ZZ",
                                "VV",
@@ -84,6 +101,7 @@ void loopPlot(){
                                "WJetsToLNu_HT-200To400",
                                "WJetsToLNu_HT-400To600",
                                "W+Jets",
+                               "QCD_HT300to500", 
                                "QCD_HT500to700",
                                "QCD_HT700to1000",
                                "QCD_HT1000to1500",
@@ -96,11 +114,18 @@ void loopPlot(){
 
 
   //// THE FACTORS FOR MC
-  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1.21, 1.21, 1.21, 1.21, 1, 1, 1, 1, 1, 1, 1.23, 1.23, 1.23, 1.23};
+
+//  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
+//----------------------------------------------------------------------------------------------
+
   
   std::vector<std::string> fMC;
   for(int ii=0;ii<nMC;ii++){
     fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+"_25ns_v2.root");
+   // PARA CUANDO JUNTEMO LAS TREES
+//    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+".root");
   }
 
   std::vector<double> kFactorsMC;
@@ -308,6 +333,9 @@ void loopPlot(){
   ////// {DYJetsToLL_HT-100to200,DYJetsToLL_HT-200to400,DYJetsToLL_HT-200to400,DYJetsToLL_HT-600toInf}
   std::vector<int> fColorsMC;
 
+
+
+
   fColorsMC.push_back(kRed-10);
   fColorsMC.push_back(kRed-10);
   fColorsMC.push_back(kRed-10);
@@ -319,6 +347,7 @@ void loopPlot(){
   fColorsMC.push_back(kRed-4);
   fColorsMC.push_back(kRed-4);
 
+  fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
   fColorsMC.push_back(kYellow-7);
@@ -337,6 +366,9 @@ void loopPlot(){
 //  fColorsMC.push_back(kYellow-7);
 //  fColorsMC.push_back(kYellow-7);
 //  fColorsMC.push_back(kYellow-7);
+//-----------------------------------------
+
+
 /*
   fColorsMC.push_back(kYellow-10);
   fColorsMC.push_back(kYellow-10);

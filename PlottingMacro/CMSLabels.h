@@ -70,13 +70,14 @@ TMathText* makeCMSPreliminaryTop(int energy = 7, double x = 0.15, double y = 0.9
   return tex;
 }
 
-TMathText* makeCMSWorkTop(int energy = 13, double x = 0.15, double y = 0.94) {
+  TMathText* makeCMSWorkTop(int energy = 13, double x = 0.15, double y = 0.94) {
   char buffer[256];
-  sprintf(buffer,"\\hbox{CMS Work in Progress  }\\sqrt{s}\\hbox{ = %i TeV}",energy);
+  sprintf(buffer,"\\hbox{CMS Work in Progress  }\\sqrt{s}\\hbox{ = %i TeV}}",energy);
   TMathText* tex = new TMathText(x,y,buffer);
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
+//  tex->SetTextSize(0.03);
   tex->Draw();
   return tex;
 }
@@ -84,11 +85,12 @@ TMathText* makeCMSWorkTop(int energy = 13, double x = 0.15, double y = 0.94) {
 
 TMathText* makeCMSLumi(double lumi = 5.0, double x = 0.666, double y = 0.72) {
   char buffer[256];
-  sprintf(buffer,"\\int L dt = %4.2lf pb^{-1}",lumi);
+  sprintf(buffer,"\\int L dt = %5.2lf pb^{-1}",lumi);
   TMathText* tex = new TMathText(x,y,buffer);
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.030);
+//  tex->SetTextSize(0.030);
+  tex->SetTextSize(0.050);
   tex->Draw();
   return tex;
 }

@@ -112,16 +112,6 @@ class EDBRHistoMaker {
    Double_t        nef;
    Int_t           nch; 
    Int_t           nconstituents;
-   Int_t           nvetomuons;
-   Int_t           nselmuons;
-   Int_t           nloosemuons;
-   Int_t           nseltaus; 
-   Int_t           InvMassEle;
-   Int_t           nEle;
-   Int_t           nMuons;
-   Int_t           InvMassMu;
-   Int_t           nTaus;
-   Int_t           nPho; 
    Double_t        sumET;
    Double_t        rawmetpt;
    Double_t        rawmetphi;
@@ -190,54 +180,10 @@ class EDBRHistoMaker {
    TBranch        *b_puweight;  //!
 
    //new
-   TBranch        *b_nvetomuons;
-   TBranch        *b_nselmuons;
-   TBranch        *b_nloosemuons;
-   TBranch        *b_nseltaus;
-   TBranch        *b_elepassVetoId;
-   TBranch        *b_elepassTightId;
-   TBranch        *b_elepassLooseId;
-   TBranch        *b_elepassMediumId;
-   TBranch        *b_elepassHEEPId; 
-   TBranch        *b_electronpt;
-   TBranch        *b_electroneta;
-   TBranch        *b_electronphi; 
-   TBranch        *b_electroncharge;
-   TBranch        *b_InvMassEle;
-   TBranch        *b_nEle;
-   TBranch        *b_nMuons;
-   TBranch        *b_muonpt;
-   TBranch        *b_muoneta;
-   TBranch        *b_muonphi;
-   TBranch        *b_muoncharge;
-   TBranch        *b_InvMassMu;
-   TBranch        *b_nTaus;
-   TBranch        *b_tauspt;
-   TBranch        *b_tauseta;
-   TBranch        *b_tausphi;
-   TBranch        *b_nPho;
-   TBranch        *b_photonspt;
-   TBranch        *b_photonseta;
-   TBranch        *b_photonsphi;
-   TBranch        *b_phopassLooseId;
-   TBranch        *b_phopassMediumId;
-   TBranch        *b_phopassTightId;
    TBranch        *b_sumET;
    TBranch        *b_rawmetpt;
    TBranch        *b_rawmetphi;
    TBranch        *b_rawsumET;
-   TBranch        *b_ak4jets_pt;
-   TBranch        *b_ak4jets_phi;
-   TBranch        *b_ak4jets_mass;
-
-
-
-
-
-
-
-
-
 
 
 
@@ -260,6 +206,7 @@ class EDBRHistoMaker {
   void setWantSignal(bool dosig=false){wantSignal_=dosig;}
   void setWantNXJets(int nxj=1){wantNXJets_=nxj;}
   void setUnitaryWeights(bool setuniw=false){setUnitaryWeights_=setuniw;}
+  void setPileupReweight(bool purewei=false){pileupReweight_=purewei;}
 
   bool eventPassesFlavorCut();
   bool eventPassesLeptonicZPtCut(double ptZll_threshold);
@@ -278,6 +225,7 @@ class EDBRHistoMaker {
   bool eventPassesdeltaPhiJetCut(double deltaPhiJet_threshold);
   bool eventPassestau21Cut(double tau21_threshold);
   bool eventPassescandTMassCut(double candTMass_threshold);
+  bool eventPassesJetMassCut(double jetMass_threshold1, double jetMass_threshold2, double jetMass_threshold3);
   bool eventPasseschfCut(double chf_threshold); // charged hadron fraction
   bool eventPassesnhfCut(double nhf_threshold); // neutral hadron fraction
   bool eventPassesnefCut(double nef_threshold); // neutral electromagnetic fraction
@@ -349,6 +297,7 @@ class EDBRHistoMaker {
   double signalVHMassLow_;
   double signalVHMassHigh_;
   bool isZZchannel_;
+  bool pileupReweight_;
 
   // The histograms
   HistoFactory hs;
@@ -432,46 +381,10 @@ void EDBRHistoMaker::Init(TTree *tree)
    fChain->SetBranchAddress("nch", &nch, &b_nch);
    fChain->SetBranchAddress("nconstituents", &nconstituents, &b_nconstituents);
    //// News
-   fChain->SetBranchAddress("nvetomuons", &nvetomuons, &b_nvetomuons);
-   fChain->SetBranchAddress("nselmuons", &nselmuons, &b_nselmuons);
-   fChain->SetBranchAddress("nloosemuons", &nloosemuons, &b_nloosemuons);
-   fChain->SetBranchAddress("nseltaus", &nseltaus, &b_nseltaus);
-   fChain->SetBranchAddress("elepassVetoId", &elepassVetoId, &b_elepassVetoId);
-   fChain->SetBranchAddress("elepassTightId", &elepassTightId, &b_elepassTightId);
-   fChain->SetBranchAddress("elepassLooseId", &elepassLooseId, &b_elepassLooseId);
-   fChain->SetBranchAddress("elepassMediumId", &elepassMediumId, &b_elepassMediumId);
-   fChain->SetBranchAddress("elepassHEEPId", &elepassHEEPId, &b_elepassHEEPId);
-   fChain->SetBranchAddress("electronpt", &electronpt, &b_electronpt);
-   fChain->SetBranchAddress("electroneta", &electroneta, &b_electroneta);
-   fChain->SetBranchAddress("electronphi", &electronphi, &b_electronphi);
-   fChain->SetBranchAddress("electroncharge", &electroncharge, &b_electroncharge);
-   fChain->SetBranchAddress("InvMassEle", &InvMassEle, &b_InvMassEle);
-   fChain->SetBranchAddress("nEle", &nEle, &b_nEle);
-   fChain->SetBranchAddress("nMuons", &nMuons, &b_nMuons);
-   fChain->SetBranchAddress("muonpt", &muonpt, &b_muonpt);
-   fChain->SetBranchAddress("muoneta", &muoneta, &b_muoneta);
-   fChain->SetBranchAddress("muonphi", &muonphi, &b_muonphi);
-   fChain->SetBranchAddress("muoncharge", &muoncharge, &b_muoncharge);
-   fChain->SetBranchAddress("InvMassMu", &InvMassMu, &b_InvMassMu);
-   fChain->SetBranchAddress("nTaus", &nTaus, &b_nTaus);
-   fChain->SetBranchAddress("tauspt", &tauspt, &b_tauspt);
-   fChain->SetBranchAddress("tauseta", &tauseta, &b_tauseta);
-   fChain->SetBranchAddress("tausphi", &tausphi, &b_tausphi);
-   fChain->SetBranchAddress("nPho", &nPho, &b_nPho);
-   fChain->SetBranchAddress("photonspt", &photonspt, &b_photonspt);
-   fChain->SetBranchAddress("photonseta", &photonseta, &b_photonseta);
-   fChain->SetBranchAddress("photonsphi", &photonsphi, &b_photonsphi);
-   fChain->SetBranchAddress("phopassLooseId", &phopassLooseId, &b_phopassLooseId);
-   fChain->SetBranchAddress("phopassMediumId", &phopassMediumId, &b_phopassMediumId);
-   fChain->SetBranchAddress("phopassTightId", &phopassTightId, &b_phopassTightId);
-   fChain->SetBranchAddress("sumET", &sumET, &b_sumET);
+  fChain->SetBranchAddress("sumET", &sumET, &b_sumET);
    fChain->SetBranchAddress("rawmetpt", &rawmetpt, &b_rawmetpt);
    fChain->SetBranchAddress("rawmetphi", &rawmetphi, &b_rawmetphi);
    fChain->SetBranchAddress("rawsumET", &rawsumET, &b_rawsumET);
-   fChain->SetBranchAddress("ak4jets_pt", &ak4jets_pt, &b_ak4jets_pt);
-   fChain->SetBranchAddress("ak4jets_eta", &ak4jets_eta, &b_ak4jets_eta);
-   fChain->SetBranchAddress("ak4jets_mass", &ak4jets_mass, &b_ak4jets_mass);
-
 
 
 
@@ -536,17 +449,17 @@ void EDBRHistoMaker::createAllHistos() {
   /// in the beginning of this file.
   /// Much simpler to create histos now: just add them to
   /// hs with hs.setHisto(name,nbins,min,max);
-  hs.setHisto("nVtx", 30,0,30);
-//  hs.setHisto("ptZll",50,0,1000); // 20 GeV bins
-  hs.setHisto("ptZjj",25,0,2000); // 20 GeV bins
+  hs.setHisto("nVtx", 40,0,40);
+  hs.setHisto("ptZjj",20,0,2000); // 20 GeV bins
+//  hs.setHisto("ptZjj",50,0,2000); // 20 GeV bins
 //  hs.setHisto("yZll",56,-2.8,2.8);
-  hs.setHisto("yZjj",40,-2.8,2.8);
+  hs.setHisto("yZjj",28,-2.8,2.8);
 //  hs.setHisto("phiZll",74,-3.7,3.7);
-  hs.setHisto("phiZjj",40,-3.7,3.7);
+  hs.setHisto("phiZjj",28,-3.7,3.7);
 //  hs.setHisto("massZll",50,50,150); // 2 GeV bins 
-  hs.setHisto("massZjj",40,30,130); // 2 GeV bins  
+  hs.setHisto("massZjj",32,0,600); // 2 GeV bins  
   hs.setHisto("tau21",30,0,1);
-  hs.setHisto("numjets", 20, -0.5, 19.5);
+  hs.setHisto("numjets", 15, -0.5, 14.5);
 //  hs.setHisto("ptlep1",40,0,800); 
 //  hs.setHisto("ptlep2",50,0,500);
 //  hs.setHisto("ptjet1",50,0,1000);
@@ -565,8 +478,10 @@ void EDBRHistoMaker::createAllHistos() {
 //  hs.setHisto("deltaRlepjet",70,0,7); 
 //  hs.setHisto("candMass", 40,100,2100); // 50 GeV bins...
   //but to have the signal spread around 4 bins maybe we want 25 GeV bins?
-  hs.setHisto("candTMass", 40,100,2100);
-  hs.setHisto("metpt", 30, 0, 2000);
+//  hs.setHisto("candTMass", 30,100,2800);
+  hs.setHisto("candTMass", 20,500,2500);
+//  hs.setHisto("metpt", 30, 0, 1800);
+  hs.setHisto("metpt", 20, 0, 2000);
   hs.setHisto("metphi", 30, -3.7, 3.7);
   hs.setHisto("HT", 30, 0, 1600);
   hs.setHisto("MHT", 30, 0, 1600);
@@ -723,6 +638,14 @@ bool EDBRHistoMaker::eventPassesCut(double ptZ_threshold, double ptlep1_threshol
 ////*******************************************************************************
 ////                               Znunu CUTS
 ////******************************************************************************
+
+
+////-------- CUT IN THE JET MASS (BLIND) --------------------------------------
+bool EDBRHistoMaker::eventPassesJetMassCut(double jetMass_threshold1, double jetMass_threshold2, double jetMass_threshold3){
+     bool pass = false;
+     pass = ( (massVhad > jetMass_threshold1) & (massVhad < jetMass_threshold2) || (massVhad > jetMass_threshold3));
+     return pass;
+} 
 
 ////----------- CUT IN THE NUMBER OF ak4Jets------------------------------------
 bool EDBRHistoMaker::eventPassesnumJetsCut(int numjets_threshold) {
@@ -900,7 +823,10 @@ void EDBRHistoMaker::Loop(std::string outFileName){
 
     // We calculate a weight here.
     // THE ACTUAL WEIGHT
+    // --------------------------------------------------------------
     double actualWeight = triggerWeight*lumiWeight*pileupWeight;
+  //--------------------------------------------------------------- 
+
 
     if(setUnitaryWeights_) {
       if(jentry==0)printf("Unitary weights set!\n");
@@ -914,11 +840,19 @@ void EDBRHistoMaker::Loop(std::string outFileName){
 
     // Remember: bool eventPassesCut(double ptZ_threshold, double ptlep1_threshold );
 
+    if(eventPassescandTMassCut(500)){
+
+//    if(eventPassesnumJetsCut(2)){
+
+//    if(eventPassesdeltaPhiJetCut(2.8)){ 
+
+    if (eventPassesJetMassCut(20,65,130)){
+
     //// THE QCD CUTS
-    if(eventPassesCutZnu1(2, 2.7, 0.5, 600)){
+//    if(eventPassesCutZnu1(2, 2.7, 0.5, 600)){
 
     //// THE JET ID CUTS
-    if(eventPassesCutZnu2(0.1, 0, 0.99, 1)){
+//    if(eventPassesCutZnu2(0.1, 0, 0.99, 1)){
       
       // In case we need particular events
       //if(candMass>2400.0)
@@ -970,11 +904,13 @@ void EDBRHistoMaker::Loop(std::string outFileName){
       (theHistograms["nch"])->Fill(nch,actualWeight);//printf("line number %i\n",__LINE__);
       (theHistograms["nconstituents"])->Fill(nconstituents,actualWeight);//printf("line number %i\n",__LINE__);
 
-
+      }
       
-      }//end if eventPassesCutZnu1
+//      }//end if eventPassesCutZnu1
 
-   }//end if eventPassesCutZnu2
+//   }//end if eventPassesCutZnu2
+
+  }
     
   }//end loop over entries
   

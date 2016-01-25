@@ -277,10 +277,10 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
    // FOR NOW WE ARE GOING TO USE ONLY TWO PADS
 
   if (makeRatio_ && isDataPresent_) {
-//    fPads1 = new TPad("pad1", "", 0.00, 0.40, 0.99, 0.99);
-     fPads1 = new TPad("pad1", "", 0.00, 0.19, 0.99, 0.99); 
-//    fPads2 = new TPad("pad2", "", 0.00, 0.20, 0.99, 0.40);
-    fPads2 = new TPad("pad2", "", 0.00, 0.00, 0.99, 0.20);
+    fPads1 = new TPad("pad1", "", 0.00, 0.40, 0.99, 0.99);
+//     fPads1 = new TPad("pad1", "", 0.00, 0.19, 0.99, 0.99); 
+    fPads2 = new TPad("pad2", "", 0.00, 0.20, 0.99, 0.40);
+//    fPads2 = new TPad("pad2", "", 0.00, 0.00, 0.99, 0.20);
     fPads3 = new TPad("pad3", "", 0.00, 0.00, 0.99, 0.20);
     fPads1->SetFillColor(0);
     fPads1->SetLineColor(0);
@@ -291,7 +291,8 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
     fPads1->Draw();
     fPads2->Draw();
 // FOR NOW WE ONLY WANT DATA/BACK RATIO
-//    fPads3->Draw();
+// If we ccomment this plot only 2 hitograms
+    fPads3->Draw();
   }
 
   //============ Data vs MC plots ==============
@@ -379,8 +380,10 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
       TH1D* histo = (TH1D*)(filesMC.at(i)->Get(histoName.c_str())->Clone(labels.at(i).c_str()));
       histo->SetDirectory(0);
       histo->SetFillColor(getFillColor(i));
-      //// para graficar las diferentes componetes del mismo color
+//// para graficar las diferentes componetes del mismo color
+//// Cuando unamos las trees hay que comentarlo
     histo->SetLineColor(getFillColor(i));     
+    //--------------------------------------------------------
     TString filename = filesMC.at(i)->GetName();
     histo->Scale(kFactorsMC_.at(i));
     if (filename.Contains("WJets"))histo->Scale(WJetsScaleFactor);
@@ -434,7 +437,7 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
 
   sumMC->SetFillStyle(0);
   sumMC->SetLineColor(kBlack);
-  sumMC->SetLineWidth(2);
+  sumMC->SetLineWidth(1.8);
 
   if (scaleToData_ && isDataPresent_) {
     std::cout << "===> Residual DATA/MC Scale Factor is: " << sumDataIntegral / sumBkgAtTargetLumi << std::endl;
@@ -487,16 +490,43 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
   /// Draw both MC and DATA in the stack
   ///-----------------------------------
 
+  std::map<std::string, std::string> axisTitle;
+  axisTitle["h_nVtx"]          = "Number of Primary Vertices";
+  axisTitle["h_ptZjj"]         = "Fat jet p_{T} (GeV)"; 
+  axisTitle["h_yZjj"]          = "Fat jet #eta"; 
+  axisTitle["h_phiZjj"]        = "Fat jet #phi"; 
+  axisTitle["h_massZjj"]       = "jet pruned mass (GeV)"; 
+  axisTitle["h_tau21"]         = "#tau_{21}"; 
+  axisTitle["h_region"]        = "region"; 
+  axisTitle["h_triggerWeight"] = "trigger weight"; 
+  axisTitle["h_lumiWeight"]    = "luminosity weight"; 
+  axisTitle["h_pileupWeight"]  = "pileup weight"; 
+  axisTitle["h_numjets"]         = "Number of jets";
+  axisTitle["h_candTMass"]      = "VZ Candidate Transverse Mass (GeV)"; 
+  axisTitle["h_metpt"]          = "MET (GeV)";
+  axisTitle["h_metphi"]         = "MET #phi ";
+  axisTitle["h_HT"]             = "HT (GeV)";
+  axisTitle["h_MHT"]            = "MHT (GeV)";
+  axisTitle["h_deltaPhijetjetabs"] = "#Delta #phi";
+  axisTitle["h_chf"]               = "Charged Hadron Fraction";
+  axisTitle["h_nhf"]               = "Neutral Hadron fraction";
+  axisTitle["h_cef"]               = "Charged EM Fraction";
+  axisTitle["h_nef"]               = "Neutral EM Fraction";
+  axisTitle["h_nch"]               = "Charged Multiplicity";
+  axisTitle["h_nconstituents"]    =  "Number of Constituents";
+
+
   hs->Draw("HIST");
-  hs->GetXaxis()->SetTitle(histoName.c_str());
+//  hs->GetXaxis()->SetTitle(histoName.c_str());
+  hs->GetXaxis()->SetTitle(axisTitle[histoName].c_str());
   hs->GetYaxis()->SetTitle("Events");
 //  hs->GetYaxis()->SetTitle("Normalized to Luminosity");
   hs->GetYaxis()->SetTitleOffset(1.15);
   hs->GetYaxis()->CenterTitle();
-  double maximumMC = 1.15 * sumMC->GetMaximum();
+  double maximumMC = 1.33 * sumMC->GetMaximum();
   double maximumDATA = -100;
   if (isDataPresent_)
-    maximumDATA = 1.15 * sumDATA->GetMaximum();
+    maximumDATA = 1.33 * sumDATA->GetMaximum();
   double maximumForStack = -100;
   if (isDataPresent_)
     maximumForStack = (maximumMC > maximumDATA ? maximumMC : maximumDATA);
@@ -513,7 +543,12 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
   hs->Draw("HIST");
   sumMC->Draw("HISTO SAME");
   if (isDataPresent_)
-    sumDATA->Draw("SAME E1");
+//    sumDATA->Draw("SAME E1");
+//    we change the thick of the error bar
+      sumDATA->Draw("SAME p");
+// we want to change the style and size of the marker in data
+    sumDATA->SetMarkerStyle(20);
+    sumDATA->SetMarkerSize(0.9);
   for (size_t is = 0; is != histosMCSig.size(); is++) {
     if (isSignalStackOnBkg_ == true)
       histosMCSig.at(is)->Draw("HISTO SAME");
@@ -556,14 +591,15 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
 //    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
 ////---------------------------------------------------------------
     //// TO INVERT THE LABELS ORDER
+
 for (int i = histosMC.size()-1; i>0; --i){
-     if(i>15){
+     if(i>16){
                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
                i= i-4;
      }
-     if (i>11 ){
+     if (i>12 ){
                 leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                i = i-5;
+                i = i-6;
      }
      if (i>6 ){
                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
@@ -577,6 +613,12 @@ for (int i = histosMC.size()-1; i>0; --i){
                 leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
      }
 }
+
+////---------------------------------------------------------------
+// PARA CUANDO UNAMOS LAS TREES EN VEZ DE LO QUE ESTA ENCIMA
+//for (int i = histosMC.size()-1; i != -1; --i)
+//    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+
     
 ////----------------------------------------------------------------
   if (histosMCSig.size() > 0) {
@@ -594,8 +636,10 @@ for (int i = histosMC.size()-1; i>0; --i){
   leg->Draw();
 
   //// Nice labels
-   TMathText* l = makeCMSWorkTop(13, 0.10, 0.935);
-  l->Draw();
+   TMathText* l1 = makeCMSWorkTop(13, 0.15, 0.935);
+   TMathText* l2 = makeCMSLumi(2.144, 0.80, 0.935);
+   l1->Draw();
+   l2->Draw();
 
   //l = makeCMSLumi(13, 19.8, 0.5, 0.935);
   //l = makeChannelLabel(wantNXJets_, flavour_, isZZchannel_);
@@ -634,7 +678,8 @@ for (int i = histosMC.size()-1; i>0; --i){
     histoRatio->GetXaxis()->SetTitle("");
     histoRatio->GetXaxis()->SetTitleOffset(0.01);
     histoRatio->GetXaxis()->SetLabelSize(0.09);
-    histoRatio->SetMarkerStyle(1);
+    histoRatio->SetMarkerStyle(20);
+    histoRatio->SetMarkerSize(0.9);
     histoRatio->Draw("p");
 
     lineAtOne = new TLine(histoRatio->GetXaxis()->GetXmin(), 1, histoRatio->GetXaxis()->GetXmax(), 1);
