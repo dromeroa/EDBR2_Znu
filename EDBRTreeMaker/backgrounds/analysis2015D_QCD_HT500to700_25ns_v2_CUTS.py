@@ -60,8 +60,8 @@ else :
 #SAMPLE="QCD_HT1500to2000_25ns_v2"
 #SAMPLE="QCD_HT1000to1500_25ns_v2"
 #SAMPLE="QCD_HT700to1000_25ns_v2"
-#SAMPLE="QCD_HT500to700_25ns_v2"
-SAMPLE="QCD_HT300to500_25ns_v2"
+SAMPLE="QCD_HT500to700_25ns_v2"
+#SAMPLE="QCD_HT300to500_25ns_v2"
 #SAMPLE="QCD_HT200to300_25ns_v2"
 #SAMPLE="QCD_HT100to200_25ns_v2"
 
@@ -83,24 +83,24 @@ process.MessageLogger.cerr.FwkReport.limit = 99999999
 
 configXsecs = { 
                 "BulkGrav_ZZ_M2000_25ns_v2"               : 1,
-                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 280.5, ## LO
-                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 77.7, ## LO
-                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 10.71, ## LO
-                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 4.098,  ## LO
-                "WJetsToLNu_HT-100To200_25ns_v2"          : 1343, ## LO
-                "WJetsToLNu_HT-200To400_25ns_v2"          : 359.6, ## LO
-                "WJetsToLNu_HT-400To600_25ns_v2"          : 48.85, ## LO
-                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 18.91, ## LO
+                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 345.0, ## NNLO(SUSY PAPER)
+                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 96.38, ## NNLO (SUSY PAPER)
+                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 13.46, ## NNLO (SUSY PAPER)
+                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 5.170,  ## NNLO (SUSY PAPER)
+                "WJetsToLNu_HT-100To200_25ns_v2"          : 1635.0, ## NNLO (SUSY PAPER)
+                "WJetsToLNu_HT-200To400_25ns_v2"          : 437.0, ## NNLO (SUSY PAPER) 
+                "WJetsToLNu_HT-400To600_25ns_v2"          : 59.50, ## NNLO (SUSY PAPER)
+                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 22.80, ## NNLO (SUSY PAPER)
                 "WW_25ns_v2"                              : 118.7,
                 "ZZ_25ns_v2"                              : 16.523,
                 "WZ_25ns_v2"                              : 47.13, 
                 "TTbar_25ns_powheg_v2"                    : 831.76,
-                "QCD_HT100to200_25ns_v2"                  : 27500000, ## LO,
+                "QCD_HT100to200_25ns_v2"                  : 27990000, ## LO,
                 "QCD_HT200to300_25ns_v2"                  : 1735000, ## LO 
                 "QCD_HT300to500_25ns_v2"                  : 367000, ## LO
-                "QCD_HT500to700_25ns_v2"                  : 29370, ## LO
-                "QCD_HT700to1000_25ns_v2"                 : 6524, ## LO
-                "QCD_HT1000to1500_25ns_v2"                : 1064, ## LO
+                "QCD_HT500to700_25ns_v2"                  : 32100, ## LO
+                "QCD_HT700to1000_25ns_v2"                 : 6831, ## LO
+                "QCD_HT1000to1500_25ns_v2"                : 1207, ## LO
                 "QCD_HT1500to2000_25ns_v2"                : 121.5, ## LO   
                 "QCD_HT2000toInf_25ns_v2"                 : 25.42, ## LO    
                 "DYJetsToLL_M_50_HT_100to200"             : 139.4, ## LO
