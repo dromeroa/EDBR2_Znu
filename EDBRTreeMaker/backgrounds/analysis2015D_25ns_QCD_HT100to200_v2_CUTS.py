@@ -1,17 +1,17 @@
-
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process( "TEST" )
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
-#process.load("Configuration.StandardSequences.Geometry_cff")
-process.load("Configuration.Geometry.GeometryIdeal_cff")
-# This is for MC
-#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-# find the global tag in the DAS under the Configs for given dataset
+process.load("FWCore.MessageLogger.MessageLogger_cfi")
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.limit = 99999999
+
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 ## FROM March 05 2016
 process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_RunIIFall15DR76_v1'
+
+
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
@@ -24,7 +24,6 @@ VZ_JetMET       = True
 
 #*********************************** THE SAMPLES ****************************************************#
 ### CHOOSE THE SAMPLE :                                                                   
-
 
 ###------   Z +JETS  -----------
 #SAMPLE="ZJetsToNuNu_HT-100To200_76x_v2"
@@ -57,17 +56,18 @@ VZ_JetMET       = True
 #SAMPLE="QCD_HT200to300_76x_v2"
 #SAMPLE="QCD_HT100to200_76x_v2"
 
+### To use with CRAB
+#import sys
+#SAMPLE = str(sys.argv[2])
+
+
 
 ### Source
-#process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
 process.load("ExoDiBosonResonances.EDBRCommon.76X_simulation."+SAMPLE)
 process.maxEvents.input = -1
 ### NUMBER OF EVENTS
 #process.maxEvents.input = 10000
 
-process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.MessageLogger.cerr.FwkReport.limit = 99999999
 
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns (1 Billion campaign)
 
@@ -127,8 +127,6 @@ usedNevents = configNevents[SAMPLE]
 process.load("ExoDiBosonResonances.EDBRCommon.leptonicZ_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.hadronicZ_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.hadronicZnu_cff")
-#process.load("ExoDiBosonResonances.EDBRCommon.leptonicW_cff")
-#process.load("ExoDiBosonResonances.EDBRCommon.hadronicW_cff")
 
 WBOSONCUT = "pt > 200. & sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 50."
 ZBOSONCUT = "pt > 200. & 70. < mass < 110."
@@ -372,7 +370,7 @@ if VZ_JetMET == True :
 
 
     process.analysis.replace(       process.jetSequence,
-#                                    process.hltSequenceZnu           *
+                                    process.hltSequenceZnu             *
                                     process.HBHEmetfilterSequence      *  
                                     process.metfilterSequence          *
                                     process.VertexSequence             *
