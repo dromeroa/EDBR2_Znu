@@ -10,8 +10,8 @@ process.load("Configuration.Geometry.GeometryIdeal_cff")
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 # find the global tag in the DAS under the Configs for given dataset
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
-## FROM Nov 19 2015
-process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
+## FROM March 05 2016
+process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_RunIIFall15DR76_v1'
 #*********************************** CHOOSE YOUR CHANNEL  *******************************************#
 #                                                                                                    #
 #CHANNEL         = "VZ_CHANNEL" 
@@ -25,47 +25,42 @@ VZ_JetMET       = True
 #*********************************** THE SAMPLES ****************************************************#
 ### CHOOSE THE SAMPLE :                                                                   
 
-###-------- RSGRrav------------------
-#SAMPLE="BulkGrav_ZZ_M2000_25ns_v2"
 
 ###------   Z +JETS  -----------
-SAMPLE="ZJetsToNuNu_HT-100To200_25ns_v2"
-#SAMPLE="ZJetsToNuNu_HT-200To400_25ns_v2"
-#SAMPLE="ZJetsToNuNu_HT-400To600_25ns_v2"
-#SAMPLE="ZJetsToNuNu_HT-600ToInf_25ns_v2"
+#SAMPLE="ZJetsToNuNu_HT-100To200_76x_v2"
+#SAMPLE="ZJetsToNuNu_HT-200To400_76x_v2"
+#SAMPLE="ZJetsToNuNu_HT-400To600_76x_v2"
+#SAMPLE="ZJetsToNuNu_HT-600ToInf_76x_v2"
 
 ###-----   W + jets-------------------
-#SAMPLE="WJetsToLNu_HT-100To200_25ns_v2"
-#SAMPLE="WJetsToLNu_HT-200To400_25ns_v2"
-#SAMPLE="WJetsToLNu_HT-400To600_25ns_v2"
-#SAMPLE="WJetsToLNu_HT-600ToInf_25ns_v2"
+#SAMPLE="WJetsToLNu_HT-100To200_76x_v2"
+#SAMPLE="WJetsToLNu_HT-200To400_76x_v2"
+#SAMPLE="WJetsToLNu_HT-400To600_76x_v2"
+#SAMPLE="WJetsToLNu_HT-600ToInf_76x_v2"
 
 ### ------- TTJets ------------------
-#SAMPLE="TTbar_25ns_powheg_v2" 
+#SAMPLE="TTJets_amcatnloFXFX_76x_v2"  
+#SAMPLE="TTJets_amcatnloFXFX_76x_v2_ext"
 
 ### ------- Dibosons ---------------
-#SAMPLE="WW_25ns_v2"
-#SAMPLE="WZ_25ns_v2"
-#SAMPLE="ZZ_25ns_v2"
+#SAMPLE="WW_76x_v2"
+#SAMPLE="WZ_76x_v2"
+#SAMPLE="ZZ_76x_v2"
 
 ###-------- QCD ------------------
-#SAMPLE="QCD_HT2000toInf_25ns_v2"
-#SAMPLE="QCD_HT1500to2000_25ns_v2"
-#SAMPLE="QCD_HT1000to1500_25ns_v2"
-#SAMPLE="QCD_HT700to1000_25ns_v2"
-#SAMPLE="QCD_HT500to700_25ns_v2"
-#SAMPLE="QCD_HT300to500_25ns_v2"
-#SAMPLE="QCD_HT200to300_25ns_v2"
-#SAMPLE="QCD_HT100to200_25ns_v2"
+#SAMPLE="QCD_HT2000toInf_76x_v2"
+#SAMPLE="QCD_HT1500to2000_76x_v2"
+#SAMPLE="QCD_HT1000to1500_76x_v2"
+#SAMPLE="QCD_HT700to1000_76x_v2"
+#SAMPLE="QCD_HT500to700_76x_v2"
+#SAMPLE="QCD_HT300to500_76x_v2"
+#SAMPLE="QCD_HT200to300_76x_v2"
+#SAMPLE="QCD_HT100to200_76x_v2"
 
-###-------- DRELL YAN------------
-#SAMPLE="DYJetsToLL_M_50_HT_100to200"
-#SAMPLE="DYJetsToLL_M_50_HT_200to400"
-#SAMPLE="DYJetsToLL_M_50_HT_400to600"
-#SAMPLE="DYJetsToLL_M_50_HT_600toInf"
 
 ### Source
-process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
+#process.load("ExoDiBosonResonances.EDBRCommon.simulation.RunIIDR74X_miniAOD_v2."+SAMPLE)
+process.load("ExoDiBosonResonances.EDBRCommon.76X_simulation."+SAMPLE)
 process.maxEvents.input = -1
 ### NUMBER OF EVENTS
 #process.maxEvents.input = 10000
@@ -74,62 +69,53 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns (1 Billion campaign)
+
 configXsecs = { 
-                "BulkGrav_ZZ_M2000_25ns_v2"               : 1,
-                "ZJetsToNuNu_HT-100To200_25ns_v2"         : 280.5, ## LO
-                "ZJetsToNuNu_HT-200To400_25ns_v2"         : 77.7, ## LO
-                "ZJetsToNuNu_HT-400To600_25ns_v2"         : 10.71, ## LO
-                "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 4.098,  ## LO
-                "WJetsToLNu_HT-100To200_25ns_v2"          : 1343, ## LO
-                "WJetsToLNu_HT-200To400_25ns_v2"          : 359.6, ## LO
-                "WJetsToLNu_HT-400To600_25ns_v2"          : 48.85, ## LO
-                "WJetsToLNu_HT-600ToInf_25ns_v2"          : 18.91, ## LO
-                "WW_25ns_v2"                              : 118.7,
-                "ZZ_25ns_v2"                              : 16.523,
-                "WZ_25ns_v2"                              : 47.13, 
-                "TTbar_25ns_powheg_v2"                    : 831.76,
-                "QCD_HT100to200_25ns_v2"                  : 27500000, ## LO,
-                "QCD_HT200to300_25ns_v2"                  : 1735000, ## LO 
-                "QCD_HT300to500_25ns_v2"                  : 367000, ## LO
-                "QCD_HT500to700_25ns_v2"                  : 29370, ## LO
-                "QCD_HT700to1000_25ns_v2"                 : 6524, ## LO
-                "QCD_HT1000to1500_25ns_v2"                : 1064, ## LO
-                "QCD_HT1500to2000_25ns_v2"                : 121.5, ## LO   
-                "QCD_HT2000toInf_25ns_v2"                 : 25.42, ## LO    
-                "DYJetsToLL_M_50_HT_100to200"             : 139.4, ## LO
-                "DYJetsToLL_M_50_HT_200to400"             : 42.75, ## LO
-                "DYJetsToLL_M_50_HT_400to600"             : 5.497, ## LO
-                "DYJetsToLL_M_50_HT_600toInf"             : 2.21, ## LO
-                 
+                "ZJetsToNuNu_HT-100To200_76x_v2"         : 344.8305,  ##  280.35  x 1.23 (NLO)  
+                "ZJetsToNuNu_HT-200To400_76x_v2"         : 95.571,    ##   77.67  x 1.23 (NLO)
+                "ZJetsToNuNu_HT-400To600_76x_v2"         : 13.1979,   ##   10.73  x 1.23 (NLO)
+                "ZJetsToNuNu_HT-600ToInf_76x_v2"         : 5.06268,   ##    4.116 x 1.23 (NLO)
+                "WJetsToLNu_HT-100To200_76x_v2"          : 1627.45,   ## 1345     x 1.21 (NLO) 
+                "WJetsToLNu_HT-200To400_76x_v2"          : 435.237,   ##  359.7   x 1.21 (NLO)
+                "WJetsToLNu_HT-400To600_76x_v2"          : 59.1811,   ##   48.91  x 1.21 (NLO)
+                "WJetsToLNu_HT-600ToInf_76x_v2"          : 22.7117,   ##   18.77  x 1.21 (NLO)
+                "WW_76x_v2"                              : 118.7,
+                "ZZ_76x_v2"                              : 16.523,
+                "WZ_76x_v2"                              : 47.13, 
+                "TTJets_amcatnloFXFX_76x_v2"             : 831.76,
+                "TTJets_amcatnloFXFX_76x_v2_ext"         : 831.76,
+                "QCD_HT200to300_76x_v2"                  : 1712000, ## LO 
+                "QCD_HT300to500_76x_v2"                  : 347700,  ## LO
+                "QCD_HT500to700_76x_v2"                  : 32100,   ## LO
+                "QCD_HT700to1000_76x_v2"                 : 6831,    ## LO
+                "QCD_HT1000to1500_76x_v2"                : 1207,    ## LO
+                "QCD_HT1500to2000_76x_v2"                : 119.9,   ## LO   
+                "QCD_HT2000toInf_76x_v2"                 : 25.24,   ## LO                    
               }
 
 configNevents = {
-                 "BulkGrav_ZZ_M2000_25ns_v2"               : 99400,
-                 "ZJetsToNuNu_HT-100To200_25ns_v2"         : 5148193,
-                 "ZJetsToNuNu_HT-200To400_25ns_v2"         : 5032927,
-                 "ZJetsToNuNu_HT-400To600_25ns_v2"         : 1014139,
-                 "ZJetsToNuNu_HT-600ToInf_25ns_v2"         : 1015904,
-                 "WJetsToLNu_HT-100To200_25ns_v2"          : 10142187,
-                 "WJetsToLNu_HT-200To400_25ns_v2"          : 5231856,
-                 "WJetsToLNu_HT-400To600_25ns_v2"          : 1901705,
-                 "WJetsToLNu_HT-600ToInf_25ns_v2"          : 1036108,
-                 "WW_25ns_v2"                              : 993640,
-                 "ZZ_25ns_v2"                              : 996944,
-                 "WZ_25ns_v2"                              : 978512, 
-                 "TTbar_25ns_powheg_v2"                    : 19757190,
-                 "QCD_HT100to200_25ns_v2"                  : 81637494,
-                 "QCD_HT200to300_25ns_v2"                  : 18718905,
-                 "QCD_HT300to500_25ns_v2"                  : 19826197,
-                 "QCD_HT500to700_25ns_v2"                  : 19664159,
-                 "QCD_HT700to1000_25ns_v2"                 : 15356448,
-                 "QCD_HT1000to1500_25ns_v2"                : 4963895, 
-                 "QCD_HT1500to2000_25ns_v2"                : 3868886,  
-                 "QCD_HT2000toInf_25ns_v2"                 : 1912529,
-                 "DYJetsToLL_M_50_HT_100to200"             : 2725655,
-                 "DYJetsToLL_M_50_HT_200to400"             : 973937,
-                 "DYJetsToLL_M_50_HT_400to600"             : 1067758,
-                 "DYJetsToLL_M_50_HT_600toInf"             : 998912, 
-             
+
+                "ZJetsToNuNu_HT-100To200_76x_v2"         : 5240199, 
+                "ZJetsToNuNu_HT-200To400_76x_v2"         : 5135542,
+                "ZJetsToNuNu_HT-400To600_76x_v2"         : 954435,
+                "ZJetsToNuNu_HT-600ToInf_76x_v2"         : 1033818,
+                "WJetsToLNu_HT-100To200_76x_v2"          : 10205377, 
+                "WJetsToLNu_HT-200To400_76x_v2"          : 4949568,
+                "WJetsToLNu_HT-400To600_76x_v2"          : 1943664,
+                "WJetsToLNu_HT-600ToInf_76x_v2"          : 1041358,
+                "WW_76x_v2"                              : 988418,
+                "ZZ_76x_v2"                              : 985600,
+                "WZ_76x_v2"                              : 1000000,  
+                "TTJets_amcatnloFXFX_76x_v2"             : 38475776,
+                "TTJets_amcatnloFXFX_76x_v2_ext"         : 196937036,
+                "QCD_HT200to300_76x_v2"                  : 18784379, 
+                "QCD_HT300to500_76x_v2"                  : 16909004,
+                "QCD_HT500to700_76x_v2"                  : 19665695,
+                "QCD_HT700to1000_76x_v2"                 : 15547962,
+                "QCD_HT1000to1500_76x_v2"                : 5049267,
+                "QCD_HT1500to2000_76x_v2"                : 3939077,    
+                "QCD_HT2000toInf_76x_v2"                 : 1981228,              
                 }
 
 usedXsec = configXsecs[SAMPLE]
