@@ -1,9 +1,12 @@
 import FWCore.ParameterSet.Config as cms
 
+### Muon Isolation (https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideMuonIdRun2#Muon_Isolation)
+baseandisolationCutString = "pt > 20 && abs(eta) < 2.5 &&  ((pfIsolationR04().sumChargedHadronPt+max(0.,pfIsolationR04().sumNeutralHadronEt+pfIsolationR04().sumPhotonEt-0.5*pfIsolationR04().sumPUPt))/pt< 0.25)"
+	
 
 goodMuons = cms.EDFilter("PATMuonSelector",
                                        src = cms.InputTag("slimmedMuons"),
-                                       cut = cms.string("pt > 20 && abs(eta) < 2.5"))
+                                       cut = cms.string(baseandisolationCutString)
 
 
 ### A loose muon ID 
