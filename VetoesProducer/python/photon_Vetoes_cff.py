@@ -10,8 +10,7 @@ goodPhotons = cms.EDFilter("PATPhotonRefSelector",
 photonsVetoProd = cms.EDProducer("PatPhotonSelectorByValueMap",
                                input     = cms.InputTag("goodPhotons"),
                                cut       = cms.string(""),
-#                               selection = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
-                               selection = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-loose"),
+                               selection = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-loose"),
                                id_cut    = cms.bool(True)
 )
 
@@ -27,4 +26,4 @@ photonVeto = cms.EDFilter("PATCandViewCountFilter",
 
 photonvetoSequence = cms.Sequence(    goodPhotons                      *
                                       photonsVetoProd                  *
-                                      photonVeto                      )
+                                      photonVeto                       )
