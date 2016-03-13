@@ -3,20 +3,20 @@ config = config()
 config.General.transferOutputs = True
 config.General.transferLogs = True
 
-config.General.requestName = 'EDBR_MET_2015D_25ns_05Oct2015'
+config.General.requestName = 'EDBR_MET_2015D_16Dec2015_76x'
 
 config.General.workArea = 'EDBR_crab_projects'
 
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'analysis-MET_Run2015D_25ns_13Ene_05Oct2015_BASELINE.py'
+config.JobType.psetName = 'analysis-MET_Run2015D_16Dec2015_76x.py'
 
 
 
 config.section_('Data')
-config.Data.inputDataset= '/MET/Run2015D-05Oct2015-v1/MINIAOD'
+config.Data.inputDataset= '/MET/Run2015D-16Dec2015-v1/MINIAOD'
 config.Data.unitsPerJob = 200
 config.Data.splitting = 'LumiBased'
-config.Data.lumiMask = "https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt"
+config.Data.lumiMask = "https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Reprocessing/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_v2.txt"
 config.Data.publication = False
 config.Data.useParent = False
 
