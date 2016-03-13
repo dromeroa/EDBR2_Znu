@@ -1,8 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
 ### This add the payload to the jets in order to use later the JEC  
-### Then we apply a cut in the mass of the fatjets in order to select the graviton in the event with the right mass
-
 
 corrJetsProducer = cms.EDProducer ( "CorrJetsProducer",
                                      jets     =    cms.InputTag( "niceJets" ),
@@ -14,9 +12,9 @@ corrJetsProducer = cms.EDProducer ( "CorrJetsProducer",
 
 hadronicVnu = cms.EDFilter(  "CandViewSelector",
                                src      =      cms.InputTag("corrJetsProducer:corrJets"),
-                               cut      =      cms.string('pt > 200. & '
-                                                          'userFloat("ak8PFJetsCHSCorrPrunedMass") > 40. & '
-                                                          'userFloat("ak8PFJetsCHSCorrPrunedMass") < 105.  '),
+                               cut      =      cms.string('pt>200. & abs(eta)<2.4\
+                                               userFloat("ak8PFJetsCHSCorrPrunedMass")>40. & \
+                                               userFloat("ak8PFJetsCHSCorrPrunedMass")<220.'),
                                filter   =      cms.bool(True) )
 
 

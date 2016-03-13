@@ -1,14 +1,27 @@
 import FWCore.ParameterSet.Config as cms
 
 
+from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors
+from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJets
+from PhysicsTools.PatAlgos.cleaningLayer1.jetCleaner_cfi import cleanPatJets
 from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 
-### FOR NOW WE APPLY THE JET ID LOOSE, THEN WE EXPLORE THIS AS WE ARE DOING IN FAT JETS
+patak4JetCorrFactorsReapplyJEC = updatedPatJetCorrFactors.clone(
+                                     src = cms.InputTag("slimmedJets"),
+                                     levels = ['L1FastJet','L2Relative','L3Absolute'],
+                                     payload = 'AK4PFchs')
+
+
+patak4JetsReapplyJEC = updatedPatJets.clone(
+                                      jetSource = cms.InputTag("slimmedJets"),
+                                      jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patak4JetCorrFactorsReapplyJEC") ))
+
 
 ###-------- JET ID LOOSE --------------------------------------
 selectak4Jets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
                          filterParams = pfJetIDSelector.clone(),
-                         src = cms.InputTag("slimmedJets")
+                         src = cms.InputTag("patak4JetsReapplyJEC"),
+                         filter = cms.bool(True)
                          )
 
 
@@ -22,10 +35,29 @@ niceak4Jets = cms.EDFilter("PATJetSelector",
                                  filter = cms.bool(True)
 )
 
+#cleanak4Jets = cleanPatJets.clone()
+
+### CLEANING
+#cleanak4Jets.src = "niceak4Jets"
+#cleanak4Jets.checkOverlaps.muons.src = "slimmedMuons"
+#cleanak4Jets.checkOverlaps.muons.deltaR = 0.4
+#cleanak4Jets.checkOverlaps.muons.requireNoOverlaps = True
+#cleanak4Jets.checkOverlaps.electrons.src = "slimmedElectrons"
+#cleanak4Jets.checkOverlaps.electrons.deltaR = 0.4
+#cleanak4Jets.checkOverlaps.electrons.requireNoOverlaps = True
+#cleanak4Jets.checkOverlaps.photons = cms.PSet()
+#cleanak4Jets.checkOverlaps.taus = cms.PSet()
+#cleanak4Jets.checkOverlaps.tkIsoElectrons = cms.PSet()
+#cleanak4Jets.finalCut = ""
+
 
 ak4JetsNuSequence = cms.Sequence(
-                                    selectak4Jets         *
-                                    niceak4Jets           )
+                                    patak4JetCorrFactorsReapplyJEC  *
+                                    patak4JetsReapplyJEC            *
+                                    selectak4Jets                   *
+                                    niceak4Jets                   
+#                                    cleanak4Jets          
+                                                                    )
                                                           
 
 
