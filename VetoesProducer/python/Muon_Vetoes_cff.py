@@ -6,8 +6,9 @@ baseandisolationCutString = "pt > 20 && abs(eta) < 2.5 &&  ((pfIsolationR04().su
 
 goodMuons = cms.EDFilter("PATMuonSelector",
                                        src = cms.InputTag("slimmedMuons"),
-                                       cut = cms.string(baseandisolationCutString)
-
+                                       cut = cms.string(baseandisolationCutString),
+                                       filter = cms.bool(False)
+)
 
 ### A loose muon ID 
 from PhysicsTools.PatAlgos.selectionLayer1.muonSelector_cfi import *

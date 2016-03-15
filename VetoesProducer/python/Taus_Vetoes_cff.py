@@ -2,7 +2,9 @@ import FWCore.ParameterSet.Config as cms
 
 goodTaus = cms.EDFilter("PATTauSelector",
                                 src = cms.InputTag("slimmedTaus"),
-                                cut = cms.string("pt >20 & abs(eta)<2.3"))
+                                cut = cms.string("pt >20 & abs(eta)<2.3"),
+                                filter = cms.bool(False)
+)
 
 
 from PhysicsTools.PatAlgos.selectionLayer1.tauSelector_cfi import *

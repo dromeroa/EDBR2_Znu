@@ -2,7 +2,8 @@ import FWCore.ParameterSet.Config as cms
 
 goodPhotons = cms.EDFilter("PATPhotonRefSelector",
                                src = cms.InputTag("slimmedPhotons"),
-                               cut = cms.string("pt > 15 &  abs(eta) < 2.5")
+                               cut = cms.string("pt > 15 &  abs(eta) < 2.5"),
+                               filter = cms.bool(False)
 )
 
 

@@ -21,7 +21,7 @@ patak4JetsReapplyJEC = updatedPatJets.clone(
 selectak4Jets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
                          filterParams = pfJetIDSelector.clone(),
                          src = cms.InputTag("patak4JetsReapplyJEC"),
-                         filter = cms.bool(True)
+                         filter = cms.bool(False)
                          )
 
 
@@ -32,7 +32,7 @@ ak4JETCUTS  =   "(pt > 30)  && (abs(eta) < 2.4) && (chargedHadronEnergyFraction(
 niceak4Jets = cms.EDFilter("PATJetSelector",
                                  src = cms.InputTag("selectak4Jets"),
                                  cut = cms.string(ak4JETCUTS),
-                                 filter = cms.bool(True)
+                                 filter = cms.bool(False)
 )
 
 #cleanak4Jets = cleanPatJets.clone()

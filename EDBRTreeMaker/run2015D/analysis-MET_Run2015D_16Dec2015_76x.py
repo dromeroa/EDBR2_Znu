@@ -20,7 +20,7 @@ process.MessageLogger.cerr.FwkReport.limit = 99999999
 ##***************************************************************************************#
 ##     2. Global Tag                                                                     #
 ##***************************************************************************************#
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 ## FROM March 05 2016
 process.GlobalTag.globaltag = '76X_dataRun2_16Dec2015_v0'
 
@@ -105,11 +105,6 @@ TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughte
 
 process.corrJetsProducer.isData = True
 
-process.niceak4JetsSelector = cms.EDFilter(     "CandViewSelector",
-                                                src                 = cms.InputTag  (  "niceak4Jets"              ),
-                                                cut                 = cms.string    (   ""                        ),
-                                                filter              = cms.bool      (   True                      ) )
-
 
 process.bestHadronicVnu = cms.EDFilter(         "LargestPtCandSelector",
                                                 src                 = cms.InputTag  (  "hadronicVnu"              ),
@@ -166,9 +161,7 @@ process.jetSequence       = cms.Sequence  (
                                              process.bestHadronicVnu            
                                                                                 )
 
-process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          *
-                                             process.niceak4JetsSelector  
-                                                                                )
+process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          )
 
 process.gravitonSequence  = cms.Sequence  (  process.graviton                   *
                                              process.gravitonFilter   

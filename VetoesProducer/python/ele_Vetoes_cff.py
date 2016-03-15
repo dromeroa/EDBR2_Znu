@@ -7,7 +7,8 @@ import FWCore.ParameterSet.Config as cms
 
 goodElectrons = cms.EDFilter("PATElectronRefSelector",
                                src = cms.InputTag("slimmedElectrons"),
-                               cut = cms.string("pt > 20 & abs(eta) < 2.5")
+                               cut = cms.string("pt > 20 & abs(eta) < 2.5"),
+                               filter = cms.bool(False)
 )
 ### The pt and eta cuts are based on https://indico.cern.ch/event/370507/contribution/1/attachments/1140657/1633761/Rami_eleCB_ID_25ns.pdf
 
