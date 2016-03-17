@@ -30,6 +30,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
+#include "TMath.h"
 
 //
 // class declaration
@@ -102,42 +103,21 @@ QCDfilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    int multi = jets->size();
 
-   bool result = false;
+   bool result = true;
 
-   switch (multi) {
-   
-    case 0 :  
-       {
-                  result = true;
-       }
-       break;
+   if (multi == 2){
 
-    case 1 :  
-       {
-                   result = true;
-       }
-       break;
-
-    case 2 :  
-       {
                const pat::Jet &jet1 = jets->at(0);
                const pat::Jet &jet2 = jets->at(1);
                double phi1 = jet1.phi();
                double phi2 = jet2.phi();
-               double deltaPhijetjetabs = fabs(deltaPhi(phi1,phi2)); 
+               double deltaPhijetjetabs = TMath::Abs(deltaPhi(phi1,phi2));
 
-               if (deltaPhijetjetabs <= deltaphi_threshold_){
-                   result = true;
-               }
-       }
-       break;
+               if (deltaPhijetjetabs > deltaphi_threshold_){
+                   result = false;
+               }       
 
-    default:  
-        {
-             result = false;
-        }                
-        break;  
-  }
+    }
 
 
    return result;
