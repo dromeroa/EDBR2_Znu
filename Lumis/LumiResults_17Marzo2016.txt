@@ -1,0 +1,255 @@
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+| run:fill    | time              | ncms | hltpath                                             | delivered(/fb) | recorded(/fb) |
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+| 254231:4201 | 08/13/15 05:14:40 | 24   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.000          | 0.000         |
+| 254232:4201 | 08/13/15 05:43:48 | 81   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.000          | 0.000         |
+| 254790:4243 | 08/21/15 05:24:04 | 685  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.012          | 0.011         |
+| 254852:4249 | 08/22/15 13:49:29 | 40   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.001          | 0.001         |
+| 254879:4254 | 08/23/15 03:34:41 | 88   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.002          | 0.002         |
+| 254906:4256 | 08/23/15 16:23:48 | 75   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.002          | 0.002         |
+| 254907:4256 | 08/23/15 16:55:45 | 52   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.001          | 0.001         |
+| 256630:4376 | 09/16/15 12:20:57 | 22   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 256673:4381 | 09/17/15 01:46:10 | 2    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 256674:4381 | 09/17/15 01:47:46 | 2    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 256675:4381 | 09/17/15 01:50:18 | 160  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 256676:4381 | 09/17/15 02:55:57 | 207  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.010          | 0.010         |
+| 256677:4381 | 09/17/15 09:59:03 | 477  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.018          | 0.016         |
+| 256801:4386 | 09/18/15 16:00:54 | 189  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.010          | 0.009         |
+| 256843:4391 | 09/19/15 07:02:10 | 971  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.040          | 0.039         |
+| 256866:4393 | 09/19/15 22:02:52 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 256867:4393 | 09/19/15 22:11:45 | 92   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.005         |
+| 256868:4393 | 09/19/15 22:55:07 | 486  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.025          | 0.024         |
+| 256869:4393 | 09/20/15 02:07:40 | 34   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 256926:4397 | 09/20/15 19:09:17 | 28   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 256941:4398 | 09/21/15 07:30:01 | 209  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.009         |
+| 257461:4418 | 09/25/15 05:51:21 | 52   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.003          | 0.003         |
+| 257531:4423 | 09/26/15 09:37:19 | 135  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.009         |
+| 257599:4426 | 09/26/15 21:47:23 | 77   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.006          | 0.005         |
+| 257613:4428 | 09/27/15 04:26:52 | 1294 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.083          | 0.080         |
+| 257614:4428 | 09/27/15 12:52:08 | 16   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257645:4432 | 09/27/15 23:26:52 | 1059 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.068          | 0.066         |
+| 257682:4434 | 09/28/15 11:59:23 | 301  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.015          | 0.014         |
+| 257722:4435 | 09/28/15 17:20:59 | 19   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257723:4435 | 09/28/15 17:31:51 | 142  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.007          | 0.006         |
+| 257735:4435 | 09/28/15 22:05:27 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257751:4437 | 09/29/15 04:53:56 | 463  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.030          | 0.029         |
+| 257804:4440 | 09/29/15 13:35:04 | 17   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 257805:4440 | 09/29/15 13:49:01 | 249  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.019          | 0.018         |
+| 257816:4440 | 09/29/15 15:33:56 | 385  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.027          | 0.026         |
+| 257819:4440 | 09/29/15 18:11:51 | 248  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 257968:4444 | 09/30/15 23:42:22 | 258  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.019          | 0.018         |
+| 257969:4444 | 10/01/15 01:24:08 | 634  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.043          | 0.042         |
+| 258129:4448 | 10/02/15 09:56:47 | 95   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.006          | 0.006         |
+| 258136:4448 | 10/02/15 10:38:14 | 60   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.004          | 0.004         |
+| 258157:4449 | 10/02/15 14:07:10 | 56   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.004          | 0.004         |
+| 258158:4449 | 10/02/15 14:33:52 | 1784 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.115          | 0.112         |
+| 258159:4449 | 10/03/15 02:09:44 | 501  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.028          | 0.027         |
+| 258177:4452 | 10/03/15 20:21:28 | 1905 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.115          | 0.112         |
+| 258211:4455 | 10/04/15 16:54:29 | 87   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.007          | 0.007         |
+| 258213:4455 | 10/04/15 17:32:20 | 165  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.013          | 0.012         |
+| 258214:4455 | 10/04/15 18:38:59 | 217  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 258215:4455 | 10/04/15 20:07:49 | 6    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 258287:4462 | 10/05/15 15:44:45 | 179  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.015          | 0.014         |
+| 258403:4466 | 10/06/15 14:10:07 | 250  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 258425:4467 | 10/06/15 18:50:09 | 134  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 258426:4467 | 10/06/15 20:00:12 | 10   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 258427:4467 | 10/06/15 20:06:18 | 107  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.008         |
+| 258428:4467 | 10/06/15 20:54:17 | 159  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.013          | 0.012         |
+| 258432:4467 | 10/06/15 23:04:32 | 4    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 258434:4467 | 10/06/15 23:11:39 | 453  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.033          | 0.033         |
+| 258440:4467 | 10/07/15 02:10:32 | 731  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.049          | 0.048         |
+| 258444:4467 | 10/07/15 09:00:44 | 37   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 258445:4467 | 10/07/15 09:52:47 | 302  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.018          | 0.017         |
+| 258446:4467 | 10/07/15 11:52:39 | 142  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 258448:4467 | 10/07/15 12:53:07 | 728  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.038          | 0.038         |
+| 258655:4476 | 10/09/15 11:20:05 | 9    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 258656:4476 | 10/09/15 11:24:46 | 334  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.028          | 0.028         |
+| 258694:4477 | 10/09/15 19:55:27 | 177  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.017         |
+| 258702:4479 | 10/10/15 07:31:21 | 351  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.033          | 0.032         |
+| 258703:4479 | 10/10/15 09:48:30 | 389  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.035          | 0.034         |
+| 258705:4479 | 10/10/15 13:01:34 | 100  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 258706:4479 | 10/10/15 13:44:18 | 733  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.058          | 0.056         |
+| 258712:4479 | 10/10/15 18:36:26 | 524  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.038          | 0.037         |
+| 258713:4479 | 10/10/15 22:03:19 | 161  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 258714:4479 | 10/10/15 23:06:33 | 67   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.004         |
+| 258741:4485 | 10/11/15 15:12:30 | 51   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.005         |
+| 258742:4485 | 10/11/15 15:37:24 | 692  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.068          | 0.065         |
+| 258745:4485 | 10/11/15 20:12:22 | 260  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.024          | 0.023         |
+| 258749:4485 | 10/11/15 22:08:51 | 589  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.049          | 0.048         |
+| 258750:4485 | 10/12/15 02:08:14 | 197  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.016          | 0.015         |
+| 259626:4518 | 10/20/15 04:27:54 | 337  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 259637:4519 | 10/20/15 11:56:33 | 216  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.016          | 0.016         |
+| 259681:4522 | 10/21/15 02:10:07 | 35   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.004          | 0.002         |
+| 259683:4522 | 10/21/15 02:51:43 | 86   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.008          | 0.008         |
+| 259685:4522 | 10/21/15 03:31:12 | 623  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.058          | 0.056         |
+| 259686:4522 | 10/21/15 07:40:55 | 333  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.028          | 0.027         |
+| 259721:4525 | 10/21/15 21:49:33 | 334  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.013          | 0.012         |
+| 259809:4528 | 10/23/15 01:19:55 | 170  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.015          | 0.014         |
+| 259810:4528 | 10/23/15 02:27:57 | 114  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 259811:4528 | 10/23/15 03:14:40 | 89   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.008          | 0.007         |
+| 259813:4528 | 10/23/15 03:55:28 | 10   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.001          | 0.001         |
+| 259817:4528 | 10/23/15 04:12:46 | 5    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.000          | 0.000         |
+| 259818:4528 | 10/23/15 04:16:25 | 160  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.014          | 0.013         |
+| 259820:4528 | 10/23/15 05:28:06 | 158  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.013          | 0.013         |
+| 259821:4528 | 10/23/15 06:36:07 | 210  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.017          | 0.016         |
+| 259822:4528 | 10/23/15 08:06:27 | 461  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.033          | 0.033         |
+| 259861:4530 | 10/23/15 22:04:22 | 152  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.014          | 0.014         |
+| 259862:4530 | 10/23/15 23:06:58 | 530  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.047          | 0.046         |
+| 259884:4532 | 10/24/15 16:31:58 | 80   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.007          | 0.007         |
+| 259890:4532 | 10/24/15 17:20:01 | 107  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 259891:4532 | 10/24/15 18:06:49 | 108  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 260373:4555 | 10/30/15 10:18:37 | 360  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.011          | 0.011         |
+| 260424:4557 | 10/30/15 18:40:06 | 666  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.069          | 0.067         |
+| 260425:4557 | 10/30/15 23:06:36 | 252  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.024          | 0.024         |
+| 260426:4557 | 10/31/15 01:02:23 | 499  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.045          | 0.044         |
+| 260427:4557 | 10/31/15 04:25:46 | 284  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.024          | 0.023         |
+| 260431:4557 | 10/31/15 06:31:22 | 447  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.036          | 0.035         |
+| 260532:4560 | 11/01/15 04:26:38 | 741  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.071          | 0.069         |
+| 260533:4560 | 11/01/15 09:24:23 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.001          | 0.001         |
+| 260534:4560 | 11/01/15 09:34:18 | 375  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.033          | 0.032         |
+| 260536:4560 | 11/01/15 12:11:50 | 177  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.015          | 0.014         |
+| 260538:4560 | 11/01/15 13:29:58 | 284  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.023          | 0.022         |
+| 260541:4560 | 11/01/15 15:25:55 | 24   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.002          | 0.002         |
+| 260575:4562 | 11/01/15 21:37:56 | 20   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.002          | 0.002         |
+| 260576:4562 | 11/01/15 21:49:30 | 463  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.055          | 0.051         |
+| 260577:4562 | 11/02/15 00:53:22 | 76   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.009          | 0.008         |
+| 260593:4565 | 11/02/15 08:42:24 | 337  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.038          | 0.036         |
+| 260627:4569 | 11/02/15 19:06:16 | 1739 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.186          | 0.179         |
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+#Summary: 
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
+| hltpath                                             | nfill | nrun | ncms  | totdelivered(/fb) | totrecorded(/fb) |
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 5     | 7    | 1045  | 0.017             | 0.017            |
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 29    | 70   | 21339 | 1.409             | 1.365            |
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 12    | 37   | 10739 | 0.969             | 0.934            |
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+| run:fill    | time              | ncms | hltpath                                             | delivered(/fb) | recorded(/fb) |
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+| 254231:4201 | 08/13/15 05:14:40 | 24   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.000          | 0.000         |
+| 254232:4201 | 08/13/15 05:43:48 | 81   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.000          | 0.000         |
+| 254790:4243 | 08/21/15 05:24:04 | 685  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.012          | 0.011         |
+| 254852:4249 | 08/22/15 13:49:29 | 40   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.001          | 0.001         |
+| 254879:4254 | 08/23/15 03:34:41 | 88   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.002          | 0.002         |
+| 254906:4256 | 08/23/15 16:23:48 | 75   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.002          | 0.002         |
+| 254907:4256 | 08/23/15 16:55:45 | 52   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 0.001          | 0.001         |
+| 256630:4376 | 09/16/15 12:20:57 | 22   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 256673:4381 | 09/17/15 01:46:10 | 2    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 256674:4381 | 09/17/15 01:47:46 | 2    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 256675:4381 | 09/17/15 01:50:18 | 160  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 256676:4381 | 09/17/15 02:55:57 | 207  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.010          | 0.010         |
+| 256677:4381 | 09/17/15 09:59:03 | 477  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.018          | 0.016         |
+| 256801:4386 | 09/18/15 16:00:54 | 189  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.010          | 0.009         |
+| 256843:4391 | 09/19/15 07:02:10 | 971  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.040          | 0.039         |
+| 256866:4393 | 09/19/15 22:02:52 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 256867:4393 | 09/19/15 22:11:45 | 92   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.005         |
+| 256868:4393 | 09/19/15 22:55:07 | 486  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.025          | 0.024         |
+| 256869:4393 | 09/20/15 02:07:40 | 34   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 256926:4397 | 09/20/15 19:09:17 | 28   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 256941:4398 | 09/21/15 07:30:01 | 209  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.009         |
+| 257461:4418 | 09/25/15 05:51:21 | 52   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.003          | 0.003         |
+| 257531:4423 | 09/26/15 09:37:19 | 135  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.009         |
+| 257599:4426 | 09/26/15 21:47:23 | 77   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.006          | 0.005         |
+| 257613:4428 | 09/27/15 04:26:52 | 1294 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.083          | 0.080         |
+| 257614:4428 | 09/27/15 12:52:08 | 16   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257645:4432 | 09/27/15 23:26:52 | 1059 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.068          | 0.066         |
+| 257682:4434 | 09/28/15 11:59:23 | 301  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.015          | 0.014         |
+| 257722:4435 | 09/28/15 17:20:59 | 19   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257723:4435 | 09/28/15 17:31:51 | 142  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.007          | 0.006         |
+| 257735:4435 | 09/28/15 22:05:27 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 257751:4437 | 09/29/15 04:53:56 | 463  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.030          | 0.029         |
+| 257804:4440 | 09/29/15 13:35:04 | 17   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 257805:4440 | 09/29/15 13:49:01 | 249  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.019          | 0.018         |
+| 257816:4440 | 09/29/15 15:33:56 | 385  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.027          | 0.026         |
+| 257819:4440 | 09/29/15 18:11:51 | 248  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 257968:4444 | 09/30/15 23:42:22 | 258  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.019          | 0.018         |
+| 257969:4444 | 10/01/15 01:24:08 | 634  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.043          | 0.042         |
+| 258129:4448 | 10/02/15 09:56:47 | 95   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.006          | 0.006         |
+| 258136:4448 | 10/02/15 10:38:14 | 60   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.004          | 0.004         |
+| 258157:4449 | 10/02/15 14:07:10 | 56   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.004          | 0.004         |
+| 258158:4449 | 10/02/15 14:33:52 | 1784 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.115          | 0.112         |
+| 258159:4449 | 10/03/15 02:09:44 | 501  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.028          | 0.027         |
+| 258177:4452 | 10/03/15 20:21:28 | 1905 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.115          | 0.112         |
+| 258211:4455 | 10/04/15 16:54:29 | 87   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.007          | 0.007         |
+| 258213:4455 | 10/04/15 17:32:20 | 165  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.013          | 0.012         |
+| 258214:4455 | 10/04/15 18:38:59 | 217  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 258215:4455 | 10/04/15 20:07:49 | 6    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 258287:4462 | 10/05/15 15:44:45 | 179  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.015          | 0.014         |
+| 258403:4466 | 10/06/15 14:10:07 | 250  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.016         |
+| 258425:4467 | 10/06/15 18:50:09 | 134  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 258426:4467 | 10/06/15 20:00:12 | 10   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.001         |
+| 258427:4467 | 10/06/15 20:06:18 | 107  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.009          | 0.008         |
+| 258428:4467 | 10/06/15 20:54:17 | 159  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.013          | 0.012         |
+| 258432:4467 | 10/06/15 23:04:32 | 4    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.000          | 0.000         |
+| 258434:4467 | 10/06/15 23:11:39 | 453  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.033          | 0.033         |
+| 258440:4467 | 10/07/15 02:10:32 | 731  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.049          | 0.048         |
+| 258444:4467 | 10/07/15 09:00:44 | 37   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.002          | 0.002         |
+| 258445:4467 | 10/07/15 09:52:47 | 302  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.018          | 0.017         |
+| 258446:4467 | 10/07/15 11:52:39 | 142  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 258448:4467 | 10/07/15 12:53:07 | 728  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.038          | 0.038         |
+| 258655:4476 | 10/09/15 11:20:05 | 9    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.001          | 0.000         |
+| 258656:4476 | 10/09/15 11:24:46 | 334  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.028          | 0.028         |
+| 258694:4477 | 10/09/15 19:55:27 | 177  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.017          | 0.017         |
+| 258702:4479 | 10/10/15 07:31:21 | 351  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.033          | 0.032         |
+| 258703:4479 | 10/10/15 09:48:30 | 389  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.035          | 0.034         |
+| 258705:4479 | 10/10/15 13:01:34 | 100  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.008          | 0.008         |
+| 258706:4479 | 10/10/15 13:44:18 | 733  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.058          | 0.056         |
+| 258712:4479 | 10/10/15 18:36:26 | 524  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.038          | 0.037         |
+| 258713:4479 | 10/10/15 22:03:19 | 161  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 258714:4479 | 10/10/15 23:06:33 | 67   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.004         |
+| 258741:4485 | 10/11/15 15:12:30 | 51   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.005          | 0.005         |
+| 258742:4485 | 10/11/15 15:37:24 | 692  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.068          | 0.065         |
+| 258745:4485 | 10/11/15 20:12:22 | 260  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.024          | 0.023         |
+| 258749:4485 | 10/11/15 22:08:51 | 589  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.049          | 0.048         |
+| 258750:4485 | 10/12/15 02:08:14 | 197  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.016          | 0.015         |
+| 259626:4518 | 10/20/15 04:27:54 | 337  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 0.011          | 0.011         |
+| 259637:4519 | 10/20/15 11:56:33 | 216  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.016          | 0.016         |
+| 259681:4522 | 10/21/15 02:10:07 | 35   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.004          | 0.002         |
+| 259683:4522 | 10/21/15 02:51:43 | 86   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.008          | 0.008         |
+| 259685:4522 | 10/21/15 03:31:12 | 623  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.058          | 0.056         |
+| 259686:4522 | 10/21/15 07:40:55 | 333  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.028          | 0.027         |
+| 259721:4525 | 10/21/15 21:49:33 | 334  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.013          | 0.012         |
+| 259809:4528 | 10/23/15 01:19:55 | 170  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.015          | 0.014         |
+| 259810:4528 | 10/23/15 02:27:57 | 114  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 259811:4528 | 10/23/15 03:14:40 | 89   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.008          | 0.007         |
+| 259813:4528 | 10/23/15 03:55:28 | 10   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.001          | 0.001         |
+| 259817:4528 | 10/23/15 04:12:46 | 5    | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.000          | 0.000         |
+| 259818:4528 | 10/23/15 04:16:25 | 160  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.014          | 0.013         |
+| 259820:4528 | 10/23/15 05:28:06 | 158  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.013          | 0.013         |
+| 259821:4528 | 10/23/15 06:36:07 | 210  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.017          | 0.016         |
+| 259822:4528 | 10/23/15 08:06:27 | 461  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.033          | 0.033         |
+| 259861:4530 | 10/23/15 22:04:22 | 152  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.014          | 0.014         |
+| 259862:4530 | 10/23/15 23:06:58 | 530  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.047          | 0.046         |
+| 259884:4532 | 10/24/15 16:31:58 | 80   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.007          | 0.007         |
+| 259890:4532 | 10/24/15 17:20:01 | 107  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 259891:4532 | 10/24/15 18:06:49 | 108  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.010          | 0.010         |
+| 260373:4555 | 10/30/15 10:18:37 | 360  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.011          | 0.011         |
+| 260424:4557 | 10/30/15 18:40:06 | 666  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.069          | 0.067         |
+| 260425:4557 | 10/30/15 23:06:36 | 252  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.024          | 0.024         |
+| 260426:4557 | 10/31/15 01:02:23 | 499  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.045          | 0.044         |
+| 260427:4557 | 10/31/15 04:25:46 | 284  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.024          | 0.023         |
+| 260431:4557 | 10/31/15 06:31:22 | 447  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.036          | 0.035         |
+| 260532:4560 | 11/01/15 04:26:38 | 741  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.071          | 0.069         |
+| 260533:4560 | 11/01/15 09:24:23 | 14   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.001          | 0.001         |
+| 260534:4560 | 11/01/15 09:34:18 | 375  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.033          | 0.032         |
+| 260536:4560 | 11/01/15 12:11:50 | 177  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.015          | 0.014         |
+| 260538:4560 | 11/01/15 13:29:58 | 284  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.023          | 0.022         |
+| 260541:4560 | 11/01/15 15:25:55 | 24   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.002          | 0.002         |
+| 260575:4562 | 11/01/15 21:37:56 | 20   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.002          | 0.002         |
+| 260576:4562 | 11/01/15 21:49:30 | 463  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.055          | 0.051         |
+| 260577:4562 | 11/02/15 00:53:22 | 76   | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.009          | 0.008         |
+| 260593:4565 | 11/02/15 08:42:24 | 337  | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.038          | 0.036         |
+| 260627:4569 | 11/02/15 19:06:16 | 1739 | HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 0.186          | 0.179         |
++-------------+-------------------+------+-----------------------------------------------------+----------------+---------------+
+#Summary: 
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
+| hltpath                                             | nfill | nrun | ncms  | totdelivered(/fb) | totrecorded(/fb) |
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v1 | 5     | 7    | 1045  | 0.017             | 0.017            |
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v2 | 29    | 70   | 21339 | 1.409             | 1.365            |
+| HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v3 | 12    | 37   | 10739 | 0.969             | 0.934            |
++-----------------------------------------------------+-------+------+-------+-------------------+------------------+
+
+
+Total = 2.316 (/fb)
