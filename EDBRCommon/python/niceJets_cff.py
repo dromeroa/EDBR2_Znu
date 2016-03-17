@@ -2,7 +2,6 @@ import FWCore.ParameterSet.Config as cms
 
 from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors
 from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJets
-from PhysicsTools.PatAlgos.cleaningLayer1.jetCleaner_cfi import cleanPatJets
 from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 
 
@@ -38,37 +37,12 @@ niceJets = cms.EDFilter("PATJetSelector",
 )
 
 
-### CLEANING
-#cleanPatJets.src = "niceJets"
-#cleanPatJets.src = "selectJets"
-
-#cleanPatJets.src = "slimmedJetsAK8"
-
-#cleanPatJets.checkOverlaps.muons.src = "slimmedMuons"
-#cleanPatJets.checkOverlaps.muons.deltaR = 0.8
-#cleanPatJets.checkOverlaps.muons.requireNoOverlaps = True
-#cleanPatJets.checkOverlaps.electrons.src = "slimmedElectrons"
-#cleanPatJets.checkOverlaps.electrons.deltaR = 0.8
-#cleanPatJets.checkOverlaps.electrons.requireNoOverlaps = True
-#cleanPatJets.checkOverlaps.photons = cms.PSet()
-#cleanPatJets.checkOverlaps.taus = cms.PSet()
-#cleanPatJets.checkOverlaps.tkIsoElectrons = cms.PSet()
-#cleanPatJets.finalCut = ""
-
-#countCleanJets = cms.EDFilter("PATCandViewCountFilter",
-#                              minNumber = cms.uint32(1),
-#                              maxNumber = cms.uint32(999999),
-#                              src = cms.InputTag("cleanPatJets"))
-
-
 fatJetsNuSequence = cms.Sequence( 
                                    patJetCorrFactorsReapplyJEC  *
                                    patJetsReapplyJEC            *
                                    selectJets                   *
                                    niceJets                      
-#                                   cleanPatJets                 
-#                                   countCleanJets
-                                )
+                                                                 )
 
 
 
