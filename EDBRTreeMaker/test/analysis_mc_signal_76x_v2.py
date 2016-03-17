@@ -50,8 +50,8 @@ SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
 ## Source
 process.load("ExoDiBosonResonances.EDBRCommon.Simulation76X."+SAMPLE)
 ## Number of Events to run
-#process.maxEvents.input = -1
-process.maxEvents.input = 40000
+process.maxEvents.input = -1
+#process.maxEvents.input = 40000
 
 
 ##***************************************************************************************#
@@ -121,7 +121,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 isData              = cms.bool      (  False                      ),
                                                 originalNEvents     = cms.int32     (  usedNevents                ),
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
-                                                targetLumiInvPb     = cms.double    (  2086.097                   ),
+                                                targetLumiInvPb     = cms.double    (  2316                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
                                                 puWeights           = cms.FileInPath(  "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),

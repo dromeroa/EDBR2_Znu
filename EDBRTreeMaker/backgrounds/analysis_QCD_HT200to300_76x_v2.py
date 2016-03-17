@@ -35,8 +35,6 @@ VZ_JetMET       = True
 ##***************************************************************************************#
 ##     4. Samples                                                                        #
 ##***************************************************************************************#                
-## Signal                                                         
-#SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
 
 ## Backgrounds
 ###------   Z +JETS  -----------
@@ -81,8 +79,8 @@ SAMPLE="QCD_HT200to300_76x_v2"
 ## Source
 process.load("ExoDiBosonResonances.EDBRCommon.Simulation76X."+SAMPLE)
 ## Number of Events to run
-#process.maxEvents.input = -1
-process.maxEvents.input = 40000
+process.maxEvents.input = -1
+#process.maxEvents.input = 40000
 
 
 ##***************************************************************************************#
@@ -92,7 +90,6 @@ process.maxEvents.input = 40000
 ## https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns (1 Billion campaign)
 
 configXsecs = { 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 1,
                 "ZJetsToNuNu_HT-100To200_76x_v2"         : 344.8305,  ##  280.35  x 1.23 (NLO)  
                 "ZJetsToNuNu_HT-200To400_76x_v2"         : 95.571,    ##   77.67  x 1.23 (NLO)
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 13.1979,   ##   10.73  x 1.23 (NLO)
@@ -117,7 +114,6 @@ configXsecs = {
 
 configNevents = {
 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 100000,
                 "ZJetsToNuNu_HT-100To200_76x_v2"         : 5240199, 
                 "ZJetsToNuNu_HT-200To400_76x_v2"         : 5135542,
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 954435,
