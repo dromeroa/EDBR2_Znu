@@ -330,8 +330,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           Handle<reco::VertexCollection> vertices;
           iEvent.getByToken(vertexToken_, vertices);
           nVtx = vertices->size();
-          const reco::Vertex& vertex = (*vertices)[0];
-
+         
 
           // energy density
           Handle< double > rhoHandle;
