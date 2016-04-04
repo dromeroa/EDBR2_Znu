@@ -141,7 +141,6 @@ private:
   double metcorrptup, metcorrptdown;
 
   //---------------------- AK8 JETS --------------------------------------------------
-  int    numfatjets;
   double tau1,     tau2,     tau3,     tau21;
   double etjet1,   ptjet1,   etajet1,  phijet1;
   double massjet1, softjet1, prunedjet1;
@@ -149,22 +148,25 @@ private:
  //Recipe to apply JEC to the pruned jet mass:
  ////https://twiki.cern.ch/twiki/bin/view/CMS/JetWtagging#Recipes_to_apply_JEC_on_the_prun
  std::string payload_;
- double prunedMassCorrection( double, double, const pat::Jet&, edm::ESHandle<JetCorrectorParametersCollection> ); 
 
-       //------------------ AK8 JET ID VARIABLES------------------------------------
+  //------------------ AK8 JET ID VARIABLES------------------------------------
   double chf, nhf, cef, nef;
   int nch, nconstituents;
 
   //-----------------------  AK4 JETS  ----------------------------------------------
   int numjets;
-  double ak4jetspt , ak4jetseta, ak4jetsphi,  ak4jetsmass;
+  double ak4jetspt1 , ak4jetseta1, ak4jetsphi1;
+  double ak4jetsphi2;
   double HT, MHTx, MHTy, MHT;
 
   edm::EDGetTokenT<pat::JetCollection> niceak4JetToken_;
 
   //--------------------DELTAS ------------------------------------------------------- 
-  double deltaphijetmet, deltaPhijetjetabs;
-
+  double deltaphijetmet;
+  std::vector<double> deltaRjetfatjet;
+  std::vector<double> deltaphijetfatjet;
+  std::vector<double> deltaRjetjet;
+  std::vector<double> deltaphijetjet;
   //-------------------CANDIDATES MASS -----------------------------------------------
   double candTMass; // transverse mass
 
@@ -250,7 +252,6 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
 
   
   /// Generic kinematic quantities
-  outTree_->Branch("numfatjets"      ,&numfatjets     ,"numfatjets/I"     );
   outTree_->Branch("numjets"         ,&numjets        ,"numjets/I"        );
   outTree_->Branch("ptjet1"          ,&ptjet1         ,"ptjet1/D"         );
   outTree_->Branch("etjet1"          ,&etjet1         ,"etjet1/D"         );
@@ -285,7 +286,10 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
   outTree_->Branch("totalWeight"     ,&totalWeight    ,"totalWeight/D"    );
   outTree_->Branch("deltaphijetmet"    ,&deltaphijetmet   ,"deltaphijetmet/D"   );
-  outTree_->Branch("deltaPhijetjetabs"   ,&deltaPhijetjetabs   ,"deltaPhijetjetabs/D");
+  outTree_->Branch("deltaRjetfatjet"   ,&deltaRjetfatjet                   );
+  outTree_->Branch("deltaphijetfatjet"   ,&deltaphijetfatjet               );
+  outTree_->Branch("deltaRjetjet"   ,&deltaRjetjet                   );
+  outTree_->Branch("deltaphijetjet"   ,&deltaphijetjet                  );
 
   /// Jet ID variables
   outTree_->Branch("chf"   ,&chf  ,"chf/D"  );
@@ -325,12 +329,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         // All the quantities which depend on RECO could go here
         if(not isGen_) {
         
-
-          // handle goodOfflinePrimaryVertex collection
+          // handle goodOfflinePrimaryVertex collection   
           Handle<reco::VertexCollection> vertices;
           iEvent.getByToken(vertexToken_, vertices);
           nVtx = vertices->size();
-         
+          
 
           // energy density
           Handle< double > rhoHandle;
@@ -419,31 +422,35 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////-----------------------------------------------------------------------------------////
                    edm::Handle<std::vector<pat::Jet>> jatos;
                    iEvent.getByToken(niceak4JetToken_, jatos);
+                   deltaRjetfatjet.clear();
+                   deltaphijetfatjet.clear();
+                   deltaRjetjet.clear();
+                   deltaphijetjet.clear(); 
                    ////--- NUMBER OF JETS ----//// 
-                   if(jatos->size() > 0) {
-                   numjets = jatos->size();
-                   }
+                   numjets = jatos->size(); 
                    ////--------  HT AND MHT  -------------////
                    HT=0;
                    MHTx = 0, MHTy = 0;
-                   for (const pat::Jet &j : *jatos) {
-                         ak4jetspt  =  j.pt();
-                         ak4jetseta =  j.eta();
-                         ak4jetsphi =  j.phi();
-                         HT += ak4jetspt;
-                         MHTx -= j.px();
-                         MHTy -= j.py();
+
+                   for(unsigned int i = 0; i != jatos->size(); ++i) {
+                       const pat::Jet& jet1 = jatos->at(i);
+                         ak4jetspt1  =  jet1.pt();
+                         ak4jetseta1 =  jet1.eta();
+                         ak4jetsphi1 =  jet1.phi();
+                         HT += ak4jetspt1;
+                         MHTx -= jet1.px();
+                         MHTy -= jet1.py();
+                         deltaRjetfatjet.push_back(deltaR(hadronicVnu,jet1));
+                         deltaphijetfatjet.push_back(TMath::Abs(deltaPhi(phiVhad,ak4jetsphi1)));
+                           
+                         for(unsigned int j = (i+1); j != jatos->size(); ++j) {
+                             const pat::Jet& jet2 = jatos->at(j);
+                             ak4jetsphi2 =  jet2.phi(); 
+                             deltaRjetjet.push_back(deltaR(jet1,jet2));                                                                                        deltaphijetjet.push_back(TMath::Abs(deltaPhi(ak4jetsphi1,ak4jetsphi2)));
+                         }
+                          
                     }         
                     MHT = sqrt( MHTx*MHTx + MHTy*MHTy );
-                    ////---DELTAPHI BETWEEN LEADING AND SUBLEADING JET----////
-                    if(numjets==2){
-                           const pat::Jet &jet1 = jatos->at(0);
-                           const pat::Jet &jet2 = jatos->at(1);
-                           double phi1 = jet1.phi();
-                           double phi2 = jet2.phi();
-                           deltaPhijetjetabs  = fabs(deltaPhi(phi1,phi2));
-                    }
-
                     ////---------------------------------------------------------------------------////
                     ////--------------------------  OTHER VARIABLES  ------------------------------////
                     ////---------------------------------------------------------------------------////
@@ -549,7 +556,6 @@ void EDBRTreeMaker::setDummyValues() {
      tau3           = -1e4;
      tau21          = -1e4;
      numjets        = -1e4; 
-     numfatjets     = -1e4;
      etjet1         = -1e4;
      ptjet1         = -1e4;
      etajet1        = -1e4;
@@ -562,7 +568,6 @@ void EDBRTreeMaker::setDummyValues() {
      metpx          = -1e4;
      metpy          = -1e4;
      deltaphijetmet = -1e4; 
-     deltaPhijetjetabs = -1e4;
      reg            = -1e4;
      rho            = -1e4;
      sumET          = -1e4;
