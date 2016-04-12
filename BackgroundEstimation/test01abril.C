@@ -26,7 +26,7 @@ void test01abril(std::string key)
   //// 1.  DEFINE THE CONDITIONS
   ////*************************************************
   const bool isBlind = true;
-  int plevelnorm = 1;
+  int plevelnorm = -1;
   int plevelshap = 1;
   // Silent RooFit
   RooMsgService::instance().setGlobalKillBelow(FATAL);
@@ -181,17 +181,22 @@ void test01abril(std::string key)
   ////  10. THE PDFs 
   ////************************************************************************
 
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // Dominant Background (Error Function * Exponential = ErfExp)
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   RooRealVar c1("c1","slope of the exp",             -0.032,  -1.,    0.);
   RooRealVar offset1("offset1","offset of the erf",    85.0,   1.,  150.);
   RooRealVar width1("width1",  "width of the erf",     36.0,   1,   100.);
-  
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // Subdominant Background
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // ErfExp 
   RooRealVar c2("c2","slope of the exp",             -0.040,  -1.,    0.);
   RooRealVar offset2("offset2","offset of the erf",    79.0,   1.,  150.);
   RooRealVar width2("width2",  "width of the erf",     17.0,   1,   100.);
-  // Gaus 2
+  // Gaus 2 (gauss1 +gauss2)
   RooRealVar mu1("mu1", "average", 90, 0, 200);
   RooRealVar sigma1("sigma1", "sigma", 20, 0, 100);
   RooRealVar mu2("mu2", "average", 90, 0, 200);
@@ -199,17 +204,31 @@ void test01abril(std::string key)
   RooGaussian gauss1("gauss1","gaussian PDF1", massVhad, mu1, sigma1);
   RooGaussian gauss2("gauss2","gaussian PDF2", massVhad, mu2, sigma2);
   RooRealVar funfrac("funfrac","fraction of functions",0.6,0.,1.);
+  // ExpGaus (exp + gauss)
+  RooRealVar mu3("mu3", "average", 90, 0, 200);
+  RooRealVar sigma3("sigma3", "sigma", 20, 0, 100);
+  RooRealVar lambda("lambda", "exponential slope", -0.1, -1.0, 1.0);
+  RooGaussian gauss3("gauss3","gaussian PDF", massVhad, mu3, sigma3);
+  RooExponential expo("expo", "exponential PDF", massVhad, lambda);
+  RooRealVar funfrac2("funfrac2","fraction of functions",0.6,0.,1.);
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //  THE MODELS
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   RooErfExpPdf model1("model1","dominant backgrounds",massVhad,c1,offset1,width1);
-  // to plot the error
   RooErfExpPdf model1a("model1a","dominant backgroundsa",massVhad,c1,offset1,width1);
+
   RooErfExpPdf model2("model2","subdom backgrounds",massVhad,c2,offset2,width2);
-  // to plot the error
   RooErfExpPdf model2a("model2a","subdom backgroundsa",massVhad,c2,offset2,width2);
+
   RooAddPdf model3("Gaus2", "gaussian plus gaussian", RooArgList(gauss1, gauss2), funfrac);
   RooAddPdf model3a("Gaus2a", "gaussian plus gaussiana", RooArgList(gauss1, gauss2), funfrac);
+
+  RooAddPdf model4("Gausexpo", "gaussian plus expo", RooArgList(gauss3, expo), funfrac2);
+  RooAddPdf model4a("Gausexpoa", "gaussian plus expo", RooArgList(gauss3, expo), funfrac2);
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
   // A command to add a normalization to the PDF
@@ -219,6 +238,9 @@ void test01abril(std::string key)
   RooExtendPdf emodel2a("emodel2a","extended sub backgrounds",model2a,nbkg2);
   RooExtendPdf emodel3("emodel3","extended sub backgrounds",model3,nbkg2);
   RooExtendPdf emodel3a("emodel3a","extended sub backgrounds",model3a,nbkg2);
+  RooExtendPdf emodel4("emodel4","extended sub backgrounds",model4,nbkg2);
+  RooExtendPdf emodel4a("emodel4a","extended sub backgrounds",model4a,nbkg2);
+
 
   // The fit of each background in all range separatly
   std::cout << "Fitting models - normalisation" << std::endl;
@@ -228,7 +250,8 @@ void test01abril(std::string key)
   RooFitResult *rf2a = emodel2a.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
   RooFitResult *rf3 = emodel3.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
   RooFitResult *rf3a = emodel3a.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
-
+  RooFitResult *rf4 = emodel4.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
+  RooFitResult *rf4a = emodel4a.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
   
   //*****************************************************************
   //                     PLOTS FOR THE BACKGROUNDS AND FITS
@@ -251,6 +274,8 @@ void test01abril(std::string key)
   RooHist* hpull = frame1->pullHist();
   RooPlot* frame1a = massVhad.frame() ;
   frame1a->addPlotable(hpull,"P") ;
+  // Chi square
+  Double_t chi2 = frame1->chiSquare("fitmc1", "mc1", 3); 
   // The pads
   TPad* fPads1 = NULL;
   TPad* fPads2 = NULL;
@@ -291,6 +316,8 @@ void test01abril(std::string key)
   frame1a->GetYaxis()->SetRangeUser(-5,5);
   frame1a->SetTitle(""); 
   frame1a->Draw();
+  TPaveLabel *t1 = new TPaveLabel(0.7,0.7,0.9,0.9, Form("#chi^{2}/dof = %f", chi2),"brNDC");
+  t1->Draw();
   // SAVE THE FILE 
   cv.SaveAs(Form("otherPlots/domBkgMj%s.png",key.c_str()));
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -313,6 +340,8 @@ void test01abril(std::string key)
   RooHist* hpull2 = frame2->pullHist();
   RooPlot* frame2a = massVhad.frame();
   frame2a->addPlotable(hpull2,"P");
+  // Chi square
+  Double_t chi2a = frame2->chiSquare("fitmc2", "mc2", 3);
   // The pads
   TPad* fPads1a = NULL;
   TPad* fPads2a = NULL;
@@ -353,6 +382,8 @@ void test01abril(std::string key)
   frame2a->GetYaxis()->SetRangeUser(-5,5);
   frame2a->SetTitle("");
   frame2a->Draw();
+  TPaveLabel *t2 = new TPaveLabel(0.7,0.7,0.9,0.9, Form("#chi^{2}/dof = %f", chi2a),"brNDC");
+  t2->Draw();
   // SAVE THE FILE
   cv2.SaveAs(Form("otherPlots/subBkgMj%s.png",key.c_str()));
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -374,6 +405,8 @@ void test01abril(std::string key)
   RooHist* hpull3 = frame3->pullHist();
   RooPlot* frame3a = massVhad.frame();
   frame3a->addPlotable(hpull3,"P"); 
+  // Chi square
+  Double_t chi2b = frame3->chiSquare("fitmc3", "mc3", 5);
   // The Pads
   TPad* fPads1b = NULL;
   TPad* fPads2b = NULL;
@@ -414,8 +447,153 @@ void test01abril(std::string key)
   frame3a->GetYaxis()->SetRangeUser(-5,5);
   frame3a->SetTitle("");
   frame3a->Draw();
+  TPaveLabel *t3 = new TPaveLabel(0.7,0.7,0.9,0.9, Form("#chi^{2}/dof = %f", chi2b),"brNDC");
+  t3->Draw();
   // SAVE THE FILE
   cv3.SaveAs(Form("otherPlots/subBkgMj%s_gaus2.png",key.c_str()));
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
  
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // 4. SUBDOMINANT BACKGROUND (GAUSEXPO)
+  RooPlot* frame4 = massVhad.frame(Title("#bf{CMS} Preliminary #sqrt{s} = 13 TeV"));
+  bkg2.plotOn(frame4,Name("mc4"),Binning(36));
+  model4.plotOn(frame4,Name("fitmc4"), LineColor(kRed));
+  model4a.plotOn(frame4,Name("error4"),VisualizeError(*rf4a,1),FillColor(kAzure-2), FillStyle(3002));
+  model4.paramOn(frame4,Layout(0.55,0.9,0.6));
+  frame4->drawAfter("error4","mc4");
+  frame4->drawAfter("error4","fitmc4");
+  frame4->getAttText()->SetTextSize(0.03);
+  // THE CANVAS
+  TCanvas cv4("cv4","cv4",800,800);
+  // The pulls
+  RooHist* hpull4 = frame4->pullHist();
+  RooPlot* frame4a = massVhad.frame();
+  frame4a->addPlotable(hpull4,"P");
+  // Chi square
+  Double_t chi2c = frame4->chiSquare("fitmc4", "mc4", 4);
+  // The Pads
+  TPad* fPads1c = NULL;
+  TPad* fPads2c = NULL;
+  fPads1c = new TPad("pad1c", "", 0.00, 0.15, 0.99, 0.99);
+  fPads2c = new TPad("pad2c", "", 0.00, 0.05, 0.99, 0.225);
+  fPads1c->SetFillColor(0);
+  fPads1c->SetLineColor(0);
+  fPads2c->SetFillColor(0);
+  fPads2c->SetLineColor(0);
+  fPads1c->Draw();
+  fPads2c->Draw();
+  // First pad
+  fPads1c->cd();
+  frame4->GetYaxis()->SetTitleOffset(1.30);
+  frame4->GetXaxis()->SetLabelSize(0);
+  frame4->Draw();
+  // The Legend
+  TLegend *leg1c = new TLegend(0.55,0.6,0.9,0.9);
+  leg1c->SetHeader(legTitle[key].c_str());
+  leg1c->AddEntry("mc4",  "Subdominant Background ",    "ep");
+  leg1c->AddEntry("fitmc4","GausExpo Background Fit", "l");
+  leg1c->SetTextSize(0.03);
+  leg1c->Draw();
+  TLegendEntry *header1c = (TLegendEntry*)leg1c->GetListOfPrimitives()->First();
+  header1c->SetTextAlign(22);
+  header1c->SetTextColor(1);
+  header1c->SetTextSize(.045);
+  // Second Pad
+  fPads2c->cd();
+  fPads2c->SetGridx();
+  fPads2c->SetGridy();
+  frame4a->GetYaxis()->SetLabelSize(0.08);
+  frame4a->GetXaxis()->SetLabelSize(0.17);
+  frame4a->GetYaxis()->SetTitle("Pulls");
+  frame4a->GetYaxis()->SetTitleOffset(0.30);
+  frame4a->GetYaxis()->SetTitleSize(0.15);
+  frame4a->GetXaxis()->SetTitleSize(0.17);
+  frame4a->GetYaxis()->SetRangeUser(-5,5);
+  frame4a->SetTitle("");
+  frame4a->Draw();
+  TPaveLabel *t4 = new TPaveLabel(0.7,0.7,0.9,0.9, Form("#chi^{2}/dof = %f", chi2c),"brNDC");
+  t4->Draw();
+  // SAVE THE FILE
+  cv4.SaveAs(Form("otherPlots/subBkgMj%s_gausexpo.png",key.c_str()));
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+
+ ////*******************************************************************************
+ ////              FINAL BACKGROUND MODEL
+ ////******************************************************************************* 
+
+ RooAddPdf model_ext("model_ext","sum of extended models",RooArgList(emodel1,emodel3));
+ c1.setConstant(true);
+ offset1.setConstant(true);
+ width1.setConstant(true);
+ mu1.setConstant(true);
+ sigma1.setConstant(true);
+ mu2.setConstant(true);
+ sigma2.setConstant(true);
+ funfrac.setConstant(true);
+ nbkg1.setConstant(false);
+ nbkg2.setConstant(true);
+
+ RooFitResult* erf = model_ext.fitTo(sbObs,Extended(kTRUE),Range("lowerSB,upperSB"),PrintLevel(plevelnorm),Save());
+ RooPlot* frame5 = massVhad.frame(Title("#bf{CMS} Preliminary #sqrt{s} = 13 TeV"));
+ TCanvas cv5("cv5","cv5",800,800);
+ sbObs.plotOn(frame5,Name("data"),Binning(36));
+ model_ext.plotOn(frame5,Name("bothMC"),Range("fullRange"),FillColor(kAzure+6),VLines(),DrawOption("F"));
+ model_ext.plotOn(frame5,Name("dominantMC"),Components("emodel1"),FillColor(kYellow+1),VLines(),DrawOption("F"),Range("fullRange"));
+ model_ext.plotOn(frame5,Name("subdominantMC"),Components("emodel3"),FillColor(kMagenta-4),VLines(),DrawOption("F"),Range("fullRange"));
+ upsigObs.plotOn(frame5,Binning(36),Name("dataupsig"),MarkerColor(kRed));
+ frame5->SetMinimum(0.00005 );
+ frame5->drawAfter("bothMC","dominantMC");
+ frame5->drawAfter("dominantMC","subdominantMC");
+ frame5->drawAfter("subdominantMC","data");
+ // the pulls
+ RooHist* hpull5 = frame5->pullHist("data","bothMC");
+ RooPlot* frame5a = massVhad.frame();
+ frame5a->addPlotable(hpull5,"P"); 
+ // the pads
+ TPad* fPads1d = NULL;
+ TPad* fPads2d = NULL;
+ fPads1d = new TPad("pad1d", "", 0.00, 0.15, 0.99, 0.99);
+ fPads2d = new TPad("pad2d", "", 0.00, 0.05, 0.99, 0.225);
+ fPads1d->SetFillColor(0);
+ fPads1d->SetLineColor(0);
+ fPads2d->SetFillColor(0);
+ fPads2d->SetLineColor(0);
+ fPads1d->Draw();
+ fPads2d->Draw(); 
+ // first pad
+ fPads1d->cd();
+ frame5->GetYaxis()->SetTitleOffset(1.30);
+ frame5->GetXaxis()->SetLabelSize(0);
+ frame5->Draw();
+ // The legend
+ TLegend *leg1d = new TLegend(0.55,0.55,0.9,0.9);
+ leg1d->SetHeader(legTitle[key].c_str());
+ leg1d->AddEntry("bothMC",  "Total MC fit",    "f");
+ leg1d->AddEntry("dominantMC","Dominant MC fit", "f");
+ leg1d->AddEntry("subdominantMC","Subdominant MC fit", "f");
+ leg1d->AddEntry("data","data", "ep");
+ leg1d->AddEntry("dataupsig","data in Higgs region", "ep");
+ leg1d->SetTextSize(0.025);
+ leg1d->Draw();
+ TLegendEntry *header1d = (TLegendEntry*)leg1d->GetListOfPrimitives()->First();
+ header1d->SetTextAlign(22);
+ header1d->SetTextColor(1);
+ header1d->SetTextSize(.05); 
+ //Second Pad
+ fPads2d->cd();
+ fPads2d->SetGridx();
+ fPads2d->SetGridy();
+ frame5a->GetYaxis()->SetLabelSize(0.08);
+ frame5a->GetXaxis()->SetLabelSize(0.17);
+ frame5a->GetYaxis()->SetTitle("Pulls");
+ frame5a->GetYaxis()->SetTitleOffset(0.30);
+ frame5a->GetYaxis()->SetTitleSize(0.15);
+ frame5a->GetXaxis()->SetTitleSize(0.17);
+ frame5a->GetYaxis()->SetRangeUser(-5,5);
+ frame5a->SetTitle("");
+ frame5a->Draw();  
+ // SAVE THE FILE
+ cv5.SaveAs(Form("otherPlots/dataMj%s.png",key.c_str())); 
 }
