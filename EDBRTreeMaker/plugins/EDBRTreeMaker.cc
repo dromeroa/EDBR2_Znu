@@ -131,7 +131,6 @@ private:
   edm::EDGetTokenT<GenEventInfoProduct> genEvtInfoToken;
 
 
-
   //------------------------ V quantities ------------------------------------------
   double ptVhad, yVhad, phiVhad, massVhad;
 
@@ -145,34 +144,40 @@ private:
   double etjet1,   ptjet1,   etajet1,  phijet1;
   double massjet1, softjet1, prunedjet1;
 
- //Recipe to apply JEC to the pruned jet mass:
- ////https://twiki.cern.ch/twiki/bin/view/CMS/JetWtagging#Recipes_to_apply_JEC_on_the_prun
- std::string payload_;
-
   //------------------ AK8 JET ID VARIABLES------------------------------------
   double chf, nhf, cef, nef;
   int nch, nconstituents;
 
   //-----------------------  AK4 JETS  ----------------------------------------------
   int numjets;
-  double ak4jetspt1 , ak4jetseta1, ak4jetsphi1;
+  float ak4jetspt1;
+  double ak4jetseta1, ak4jetsphi1;
   double ak4jetsphi2;
-  double HT, MHTx, MHTy, MHT;
+  double minabsdeltaphi;
+  double ak4jetphi;
+  double absdeltaphiak4jetmet;
 
+  float HT, MHTx, MHTy, MHT;
+  std::vector<float> ak4jetpt;
+  std::vector<float> deltaRjetfatjet; 
+  std::vector<double> deltaphiak4jetmetvec;
   edm::EDGetTokenT<pat::JetCollection> niceak4JetToken_;
+
+  //------------------------  EXTRA JETS ---------------------------------------
+
+  int extranumjets;
+  float extrajetspt1;
+  float extraHT, extraMHTx, extraMHTy, extraMHT;
+  double deltaPhiextrajetjetabs;
+  std::vector<float> extrajetpt; 
+  edm::EDGetTokenT<pat::JetCollection> niceextraJetToken_;
 
   //--------------------DELTAS ------------------------------------------------------- 
   double deltaphijetmet;
-  std::vector<double> deltaRjetfatjet;
-  std::vector<double> deltaphijetfatjet;
-  std::vector<double> deltaRjetjet;
-  std::vector<double> deltaphijetjet;
   //-------------------CANDIDATES MASS -----------------------------------------------
   double candTMass; // transverse mass
 
   double rho; // energy density
-
-  boost::shared_ptr<FactorizedJetCorrector> jecAK8_;
 
 
   void setDummyValues();
@@ -192,7 +197,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   targetLumiInvPb_ (                                   iConfig.getParameter<double>        ( "targetLumiInvPb"   ) ),
   EDBRChannel_     (                                   iConfig.getParameter<std::string>   ( "EDBRChannel"       ) ),
   vertexToken_     ( consumes<reco::VertexCollection>( iConfig.getParameter<edm::InputTag> ( "vertex"          ) ) ),
-  niceak4JetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) ))
+  niceak4JetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )),
+  niceextraJetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceextraJetsSrc" ) ))
 {
 
    using namespace edm;
@@ -210,7 +216,6 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   gravitonsToken    = consumes<reco::CompositeCandidateView>(  InputTag("graviton","","TEST"  ));
   puInfoToken       = consumes<std::vector<PileupSummaryInfo>>(InputTag("slimmedAddPileupInfo"));
   genEvtInfoToken   = consumes<GenEventInfoProduct>(           InputTag("generator"           ));
-
 
   if(EDBRChannel_ == "VZ_CHANNEL")
     channel=VZ_CHANNEL;
@@ -253,6 +258,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   
   /// Generic kinematic quantities
   outTree_->Branch("numjets"         ,&numjets        ,"numjets/I"        );
+  outTree_->Branch("extranumjets"    ,&extranumjets   ,"extranumjets/I"   );
   outTree_->Branch("ptjet1"          ,&ptjet1         ,"ptjet1/D"         );
   outTree_->Branch("etjet1"          ,&etjet1         ,"etjet1/D"         );
   outTree_->Branch("etajet1"         ,&etajet1        ,"etajet1/D"        );
@@ -264,10 +270,14 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("metphi"          ,&metphi         ,"metphi/D"         );
   outTree_->Branch("metpx"           ,&metpx          ,"metpx/D"          );
   outTree_->Branch("metpy"           ,&metpy          ,"metpy/D"          );
-  outTree_->Branch("HT"              ,&HT             ,"HT/D"             );
-  outTree_->Branch("MHT"             ,&MHT            ,"MHT/D"            );
-  outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/D"           );
-  outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/D"           );
+  outTree_->Branch("HT"              ,&HT             ,"HT/F"             );
+  outTree_->Branch("MHT"             ,&MHT            ,"MHT/F"            );
+  outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/F"           );
+  outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/F"           );
+  outTree_->Branch("extraHT"         ,&extraHT        ,"extraHT/F"        );
+  outTree_->Branch("extraMHT"        ,&extraMHT       ,"extraMHT/F"       );
+  outTree_->Branch("extraMHTx"       ,&extraMHTx      ,"extraMHTx/F"      );
+  outTree_->Branch("extraMHTy"       ,&extraMHTy      ,"extraMHTy/F"      );
   outTree_->Branch("sumET"           ,&sumET          ,"sumET/D"          );
   outTree_->Branch("rawmetpt"        ,&rawmetpt       ,"rawmetpt/D"       );
   outTree_->Branch("rawmetphi"       ,&rawmetphi      ,"rawmetphi/D"      );
@@ -279,6 +289,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("calometsumET"    ,&calometsumET   ,"calometsumET/D"   );
   outTree_->Branch("metcorrptup"     ,&metcorrptup    ,"metcorrptup/D"    );
   outTree_->Branch("metcorrptdown"   ,&metcorrptdown  ,"metcorrptdown/D"  );
+  outTree_->Branch("minabsdeltaphi"  ,&minabsdeltaphi ,"minabsdeltaphi/D"    );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
@@ -286,10 +297,10 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
   outTree_->Branch("totalWeight"     ,&totalWeight    ,"totalWeight/D"    );
   outTree_->Branch("deltaphijetmet"    ,&deltaphijetmet   ,"deltaphijetmet/D"   );
-  outTree_->Branch("deltaRjetfatjet"   ,&deltaRjetfatjet                   );
-  outTree_->Branch("deltaphijetfatjet"   ,&deltaphijetfatjet               );
-  outTree_->Branch("deltaRjetjet"   ,&deltaRjetjet                   );
-  outTree_->Branch("deltaphijetjet"   ,&deltaphijetjet                  );
+  outTree_->Branch("ak4jetpt"          ,&ak4jetpt     );
+  outTree_->Branch("extrajetpt"       ,&extrajetpt  );
+  outTree_->Branch("deltaRjetfatjet" ,&deltaRjetfatjet );
+  outTree_->Branch("deltaPhiextrajetjetabs"  ,&deltaPhiextrajetjetabs    ,"deltaPhiextrajetjetabs/D"  );
 
   /// Jet ID variables
   outTree_->Branch("chf"   ,&chf  ,"chf/D"  );
@@ -321,6 +332,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    Handle<reco::CompositeCandidateView > gravitons;
    iEvent.getByToken(gravitonsToken, gravitons);
    numCands = gravitons->size();
+
+
    if(numCands != 0 ) {
 
        const reco::Candidate& graviton = gravitons->at(0);
@@ -420,38 +433,69 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    ////-----------------------------------------------------------------------------------////
                    ////--------------------------------  AK4 JETS  ---------------------------------------////
                    ////-----------------------------------------------------------------------------------////
-                   edm::Handle<std::vector<pat::Jet>> jatos;
-                   iEvent.getByToken(niceak4JetToken_, jatos);
+                   ak4jetpt.clear();
                    deltaRjetfatjet.clear();
-                   deltaphijetfatjet.clear();
-                   deltaRjetjet.clear();
-                   deltaphijetjet.clear(); 
+                   deltaphiak4jetmetvec.clear();
+                   Handle<pat::JetCollection> jatos;
+                   iEvent.getByToken(niceak4JetToken_, jatos);
                    ////--- NUMBER OF JETS ----//// 
                    numjets = jatos->size(); 
+                   //// Min deltaPhi(ak4jet, MET) 
+                   for(unsigned int k = 0; k != jatos->size(); ++k) {
+                       const pat::Jet& ak4jet = jatos->at(k);
+                         ak4jetphi = ak4jet.phi();
+                         absdeltaphiak4jetmet = abs(deltaPhi(ak4jetphi, metphi)); 
+                         deltaphiak4jetmetvec.push_back(absdeltaphiak4jetmet);
+                   }       
+                   // sort
+                   std::sort( deltaphiak4jetmetvec.begin(), deltaphiak4jetmetvec.end());
+                   // mindeltaPhi
+                   if (deltaphiak4jetmetvec.size()){
+                       minabsdeltaphi = deltaphiak4jetmetvec[0];
+                   }
+                 
                    ////--------  HT AND MHT  -------------////
                    HT=0;
-                   MHTx = 0, MHTy = 0;
-
+                   MHTx = 0, MHTy = 0; 
                    for(unsigned int i = 0; i != jatos->size(); ++i) {
-                       const pat::Jet& jet1 = jatos->at(i);
-                         ak4jetspt1  =  jet1.pt();
-                         ak4jetseta1 =  jet1.eta();
-                         ak4jetsphi1 =  jet1.phi();
-                         HT += ak4jetspt1;
-                         MHTx -= jet1.px();
-                         MHTy -= jet1.py();
-                         deltaRjetfatjet.push_back(deltaR(hadronicVnu,jet1));
-                         deltaphijetfatjet.push_back(TMath::Abs(deltaPhi(phiVhad,ak4jetsphi1)));
-                           
-                         for(unsigned int j = (i+1); j != jatos->size(); ++j) {
-                             const pat::Jet& jet2 = jatos->at(j);
-                             ak4jetsphi2 =  jet2.phi(); 
-                             deltaRjetjet.push_back(deltaR(jet1,jet2));                                                                                        deltaphijetjet.push_back(TMath::Abs(deltaPhi(ak4jetsphi1,ak4jetsphi2)));
-                         }
-                          
+                            const pat::Jet& jet1 = jatos->at(i);
+                            ak4jetspt1    =  jet1.pt(); 
+                            ak4jetseta1   =  jet1.eta();
+                            ak4jetsphi1   =  jet1.phi();
+                            HT += ak4jetspt1;
+                            MHTx -= jet1.px();
+                            MHTy -= jet1.py(); 
+                            ak4jetpt.push_back(ak4jetspt1); 
+                            deltaRjetfatjet.push_back(jet1.userFloat("deltaRjetfatjet"));               
                     }         
                     MHT = sqrt( MHTx*MHTx + MHTy*MHTy );
-                    ////---------------------------------------------------------------------------////
+                   ////-----------------------------------------------------------------------------
+                   //// --------------   EXTRA JETS -----------------------------------------------
+                   ////--------------------------------------------------------------------------
+                   extrajetpt.clear();                 
+                   Handle<pat::JetCollection> extrajatos;
+                   iEvent.getByToken(niceextraJetToken_, extrajatos);
+                   extranumjets = extrajatos->size(); 
+                   extraHT=0;
+                   extraMHTx = 0, extraMHTy = 0;
+                   for(unsigned int j = 0; j != extrajatos->size(); ++j) {
+                           const pat::Jet& jat1 = extrajatos->at(j);
+                           extrajetspt1    =  jat1.pt();
+                           extraHT += extrajetspt1;
+                           extraMHTx -= jat1.px();
+                           extraMHTy -= jat1.py();
+                           extrajetpt.push_back(extrajetspt1);    
+                   }
+                   extraMHT = sqrt( extraMHTx*extraMHTx + extraMHTy*extraMHTy );
+                   ////deltaphi(jet1,jet2) extrajets
+                    if(extranumjets==2){
+                         const pat::Jet &jeta = extrajatos->at(0);
+                         const pat::Jet &jetb = extrajatos->at(1);
+                         double phia = jeta.phi();
+                         double phib = jetb.phi();
+                         deltaPhiextrajetjetabs = abs(deltaPhi(phia,phib));
+                    }   
+                   ////---------------------------------------------------------------------------////
                     ////--------------------------  OTHER VARIABLES  ------------------------------////
                     ////---------------------------------------------------------------------------////
                     ////delta Phi between jet and met(from graviton) 
@@ -467,11 +511,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
        }// close not isGen
        
-//       if(isGen_) {
-//	   massVhad = hadronicV.userFloat("ak8GenJetsSoftDropMass");
-//	   nVtx = 0;
-//       }
-
 //------------------------------------------
 
         /// For data, all weights are equal to 1
@@ -483,15 +522,16 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               // pileup reweight
               Handle<std::vector< PileupSummaryInfo > > puInfo;
               iEvent.getByToken(puInfoToken, puInfo);
-              std::vector<PileupSummaryInfo>::const_iterator PVI;
-              for(PVI = puInfo->begin(); PVI != puInfo->end(); ++PVI) {
-                  int BX = PVI->getBunchCrossing();
-                  if( BX == 0 ){
-                          int bin = h1->FindBin(PVI->getTrueNumInteractions());
-                          pileupWeight = h1->GetBinContent(bin);
-                          continue;
-                  }
-              }
+                    std::vector<PileupSummaryInfo>::const_iterator PVI;
+                    for(PVI = puInfo->begin(); PVI != puInfo->end(); ++PVI) {
+                    int BX = PVI->getBunchCrossing();
+                      if( BX == 0 ){
+                            int bin = h1->FindBin(PVI->getTrueNumInteractions());
+                            pileupWeight = h1->GetBinContent(bin);
+                            continue;
+                      }
+                    }
+               
               // generator weight
               edm::Handle<GenEventInfoProduct>   genEvtInfo; 
               iEvent.getByToken(genEvtInfoToken, genEvtInfo );
@@ -528,7 +568,9 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    
        outTree_->Fill();
-   }
+
+  } // end of numcandidate != 0
+
    else {
        /// If we arrive here, that means we have NOT found a resonance candidate,
        /// i.e. numCands == 0.
@@ -555,7 +597,8 @@ void EDBRTreeMaker::setDummyValues() {
      tau2           = -1e4;
      tau3           = -1e4;
      tau21          = -1e4;
-     numjets        = -1e4; 
+     numjets        = -1e4;
+     extranumjets   = -1e4; 
      etjet1         = -1e4;
      ptjet1         = -1e4;
      etajet1        = -1e4;
@@ -591,6 +634,8 @@ void EDBRTreeMaker::setDummyValues() {
      nconstituents  = -1e4;
      metcorrptup    = -1e4;
      metcorrptdown  = -1e4;
+     minabsdeltaphi = -1e4;
+     deltaPhiextrajetjetabs = -1e4;
 
 }
 

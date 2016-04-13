@@ -159,7 +159,9 @@ process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
+
 
 ##***************************************************************************************#
 ##     8. Modules                                                                        #
@@ -241,7 +243,8 @@ process.analysis          = cms.Path(
                                              process.jetSequence                *
                                              process.ak4jetSequence             *
                                              process.extrajetSequence           *
-                                             process.mindeltaPhiSequence        *
+#                                             process.Numberjetsak4QCDSequence   *
+#                                             process.deltaPhiak4JetsSequence    *
                                              process.egmGsfElectronIDs          *
                                              process.VETOSelectEvents           *
                                              process.egmPhotonIDs               *

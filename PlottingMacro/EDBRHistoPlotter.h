@@ -10,9 +10,11 @@
 #include "TString.h"
 #include "TObjString.h"
 #include "TSystem.h"
+#include "TPaveText.h"
 #include "CMSLabels.h"
 #include "TVectorD.h"
 #include "TGraph.h"
+#include "CMS_lumi.h"
 
 class EDBRHistoPlotter {
 public:
@@ -272,25 +274,31 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
   //create 3 pads in the canvas
   TPad* fPads1 = NULL;
   TPad* fPads2 = NULL;
-  TPad* fPads3 = NULL;
+//  TPad* fPads3 = NULL;
 
    // FOR NOW WE ARE GOING TO USE ONLY TWO PADS
 
+ 
   if (makeRatio_ && isDataPresent_) {
 //    fPads1 = new TPad("pad1", "", 0.00, 0.40, 0.99, 0.99);
-     fPads1 = new TPad("pad1", "", 0.00, 0.19, 0.99, 0.99); 
+      // for only 2 pads
+    fPads1 = new TPad("pad1", "", 0.00, 0.26, 0.99, 0.99); 
+     
 //    fPads2 = new TPad("pad2", "", 0.00, 0.20, 0.99, 0.40);
-    fPads2 = new TPad("pad2", "", 0.00, 0.00, 0.99, 0.20);
-    fPads3 = new TPad("pad3", "", 0.00, 0.00, 0.99, 0.20);
+    // for only 2 pads
+    fPads2 = new TPad("pad2", "", 0.00, 0.060, 0.99, 0.26);
+//    fPads3 = new TPad("pad3", "", 0.00, 0.00, 0.99, 0.20);
     fPads1->SetFillColor(0);
     fPads1->SetLineColor(0);
+    fPads1->SetTickx(0);
     fPads2->SetFillColor(0);
     fPads2->SetLineColor(0);
-    fPads3->SetFillColor(0);
-    fPads3->SetLineColor(0);
+//    fPads3->SetFillColor(0);
+//    fPads3->SetLineColor(0);
     fPads1->Draw();
     fPads2->Draw();
 // FOR NOW WE ONLY WANT DATA/BACK RATIO
+// If we ccomment this plot only 2 hitograms
 //    fPads3->Draw();
   }
 
@@ -298,6 +306,7 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
 
   if (makeRatio_ && isDataPresent_) {
     fPads1->cd();
+    fPads1->SetBottomMargin(0);
   }
 
   ///--------------------
@@ -349,6 +358,8 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
 
   double sumBkgOther = 0.;
   double sumWJets = 0.;
+  std::vector<double> yieldMC;
+
   for (size_t i = 0; i != filesMC.size(); ++i) {
     TH1D* histo = (TH1D*)(filesMC.at(i)->Get(histoName.c_str())->Clone(labels.at(i).c_str()));
 
@@ -358,11 +369,12 @@ void EDBRHistoPlotter::makeStackPlots(std::string histoName)
       histo->Print();
     }
     sumBkgAtTargetLumi += (histo->Integral() * targetLumi_);
+     yieldMC.push_back( histo->Integral() * targetLumi_);
 
 
     if (debug_)cout << "filesMC.at(i)->GetName()   " << filesMC.at(i)->GetName() << endl;
     TString filename = filesMC.at(i)->GetName();
-    if (filename.Contains("WJets")) sumWJets += (histo->Integral() * targetLumi_);
+    if (filename.Contains("VJets")) sumWJets += (histo->Integral() * targetLumi_);
     else sumBkgOther += (histo->Integral() * targetLumi_);
   }
   if (debug_)cout << sumBkgAtTargetLumi << " " << sumWJets << " " << sumBkgOther << " " << sumWJets + sumBkgOther << endl;
@@ -379,8 +391,10 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
       TH1D* histo = (TH1D*)(filesMC.at(i)->Get(histoName.c_str())->Clone(labels.at(i).c_str()));
       histo->SetDirectory(0);
       histo->SetFillColor(getFillColor(i));
-      //// para graficar las diferentes componetes del mismo color
-    histo->SetLineColor(getFillColor(i));     
+//// para graficar las diferentes componetes del mismo color
+//// Cuando unamos las trees hay que comentarlo
+//    histo->SetLineColor(getFillColor(i));     
+    //--------------------------------------------------------
     TString filename = filesMC.at(i)->GetName();
     histo->Scale(kFactorsMC_.at(i));
     if (filename.Contains("WJets"))histo->Scale(WJetsScaleFactor);
@@ -487,16 +501,44 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
   /// Draw both MC and DATA in the stack
   ///-----------------------------------
 
+  std::map<std::string, std::string> axisTitle;
+  axisTitle["h_nVtx"]          = "Number of Primary Vertices";
+  axisTitle["h_ptZjj"]         = "Fat jet p_{T} (GeV)"; 
+  axisTitle["h_yZjj"]          = "Fat jet #eta"; 
+  axisTitle["h_phiZjj"]        = "Fat jet #phi"; 
+  axisTitle["h_massZjj"]       = "jet pruned mass (GeV)"; 
+  axisTitle["h_tau21"]         = "#tau_{21}"; 
+  axisTitle["h_region"]        = "region"; 
+  axisTitle["h_triggerWeight"] = "trigger weight"; 
+  axisTitle["h_lumiWeight"]    = "luminosity weight"; 
+  axisTitle["h_pileupWeight"]  = "pileup weight"; 
+  axisTitle["h_numjets"]         = "Number of jets";
+  axisTitle["h_candTMass"]      = "VZ Candidate Transverse Mass (GeV)"; 
+  axisTitle["h_metpt"]          = "MET (GeV)";
+  axisTitle["h_metphi"]         = "MET #phi ";
+  axisTitle["h_HT"]             = "HT (GeV)";
+  axisTitle["h_MHT"]            = "MHT (GeV)";
+  axisTitle["h_deltaPhijetjetabs"] = "#Delta #phi";
+  axisTitle["h_chf"]               = "Charged Hadron Fraction";
+  axisTitle["h_nhf"]               = "Neutral Hadron fraction";
+  axisTitle["h_cef"]               = "Charged EM Fraction";
+  axisTitle["h_nef"]               = "Neutral EM Fraction";
+  axisTitle["h_nch"]               = "Charged Multiplicity";
+  axisTitle["h_nconstituents"]    =  "Number of Constituents";
+  axisTitle["h_genZpt"]           =  "Gen Z p_{T} (GeV)";
+  axisTitle["h_genWpt"]           =  "Gen W p_{T} (GeV)";
+
   hs->Draw("HIST");
-  hs->GetXaxis()->SetTitle(histoName.c_str());
+//  hs->GetXaxis()->SetTitle(histoName.c_str());
+//  hs->GetXaxis()->SetTitle(axisTitle[histoName].c_str());
   hs->GetYaxis()->SetTitle("Events");
 //  hs->GetYaxis()->SetTitle("Normalized to Luminosity");
   hs->GetYaxis()->SetTitleOffset(1.15);
   hs->GetYaxis()->CenterTitle();
-  double maximumMC = 1.15 * sumMC->GetMaximum();
+  double maximumMC = 1.33 * sumMC->GetMaximum();
   double maximumDATA = -100;
   if (isDataPresent_)
-    maximumDATA = 1.15 * sumDATA->GetMaximum();
+    maximumDATA = 1.33 * sumDATA->GetMaximum();
   double maximumForStack = -100;
   if (isDataPresent_)
     maximumForStack = (maximumMC > maximumDATA ? maximumMC : maximumDATA);
@@ -510,10 +552,41 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
   }
 
   hs->SetMinimum(0.1);
+
+  // CHANGE THIS
+//  hs->SetMaximum(700);
+
   hs->Draw("HIST");
-  sumMC->Draw("HISTO SAME");
+
+//--------- new
+  sumMC->SetTitle("");
+  TH1* histoForErrors = (TH1*)sumMC->Clone("histoForErrors");
+  histoForErrors->SetLineWidth(1);
+  histoForErrors->SetLineColor(0);
+  histoForErrors->SetFillColor(kPink-4);
+  histoForErrors->SetMarkerSize(0);
+  histoForErrors->SetFillStyle(1001);
+  histoForErrors->Draw("E2SAME");
+
+  TH1* histoForLine = (TH1*)sumMC->Clone("histoForLine");
+  histoForLine->SetLineWidth(2);
+  histoForLine->SetLineColor(kBlack);
+  histoForLine->SetFillStyle(0);
+  histoForLine->Draw("HISTSAME");
+//-----------
+
+//// quit for now
+//  sumMC->Draw("HISTO SAME");
+
+
+
   if (isDataPresent_)
-    sumDATA->Draw("SAME E1");
+//    sumDATA->Draw("SAME E1");
+//    we change the thick of the error bar
+      sumDATA->Draw("SAME E X0");
+// we want to change the style and size of the marker in data
+    sumDATA->SetMarkerStyle(20);
+    sumDATA->SetMarkerSize(0.9);
   for (size_t is = 0; is != histosMCSig.size(); is++) {
     if (isSignalStackOnBkg_ == true)
       histosMCSig.at(is)->Draw("HISTO SAME");
@@ -541,6 +614,79 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
     }
   }
 
+
+
+//---------------------------------------------------------------------
+
+ TLegend* leg = new TLegend(0.35, 0.72, 0.92, 0.90);
+leg->SetMargin(0.4);
+leg->SetNColumns(3);
+leg->SetFillStyle(0);
+if (makeRatio_ ) leg->SetTextSize(0.038);
+else leg->SetTextSize(0.040);
+if (isDataPresent_) leg->AddEntry(sumDATA, "Data", "ep");
+histoForErrors->SetLineColor(kBlack);
+histoForErrors->SetLineWidth(2);
+leg->AddEntry(histoForErrors, "Stat. Unc.", "pf");
+
+//--------------------------------
+for (int i = histosMC.size()-1; i != -1; --i)
+//leg->AddEntry(histosMC.at(i), Form("%s (%.0f)",labels.at(i).c_str(), yieldMC.at(i)), "f");
+leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+
+
+
+ if (histosMCSig.size() > 0) {
+char rescalingLabel[64];
+for (size_t i = 0; i != histosMCSig.size(); ++i) {
+sprintf(rescalingLabel, " (x%g)", kFactorsSig_.at(i));
+std::string rescalingStr(rescalingLabel);
+
+ if (false)leg->AddEntry(histosMCSig.at(i), (labelsSig.at(i) + rescalingStr).c_str(), "lf");
+
+else leg->AddEntry(histosMCSigOrig.at(i), "G_{bulk} 2 TeV", "f");
+}
+}
+leg->SetFillColor(kWhite);
+leg->Draw();
+
+CMS_lumi(cv,0,10,true,"Preliminary");
+
+     Double_t chi2ndf = sumDATA->Chi2Test(sumMC,"UW CHI2/NDF");
+     Double_t ks = sumDATA->KolmogorovTest(sumMC);
+
+     TPaveText *pave1 = new TPaveText(0.75,0.80,0.90,0.83,"NDC");
+     pave1->SetBorderSize(0);
+     pave1->SetFillStyle(0);
+     pave1->SetTextFont(53);
+     pave1->SetTextSize(12);
+     pave1->AddText(Form("Data/Bkg = %.3f",sumDataIntegral / sumBkgAtTargetLumi));
+     pave1->Draw();
+
+
+     TPaveText *pave2 = new TPaveText(0.75,0.77,0.90,0.80,"NDC");
+     pave2->SetBorderSize(0);
+     pave2->SetFillStyle(0);
+     pave2->SetTextFont(53);
+     pave2->SetTextSize(12);
+     pave2->AddText(Form("#chi^{2} / ndf = %.3f",chi2ndf));
+     pave2->Draw();
+
+     TPaveText *pave3 = new TPaveText(0.75,0.74,0.90,0.77,"NDC");
+     pave3->SetBorderSize(0);
+     pave3->SetFillStyle(0);
+     pave3->SetTextFont(53);
+     pave3->SetTextSize(12);
+     pave3->AddText(Form("K.S = %.3f",ks));
+     pave3->Draw();
+
+
+
+
+
+/*
+//------------------------------------------------------------------------
+
   //// For the legend, we have to tokenize the name "histos_XXX.root"
   ////  HERE WE DEFINE THE OPTIONS OF THE LABELS--------------------
     TLegend* leg = new TLegend(0.68, 0.65, 0.93, 0.9);
@@ -556,18 +702,21 @@ for (size_t i = 0; i != filesMC.size(); ++i) {
 //    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
 ////---------------------------------------------------------------
     //// TO INVERT THE LABELS ORDER
+
+
+
 for (int i = histosMC.size()-1; i>0; --i){
-     if(i>15){
+     if(i>16){
                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
                i= i-4;
      }
-     if (i>11 ){
+     if (i>12 ){
                 leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-                i = i-5;
+                i = i-4;
      }
-     if (i>6 ){
+     if (i>8 ){
                leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
-               i = i-4;
+               i = i-6;
      }
      if (i==2 ){
                 leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
@@ -577,6 +726,12 @@ for (int i = histosMC.size()-1; i>0; --i){
                 leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
      }
 }
+
+////---------------------------------------------------------------
+// PARA CUANDO UNAMOS LAS TREES EN VEZ DE LO QUE ESTA ENCIMA
+//for (int i = histosMC.size()-1; i != -1; --i)
+//    leg->AddEntry(histosMC.at(i), labels.at(i).c_str(), "f");
+
     
 ////----------------------------------------------------------------
   if (histosMCSig.size() > 0) {
@@ -594,12 +749,15 @@ for (int i = histosMC.size()-1; i>0; --i){
   leg->Draw();
 
   //// Nice labels
-   TMathText* l = makeCMSWorkTop(13, 0.10, 0.935);
-  l->Draw();
+   TMathText* l1 = makeCMSWorkTop(13, 0.15, 0.935);
+   TMathText* l2 = makeCMSLumi(2.144, 0.70, 0.935);
+   l1->Draw();
+   l2->Draw();
 
   //l = makeCMSLumi(13, 19.8, 0.5, 0.935);
   //l = makeChannelLabel(wantNXJets_, flavour_, isZZchannel_);
-  
+*/ 
+ 
   /*
   //============ Save the full background histogram ============
 
@@ -615,33 +773,46 @@ for (int i = histosMC.size()-1; i>0; --i){
 
   //============ Data/MC ratio ==============
 
+
   TLine* lineAtOne = NULL;
   if (makeRatio_ && isDataPresent_) {
     fPads2->cd();
-
-    fPads2->SetGridx();
-    fPads2->SetGridy();
+    fPads2->SetTopMargin(0);
+    fPads2->SetBottomMargin(0.2);
+    fPads2->SetTickx(0); 
+//    fPads2->SetGridx();
+//    fPads2->SetGridy();
 
     TH1D* histoRatio = (TH1D*)sumDATA->Clone("ratio");
     histoRatio->SetDirectory(0);
     histoRatio->SetTitle("");
     histoRatio->Divide(sumMC);
-    histoRatio->GetYaxis()->SetRangeUser(0.5, 1.5);
+    histoRatio->GetYaxis()->SetRangeUser(0.0, 2.0);
     histoRatio->GetYaxis()->SetTitle("Data/Bkg");
     histoRatio->GetYaxis()->SetTitleOffset(0.43);
     histoRatio->GetYaxis()->SetTitleSize(0.15);
-    histoRatio->GetYaxis()->SetLabelSize(0.07);
-    histoRatio->GetXaxis()->SetTitle("");
-    histoRatio->GetXaxis()->SetTitleOffset(0.01);
-    histoRatio->GetXaxis()->SetLabelSize(0.09);
-    histoRatio->SetMarkerStyle(1);
+    histoRatio->GetYaxis()->SetLabelSize(0.1);
+    histoRatio->GetYaxis()->SetNdivisions(509);
+    histoRatio->GetXaxis()->SetTitle(axisTitle[histoName].c_str());
+    histoRatio->GetXaxis()->SetTitleOffset(0.9);
+    histoRatio->GetXaxis()->SetLabelSize(0.15);
+    histoRatio->GetXaxis()->SetTitleSize(0.2);
+    histoRatio->GetXaxis()->SetTickLength(0.1);
+    histoRatio->SetMarkerColor(kBlue+3);
+    histoRatio->SetMarkerStyle(20);
+    histoRatio->SetMarkerSize(0.8);
+    histoRatio->SetLineColor(kBlue+3); 
     histoRatio->Draw("p");
 
     lineAtOne = new TLine(histoRatio->GetXaxis()->GetXmin(), 1, histoRatio->GetXaxis()->GetXmax(), 1);
     lineAtOne->SetLineColor(2);
     lineAtOne->Draw();
+
+
   }
 
+
+/*
   //============ Data-MC/Error ==============
 
   TLine* lineAtZero = NULL;
@@ -711,7 +882,18 @@ for (int i = histosMC.size()-1; i>0; --i){
     lineAtMinusTwo->SetLineColor(2);
     lineAtMinusTwo->SetLineStyle(1);
     lineAtMinusTwo->Draw();
+
+    Double_t chi2ndf = sumDATA->Chi2Test(sumMC,"UW CHI2/NDF");
+//    Double_t chi2ndf = sumDATA->Chi2Test(sumMC,"P");
+    TPaveText *pave2 = new TPaveText(0.62,0.62,0.92,0.92,"NDC");
+    pave2->SetBorderSize(0);
+    pave2->SetFillStyle(0);
+    pave2->AddText(Form("#chi^{2} / ndf = %.4f",chi2ndf));
+//    pave2->Draw();
+
+
   }
+*/
 
   // Save the picture
   char buffer[256];
@@ -724,6 +906,7 @@ for (int i = histosMC.size()-1; i>0; --i){
   cv->SaveAs(buffer);
   if (makeRatio_ && isDataPresent_) {
     fPads1->cd();
+    fPads1->SetBottomMargin(0);
     fPads1->SetLogy(true);
   } else {
     cv->SetLogy(true);

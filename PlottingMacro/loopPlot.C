@@ -32,7 +32,7 @@ void loopPlot(){
   /// Luminosity value in fb^-1
   /// Scale histograms (line 403 EDBRHistoPloter.h) 
   /// Use lumiValue = 1. if actualWeights (lines 562-585 EDBRHistoMaker.h) were consistently defined in the EDBRTreeMaker 
-  double lumiValue = 1546.938/1000;; 
+  double lumiValue = 1; 
   /// Should we scale the histograms to data?
 //   bool scaleToData = true; 
   bool scaleToData = false;
@@ -52,17 +52,52 @@ void loopPlot(){
     //// THE LOCATION OF THE TREES
 //    std::string pathToTrees="../EDBRTreeMaker/test/trees_Oct14/";
 //      std::string pathToTrees="../EDBRTreeMaker/test/trees_pu/";
-      std::string pathToTrees="../EDBRTreeMaker/test/trees_09Nov/";
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_19Ene2016_BASE/";
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_22Ene2016_CUTS/";
+
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_28Enero/";
+
+        std::string pathToTrees="../EDBRTreeMaker/test/trees18Marzo/";
+
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_11Feb/"; 
+
+//      std::string pathToTrees="../EDBRTreeMaker/test/trees_23Ene2016_CUTS/";
+//        std::string pathToTrees="../EDBRTreeMaker/test/trees_19Ene2016_CUTS/";
+//        std::string pathToTrees="../EDBRTreeMaker/test/trees_14Ene2016_CUTS/";
     //// THE LOCATION WHERE SAVE THE PLOTS
 //    std::string outputDir = "./plots_test_Run2_Oct14"; 
 //    std::string outputDir = "./plots_test_Run2_Oct14_withjetIDcut1";
-      std::string outputDir = "./plots_09Nov"; 
+//      std::string outputDir = "./plots_19Ene2016_BASE"; 
+//      std::string outputDir = "./plots_19Ene2016_sincuts"; 
+//      std::string outputDir = "./plots_19Ene2016_CUTS";
+//      std::string outputDir = "./plots_22Ene2016_CUTS";
+//      std::string outputDir = "./plots_28Ene2016_sh#@purity_changemassscale";
+      //std::string outputDir = "./plots_28Ene2016_highpurity_unblind";
+//      std::string outputDir = "./plots_16feb2016_highpurity_flatSF";
+//      std::string outputDir = "./plots_16feb2016_lowpurity_flatSF";
+//        std::string outputDir = "./plots_16feb2016_antipurity_flatSF";
+//        std::string outputDir = "./plots_04Feb2016_nopurity";
+//      std::string outputDir = "./plots_04Feb2016_antipurity";
+//        std::string outputDir = "./plots_09Feb2016_antipurity_SF";
+//        std::string outputDir = "./plots_12Feb2016_antipurity";
+//          std::string outputDir = "./plots_12Feb2016_antipurity_SF";
+//    std::string outputDir = "./plots_16Feb2016_antipurity_SF";
+//      std::string outputDir = "./plots_02Mar2016_NOpurity";
+//        std::string outputDir = "./plots_02Mar2016_AP";
+//        std::string outputDir = "./plots_02Mar2016_HP";
+//        std::string outputDir = "./plots_17Mar2016_LP";
+          std::string outputDir = "./plots_18Mar2016";
 ///********************************************************************************
 ///              2. SETUP THE NAMES OF THE DATA FILES FOR TREES   
 ///********************************************************************************
+
      const int nDATA=2;
-     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015",
-                                   "MET_Run2015D_v4_04Nov"}; 
+//     std::string dataLabels[nDATA]={"MET_Run2015D_05Oct2015_BASELINE",
+//                                   "MET_Run2015D_v4_BASELINE"}; 
+
+     std::string dataLabels[nDATA]={"MET_Run2015C_25ns_16Dec2015_v1",
+                                   "MET_Run2015D_16Dec2015_v1"};
+
     //const int nDATA=0;//set to zero if you don't want to plot
     //std::string dataLabels[nDATA]={};
     std::vector<std::string> fData;
@@ -75,32 +110,50 @@ void loopPlot(){
 ////            3. SETUP NAMES OF MC FILES FOR TREES 
 ////*****************************************************************************
   //const int nMC=0;
-  const int nMC=17;//set to zero if you don't want to plot
-  std::string mcLabels[nMC]={  "WW",
-                               "ZZ",
+
+
+//---------------------------------------------------------------------------------
+
+//    const int nMC=16;
+//  const int nMC=18;
+    const int nMC=5;   //set to zero if you don't want to plot
+  std::string mcLabels[nMC]={
+//                               "WW",
+//                               "ZZ",
                                "VV",
                                "TTbar",
-                               "WJetsToLNu_HT-100To200",
-                               "WJetsToLNu_HT-200To400",
-                               "WJetsToLNu_HT-400To600",
-                               "W+Jets",
-                               "QCD_HT500to700",
-                               "QCD_HT700to1000",
-                               "QCD_HT1000to1500",
-                               "QCD_HT1500to2000",
+//                               "QCD_HT300to500",
+//                               "QCD_HT500to700",
+//                               "QCD_HT700to1000",
+//                               "QCD_HT1000to1500",
+//                               "QCD_HT1500to2000",
                                "QCD",
-                               "ZJetsToNuNu_HT-100To200",
-                               "ZJetsToNuNu_HT-200To400",
-                               "ZJetsToNuNu_HT-400To600",
+//                               "WJetsToLNu_HT-100To200",
+//                               "WJetsToLNu_HT-200To400",
+//                               "WJetsToLNu_HT-400To600",
+                               "W+Jets",
+//                               "ZJetsToNuNu_HT-100To200",
+//                               "ZJetsToNuNu_HT-200To400",
+//                               "ZJetsToNuNu_HT-400To600",
                                "Z+Jets"};
 
 
   //// THE FACTORS FOR MC
-  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+//  double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1.459, 1.434, 1.532, 1.004, 1, 1, 1, 1, 1, 1, 1.626, 1.617, 1.459, 1.391};
+
+// double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
+//   double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
+double kFactorsMC_array[nMC] = {1, 1, 1, 1, 1};
+//----------------------------------------------------------------------------------------------
+
   
   std::vector<std::string> fMC;
   for(int ii=0;ii<nMC;ii++){
-    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+"_25ns_v2.root");
+    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+"_25ns_v2_f.root");
+   // PARA CUANDO JUNTEMO LAS TREES
+//    fMC.push_back(pathToTrees+"treeEDBR_"+mcLabels[ii]+".root");
   }
 
   std::vector<double> kFactorsMC;
@@ -117,9 +170,10 @@ void loopPlot(){
   //// UNCOMMENT THIS TO PLOT THE SIGNAL MC
   //const int nMCSig=1;
   //std::string mcLabelsSig[nMCSig]={"RSGravToZZ_kMpl01_M-2000_25ns"};
+  //std::string mcLabelsSig[nMCSig]={"BulkGrav_ZZ_M2000_25ns_v2_CUTS"};
 
   double kFactorsSig_array[nMCSig] = {};
-  //double kFactorsSig_array[nMCSig] = {10};
+  //double kFactorsSig_array[nMCSig] = {25};
 
   std::vector<double> kFactorsMCSig;
   for (int index=0; index<nMCSig; index++)
@@ -308,27 +362,42 @@ void loopPlot(){
   ////// {DYJetsToLL_HT-100to200,DYJetsToLL_HT-200to400,DYJetsToLL_HT-200to400,DYJetsToLL_HT-600toInf}
   std::vector<int> fColorsMC;
 
-  fColorsMC.push_back(kRed-10);
-  fColorsMC.push_back(kRed-10);
-  fColorsMC.push_back(kRed-10);
+  fColorsMC.push_back(kMagenta-10);
 
-  fColorsMC.push_back(kAzure-5);
+  fColorsMC.push_back(kGreen-3);
 
-  fColorsMC.push_back(kRed-4);
-  fColorsMC.push_back(kRed-4);
-  fColorsMC.push_back(kRed-4);
-  fColorsMC.push_back(kRed-4);
+  fColorsMC.push_back(kAzure-4);
 
-  fColorsMC.push_back(kYellow-7);
-  fColorsMC.push_back(kYellow-7);
-  fColorsMC.push_back(kYellow-7);
-  fColorsMC.push_back(kYellow-7);
-  fColorsMC.push_back(kYellow-7);
 
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
-  fColorsMC.push_back(kTeal-8);
+  fColorsMC.push_back(kOrange-4);
+
+  fColorsMC.push_back(kYellow-10);
+//--------------------------------
+/*
+  fColorsMC.push_back(kBlue+4);
+  fColorsMC.push_back(kBlue+4);
+  fColorsMC.push_back(kBlue+4);
+
+  fColorsMC.push_back(kAzure+3);
+
+  fColorsMC.push_back(kCyan-5);
+  fColorsMC.push_back(kCyan-5);
+  fColorsMC.push_back(kCyan-5);
+  fColorsMC.push_back(kCyan-5);
+
+  fColorsMC.push_back(kYellow-8);
+  fColorsMC.push_back(kYellow-8);
+  fColorsMC.push_back(kYellow-8);
+  fColorsMC.push_back(kYellow-8);
+  fColorsMC.push_back(kYellow-8);
+  fColorsMC.push_back(kYellow-8);
+
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+  fColorsMC.push_back(kYellow-10);
+*/
+//--------------------------------
 
 //  fColorsMC.push_back(kTeal-8);
 //  fColorsMC.push_back(kYellow-5);
@@ -337,6 +406,9 @@ void loopPlot(){
 //  fColorsMC.push_back(kYellow-7);
 //  fColorsMC.push_back(kYellow-7);
 //  fColorsMC.push_back(kYellow-7);
+//-----------------------------------------
+
+
 /*
   fColorsMC.push_back(kYellow-10);
   fColorsMC.push_back(kYellow-10);

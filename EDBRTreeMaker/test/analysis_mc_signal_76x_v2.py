@@ -37,7 +37,8 @@ VZ_JetMET       = True
 ##***************************************************************************************#                
 ## Signal                                                         
 SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
-
+#SAMPLE="RSGravZZToZZinv_2500_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_4000_76xs_v2"
 
 ### To use with CRAB
 #import sys
@@ -51,23 +52,25 @@ SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
 process.load("ExoDiBosonResonances.EDBRCommon.Simulation76X."+SAMPLE)
 ## Number of Events to run
 process.maxEvents.input = -1
-#process.maxEvents.input = 40000
+#process.maxEvents.input = 20000
 
 
 ##***************************************************************************************#
 ##     6. Cross Section and number of events of the samples                              #
 ##***************************************************************************************#
-## Cross sections based on
-## https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns (1 Billion campaign)
+## Cross sections (pb)
 
 configXsecs = { 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 1,
+                "RSGravZZToZZinv_1000_76xs_v2"           : 0.4802378249,
+                "RSGravZZToZZinv_2500_76xs_v2"           : 0.0021077948,
+                "RSGravZZToZZinv_4000_76xs_v2"           : 1,
              }
 
 configNevents = {
 
                 "RSGravZZToZZinv_1000_76xs_v2"           : 100000,
-        
+                "RSGravZZToZZinv_2500_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_4000_76xs_v2"           : 100000,
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -83,20 +86,19 @@ process.load("ExoDiBosonResonances.EDBRCommon.METFiltersMC_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.extraJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 
 ##***************************************************************************************#
 ##     8. Modules                                                                        #
 ##***************************************************************************************#
 TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
-
 
 process.bestHadronicVnu = cms.EDFilter(         "LargestPtCandSelector",
                                                 src                 = cms.InputTag  (  "hadronicVnu"              ),
@@ -123,6 +125,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
                                                 targetLumiInvPb     = cms.double    (  2316                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
+                                                niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ), 
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
                                                 puWeights           = cms.FileInPath(  "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ))
@@ -155,8 +158,13 @@ process.jetSequence       = cms.Sequence  (
                                                                                 )
 
 process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          )
+                                                                                
 
-process.gravitonSequence  = cms.Sequence  (  process.graviton                   *
+process.extrajetSequence  = cms.Sequence  (  process.extraJetsNuSequence        )
+
+
+process.gravitonSequence  = cms.Sequence  (  
+                                             process.graviton                   * 
                                              process.gravitonFilter   
                                                                                 )
 
@@ -167,8 +175,8 @@ process.analysis          = cms.Path(
                                              process.metSequence                *
                                              process.jetSequence                *
                                              process.ak4jetSequence             *
-                                             process.Numberjetsak4QCDSequence   *
-                                             process.deltaPhiak4JetsSequence    *
+                                             process.extrajetSequence           *
+                                             process.mindeltaPhiSequence        *
                                              process.egmGsfElectronIDs          *
                                              process.VETOSelectEvents           *
                                              process.egmPhotonIDs               *

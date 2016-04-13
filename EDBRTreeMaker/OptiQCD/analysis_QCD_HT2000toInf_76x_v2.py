@@ -61,13 +61,13 @@ VZ_JetMET       = True
 #SAMPLE="ZZ_76x_v2"
 
 ###-------- QCD ------------------
-#SAMPLE="QCD_HT2000toInf_76x_v2"
+SAMPLE="QCD_HT2000toInf_76x_v2"
 #SAMPLE="QCD_HT1500to2000_76x_v2"
 #SAMPLE="QCD_HT1000to1500_76x_v2"
 #SAMPLE="QCD_HT700to1000_76x_v2"
 #SAMPLE="QCD_HT500to700_76x_v2"
 #SAMPLE="QCD_HT300to500_76x_v2"
-SAMPLE="QCD_HT200to300_76x_v2"
+#SAMPLE="QCD_HT200to300_76x_v2"
 #SAMPLE="QCD_HT100to200_76x_v2"
 
 ### To use with CRAB
@@ -159,12 +159,15 @@ process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
+
 
 ##***************************************************************************************#
 ##     8. Modules                                                                        #
 ##***************************************************************************************#
 TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
+
 
 process.bestHadronicVnu = cms.EDFilter(         "LargestPtCandSelector",
                                                 src                 = cms.InputTag  (  "hadronicVnu"              ),
@@ -191,7 +194,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
                                                 targetLumiInvPb     = cms.double    (  2316                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
-                                                niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ),
+                                                niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ), 
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
                                                 puWeights           = cms.FileInPath(  "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ))
@@ -223,11 +226,10 @@ process.jetSequence       = cms.Sequence  (
                                              process.bestHadronicVnu            
                                                                                 )
 
-process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          ) 
+process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          )
 
 
 process.extrajetSequence  = cms.Sequence  (  process.extraJetsNuSequence        )
-
 
 process.gravitonSequence  = cms.Sequence  (  process.graviton                   *
                                              process.gravitonFilter   
@@ -241,7 +243,8 @@ process.analysis          = cms.Path(
                                              process.jetSequence                *
                                              process.ak4jetSequence             *
                                              process.extrajetSequence           *
-                                             process.mindeltaPhiSequence        *
+#                                             process.Numberjetsak4QCDSequence   *
+#                                             process.deltaPhiak4JetsSequence    *
                                              process.egmGsfElectronIDs          *
                                              process.VETOSelectEvents           *
                                              process.egmPhotonIDs               *
