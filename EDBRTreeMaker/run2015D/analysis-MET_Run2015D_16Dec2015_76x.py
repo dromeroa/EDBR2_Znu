@@ -20,7 +20,7 @@ process.MessageLogger.cerr.FwkReport.limit = 99999999
 ##***************************************************************************************#
 ##     2. Global Tag                                                                     #
 ##***************************************************************************************#
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 ## FROM March 05 2016
 process.GlobalTag.globaltag = '76X_dataRun2_16Dec2015_v0'
 
@@ -89,22 +89,21 @@ process.load("ExoDiBosonResonances.EDBRCommon.METFiltersDATA_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodVertex_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.extraJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
-
+process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 ##***************************************************************************************#
 ##     9. Modules                                                                        #
 ##***************************************************************************************#
 TRANSVERSEMASSCUT = 'sqrt(2.0*daughter(0).pt()*daughter(1).pt()*(1.0-cos(daughter(0).phi()-daughter(1).phi()))) > 600'
 
-process.corrJetsProducer.isData = True
 
+process.corrJetsProducer.isData = True
 
 process.bestHadronicVnu = cms.EDFilter(         "LargestPtCandSelector",
                                                 src                 = cms.InputTag  (  "hadronicVnu"              ),
@@ -130,6 +129,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 originalNEvents     = cms.int32     (  usedNevents                ),
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
                                                 targetLumiInvPb     = cms.double    (  1                          ),
+                                                niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ))
@@ -161,7 +161,9 @@ process.jetSequence       = cms.Sequence  (
                                              process.bestHadronicVnu            
                                                                                 )
 
-process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          )
+process.ak4jetSequence    = cms.Sequence  (  process.ak4JetsNuSequence          )                                                      
+
+process.extrajetSequence  = cms.Sequence  (  process.extraJetsNuSequence        )
 
 process.gravitonSequence  = cms.Sequence  (  process.graviton                   *
                                              process.gravitonFilter   
@@ -174,8 +176,8 @@ process.analysis          = cms.Path(
                                              process.metSequence                *
                                              process.jetSequence                *
                                              process.ak4jetSequence             *
-                                             process.Numberjetsak4QCDSequence   *
-                                             process.deltaPhiak4JetsSequence    *
+                                             process.extrajetSequence           *
+                                             process.mindeltaPhiSequence        *
                                              process.egmGsfElectronIDs          *
                                              process.VETOSelectEvents           *
                                              process.egmPhotonIDs               *
