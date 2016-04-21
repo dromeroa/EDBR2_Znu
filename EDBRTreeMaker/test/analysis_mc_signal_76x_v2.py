@@ -61,8 +61,10 @@ process.maxEvents.input = -1
 ## Cross sections (pb)
 
 configXsecs = { 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 0.4802378249,
-                "RSGravZZToZZinv_2500_76xs_v2"           : 0.0021077948,
+                "RSGravZZToZZinv_1000_76xs_v2"           : 1,
+                "RSGravZZToZZinv_2500_76xs_v2"           : 1,
+#                "RSGravZZToZZinv_1000_76xs_v2"           : 0.4802378249,
+#                "RSGravZZToZZinv_2500_76xs_v2"           : 0.0021077948,
                 "RSGravZZToZZinv_4000_76xs_v2"           : 1,
              }
 
@@ -92,6 +94,7 @@ process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
+process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 
@@ -123,7 +126,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 isData              = cms.bool      (  False                      ),
                                                 originalNEvents     = cms.int32     (  usedNevents                ),
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
-                                                targetLumiInvPb     = cms.double    (  2316                       ),
+                                                targetLumiInvPb     = cms.double    (  2307                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
                                                 niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ), 
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
@@ -183,6 +186,7 @@ process.analysis          = cms.Path(
                                              process.photonvetoSequence         *
                                              process.muonsVetoSequence          *
                                              process.tausVetoSequence           *
+                                             process.bJetsVetoSequence          *
                                              process.gravitonSequence           * 
                                              process.treeDumper       
                                                                                 )

@@ -5,10 +5,11 @@ filterDeltaphi = cms.EDFilter("Deltaphi",
                             jets = cms.InputTag("niceak4Jets"),
                             mets = cms.InputTag("goodMET"),   
                             minDeltaphi_threshold  = cms.double(0.5),
-                            filter = cms.bool(True)
-)
+                            filter = cms.bool(True))
 
-mindeltaPhiSequence = cms.Sequence( filterDeltaphi )
+mindeltaPhiSequence = cms.Sequence( 
+                                     filterDeltaphi 
+                                                       )
 
 
 

@@ -34,7 +34,10 @@ ak4extrajets = cms.EDProducer("extraJetsProducer",
 
 
 ###---------JET KINEMATICS --------------------------------
-ak4JETCUTS  =   "(pt > 30)  && (abs(eta) < 2.4) && (chargedHadronEnergyFraction() > 0.1) && (neutralHadronEnergyFraction() < 0.8)"
+
+## Now all the ak4jets are extrajets (deltaR(ak4jet,ak8jet)> 0.8)
+
+ak4JETCUTS  =  "(pt > 30)  && (abs(eta) < 2.4) && (chargedHadronEnergyFraction() > 0.1) && (neutralHadronEnergyFraction() < 0.8)"
 
 niceak4Jets = cms.EDFilter("PATJetSelector",
                                  src = cms.InputTag("ak4extrajets:Jets"), 
