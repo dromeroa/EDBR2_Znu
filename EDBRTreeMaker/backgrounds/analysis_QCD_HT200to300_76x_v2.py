@@ -92,7 +92,6 @@ process.maxEvents.input = -1
 ## https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns (1 Billion campaign)
 
 configXsecs = { 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 1,
                 "ZJetsToNuNu_HT-100To200_76x_v2"         : 344.8305,  ##  280.35  x 1.23 (NLO)  
                 "ZJetsToNuNu_HT-200To400_76x_v2"         : 95.571,    ##   77.67  x 1.23 (NLO)
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 13.1979,   ##   10.73  x 1.23 (NLO)
@@ -117,7 +116,6 @@ configXsecs = {
 
 configNevents = {
 
-                "RSGravZZToZZinv_1000_76xs_v2"           : 100000,
                 "ZJetsToNuNu_HT-100To200_76x_v2"         : 5240199, 
                 "ZJetsToNuNu_HT-200To400_76x_v2"         : 5135542,
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 954435,
@@ -129,7 +127,7 @@ configNevents = {
                 "WW_76x_v2"                              : 988418,
                 "ZZ_76x_v2"                              : 985600,
                 "WZ_76x_v2"                              : 1000000,  
-                "TTJets_amcatnloFXFX_76x_v2"             : 38475776,
+                "TTJets_amcatnloFXFX_76x_v2"             : 12771412, ## Effective (sumweight) -> generated : 38475776
                 "TTJets_amcatnloFXFX_76x_v2_ext"         : 196937036,
                 "QCD_HT200to300_76x_v2"                  : 18784379, 
                 "QCD_HT300to500_76x_v2"                  : 16909004,
@@ -159,6 +157,7 @@ process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
+process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 ##***************************************************************************************#
@@ -189,7 +188,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 isData              = cms.bool      (  False                      ),
                                                 originalNEvents     = cms.int32     (  usedNevents                ),
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
-                                                targetLumiInvPb     = cms.double    (  2316                       ),
+                                                targetLumiInvPb     = cms.double    (  2307                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
                                                 niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ),
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
@@ -248,6 +247,7 @@ process.analysis          = cms.Path(
                                              process.photonvetoSequence         *
                                              process.muonsVetoSequence          *
                                              process.tausVetoSequence           *
+                                             process.bJetsVetoSequence          *
                                              process.gravitonSequence           * 
                                              process.treeDumper       
                                                                                 )
