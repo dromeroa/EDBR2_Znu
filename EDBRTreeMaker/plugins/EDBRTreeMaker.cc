@@ -150,24 +150,27 @@ private:
 
   //-----------------------  AK4 JETS  ----------------------------------------------
   int numjets;
-  float ak4jetspt1;
+  double ak4jetspt1;
   double ak4jetseta1, ak4jetsphi1;
   double ak4jetsphi2;
   double minabsdeltaphi;
   double ak4jetphi;
   double absdeltaphiak4jetmet;
 
-  float HT, MHTx, MHTy, MHT;
-  std::vector<float> ak4jetpt;
-  std::vector<float> deltaRjetfatjet; 
+  // b-tagging (pfCombinedInclusiveSecondaryVertexV2BJetTags)
+  double btagDisc;
+
+  double HT, MHTx, MHTy, MHT;
+  std::vector<double> ak4jetpt;
+  std::vector<double> deltaRjetfatjet; 
   std::vector<double> deltaphiak4jetmetvec;
   edm::EDGetTokenT<pat::JetCollection> niceak4JetToken_;
 
   //------------------------  EXTRA JETS ---------------------------------------
 
   int extranumjets;
-  float extrajetspt1;
-  float extraHT, extraMHTx, extraMHTy, extraMHT;
+  double extrajetspt1;
+  double extraHT, extraMHTx, extraMHTy, extraMHT;
   double deltaPhiextrajetjetabs;
   std::vector<float> extrajetpt; 
   edm::EDGetTokenT<pat::JetCollection> niceextraJetToken_;
@@ -270,14 +273,14 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("metphi"          ,&metphi         ,"metphi/D"         );
   outTree_->Branch("metpx"           ,&metpx          ,"metpx/D"          );
   outTree_->Branch("metpy"           ,&metpy          ,"metpy/D"          );
-  outTree_->Branch("HT"              ,&HT             ,"HT/F"             );
-  outTree_->Branch("MHT"             ,&MHT            ,"MHT/F"            );
-  outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/F"           );
-  outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/F"           );
-  outTree_->Branch("extraHT"         ,&extraHT        ,"extraHT/F"        );
-  outTree_->Branch("extraMHT"        ,&extraMHT       ,"extraMHT/F"       );
-  outTree_->Branch("extraMHTx"       ,&extraMHTx      ,"extraMHTx/F"      );
-  outTree_->Branch("extraMHTy"       ,&extraMHTy      ,"extraMHTy/F"      );
+  outTree_->Branch("HT"              ,&HT             ,"HT/D"             );
+  outTree_->Branch("MHT"             ,&MHT            ,"MHT/D"            );
+  outTree_->Branch("MHTx"            ,&MHTx           ,"MHTx/D"           );
+  outTree_->Branch("MHTy"            ,&MHTy           ,"MHTy/D"           );
+  outTree_->Branch("extraHT"         ,&extraHT        ,"extraHT/D"        );
+  outTree_->Branch("extraMHT"        ,&extraMHT       ,"extraMHT/D"       );
+  outTree_->Branch("extraMHTx"       ,&extraMHTx      ,"extraMHTx/D"      );
+  outTree_->Branch("extraMHTy"       ,&extraMHTy      ,"extraMHTy/D"      );
   outTree_->Branch("sumET"           ,&sumET          ,"sumET/D"          );
   outTree_->Branch("rawmetpt"        ,&rawmetpt       ,"rawmetpt/D"       );
   outTree_->Branch("rawmetphi"       ,&rawmetphi      ,"rawmetphi/D"      );
@@ -289,12 +292,14 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("calometsumET"    ,&calometsumET   ,"calometsumET/D"   );
   outTree_->Branch("metcorrptup"     ,&metcorrptup    ,"metcorrptup/D"    );
   outTree_->Branch("metcorrptdown"   ,&metcorrptdown  ,"metcorrptdown/D"  );
-  outTree_->Branch("minabsdeltaphi"  ,&minabsdeltaphi ,"minabsdeltaphi/D"    );
+  outTree_->Branch("minabsdeltaphi"  ,&minabsdeltaphi ,"minabsdeltaphi/D" );
+  outTree_->Branch("btagDisc"        ,&btagDisc       ,"btagDisc/D"       );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
   outTree_->Branch("lumiWeight"      ,&lumiWeight     ,"lumiWeight/D"     );
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
+  outTree_->Branch("genWeight"       ,&genWeight      ,"genWeight/D"      );
   outTree_->Branch("totalWeight"     ,&totalWeight    ,"totalWeight/D"    );
   outTree_->Branch("deltaphijetmet"    ,&deltaphijetmet   ,"deltaphijetmet/D"   );
   outTree_->Branch("ak4jetpt"          ,&ak4jetpt     );
@@ -446,6 +451,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                          ak4jetphi = ak4jet.phi();
                          absdeltaphiak4jetmet = abs(deltaPhi(ak4jetphi, metphi)); 
                          deltaphiak4jetmetvec.push_back(absdeltaphiak4jetmet);
+                   //// B-Tagging
+                         btagDisc = ak4jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
                    }       
                    // sort
                    std::sort( deltaphiak4jetmetvec.begin(), deltaphiak4jetmetvec.end());
@@ -636,6 +643,7 @@ void EDBRTreeMaker::setDummyValues() {
      metcorrptdown  = -1e4;
      minabsdeltaphi = -1e4;
      deltaPhiextrajetjetabs = -1e4;
+     btagDisc       = -1e4;
 
 }
 
