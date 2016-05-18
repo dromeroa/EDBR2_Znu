@@ -37,7 +37,6 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/Utilities/interface/Exception.h"
 #include "FWCore/Framework/interface/EventSetup.h"
-#include "ExoDiBosonResonances/EDBRLeptons/interface/TrackerMuonSelector.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
@@ -48,6 +47,7 @@
 #include "TH1.h"
 #include "TString.h"
 #include "TTree.h"
+#include "TF1.h"
 
 ////---- JEC
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
@@ -70,6 +70,7 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
 
 #include <boost/foreach.hpp>
@@ -111,7 +112,7 @@ private:
   int numCands;
   int nevent, run, lumisec;
   int channel, reg;
-  double triggerWeight, lumiWeight, pileupWeight, genWeight;
+  double triggerWeight, lumiWeight, pileupWeight, genWeight, ewkWeight;
   double totalWeight;
 
   bool isGen_;
@@ -122,6 +123,7 @@ private:
   std::string EDBRChannel_;
   std::string gravitonSrc_, metSrc_;
   edm::FileInPath puWeights_;
+  edm::FileInPath EWcorr_;
   edm::EDGetTokenT<reco::VertexCollection> vertexToken_;
 
 
@@ -158,7 +160,7 @@ private:
   double absdeltaphiak4jetmet;
 
   // b-tagging (pfCombinedInclusiveSecondaryVertexV2BJetTags)
-  double btagDisc;
+  std:: vector<double> btagDisc;
 
   double HT, MHTx, MHTy, MHT;
   std::vector<double> ak4jetpt;
@@ -170,8 +172,9 @@ private:
 
   int extranumjets;
   double extrajetspt1;
+  double extrajetphi1;
   double extraHT, extraMHTx, extraMHTy, extraMHT;
-  double deltaPhiextrajetjetabs;
+  std::vector<double> deltaPhiextrajetfatjet;
   std::vector<float> extrajetpt; 
   edm::EDGetTokenT<pat::JetCollection> niceextraJetToken_;
 
@@ -182,11 +185,20 @@ private:
 
   double rho; // energy density
 
+  //------------------- GEN INFORMATION ------------------------
+  edm::EDGetTokenT<reco::CandidateCollection> genleptonicZ_;
+  edm::EDGetTokenT<reco::CandidateCollection> genleptonicW_;
+  edm::EDGetTokenT<edm::View<reco::GenParticle> > prunedGenToken_;
+  double genptZl, genptWl;
+  int numgenZ, numgenW;
+
 
   void setDummyValues();
-
-  TFile *f1;
+ 
+ 
+  TFile *f1, *f2;
   TH1D *h1;
+  TF1 *fun1, *fun2; 
  
 };
 
@@ -202,6 +214,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   vertexToken_     ( consumes<reco::VertexCollection>( iConfig.getParameter<edm::InputTag> ( "vertex"          ) ) ),
   niceak4JetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )),
   niceextraJetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceextraJetsSrc" ) ))
+//  prunedGenToken_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("pruned")))
 {
 
    using namespace edm;
@@ -213,12 +226,18 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
    if( iConfig.existsAs<edm::FileInPath>("puWeights") )
         puWeights_ = iConfig.getParameter<edm::FileInPath>("puWeights") ;
 
+  if( iConfig.existsAs<FileInPath>("EWcorr") )
+     EWcorr_ = iConfig.getParameter<FileInPath>("EWcorr") ;
 
 
   rhoToken          = consumes<double>(          InputTag("fixedGridRhoFastjetAll"            ));
   gravitonsToken    = consumes<reco::CompositeCandidateView>(  InputTag("graviton","","TEST"  ));
   puInfoToken       = consumes<std::vector<PileupSummaryInfo>>(InputTag("slimmedAddPileupInfo"));
   genEvtInfoToken   = consumes<GenEventInfoProduct>(           InputTag("generator"           ));
+
+  genleptonicZ_     =consumes<reco::CandidateCollection>( InputTag("genZboson::TEST" ));
+  genleptonicW_     =consumes<reco::CandidateCollection>( InputTag("genWboson::TEST" )); 
+
 
   if(EDBRChannel_ == "VZ_CHANNEL")
     channel=VZ_CHANNEL;
@@ -293,7 +312,9 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("metcorrptup"     ,&metcorrptup    ,"metcorrptup/D"    );
   outTree_->Branch("metcorrptdown"   ,&metcorrptdown  ,"metcorrptdown/D"  );
   outTree_->Branch("minabsdeltaphi"  ,&minabsdeltaphi ,"minabsdeltaphi/D" );
-  outTree_->Branch("btagDisc"        ,&btagDisc       ,"btagDisc/D"       );
+//  outTree_->Branch("btagDisc"        ,&btagDisc        );
+//  outTree_->Branch("genptZl"         ,&genptZl         ,"genptZl/D"       );
+//  outTree_->Branch("genptWl"         ,&genptWl         ,"genptWl/D"       );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
@@ -305,7 +326,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("ak4jetpt"          ,&ak4jetpt     );
   outTree_->Branch("extrajetpt"       ,&extrajetpt  );
   outTree_->Branch("deltaRjetfatjet" ,&deltaRjetfatjet );
-  outTree_->Branch("deltaPhiextrajetjetabs"  ,&deltaPhiextrajetjetabs    ,"deltaPhiextrajetjetabs/D"  );
+  outTree_->Branch("deltaPhiextrajetfatjet"  ,&deltaPhiextrajetfatjet);
 
   /// Jet ID variables
   outTree_->Branch("chf"   ,&chf  ,"chf/D"  );
@@ -343,6 +364,50 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
        const reco::Candidate& graviton = gravitons->at(0);
 
+/* 
+        Handle<edm::View<reco::GenParticle> > pruned;
+        iEvent.getByToken(prunedGenToken_,pruned);
+
+        // genZ
+        int cont = 0;    
+        for(size_t i=0; i<pruned->size();i++){
+            if(abs((*pruned)[i].pdgId()) ==  23 ){
+                cont = cont+1; 
+                const Candidate *Zlep  = &(*pruned)[i];
+                genptZl = Zlep->pt();
+               if (cont>0) break;
+             }
+        }
+
+
+         // genW
+         int cont2 = 0;
+         for(size_t j=0; j<pruned->size();j++){
+            if(abs((*pruned)[j].pdgId()) ==  24 ){
+                cont2 = cont2+1; 
+                const Candidate *Wlep  = &(*pruned)[j];
+                genptWl = Wlep->pt();
+                if (cont2>0) break;
+             }
+        }
+
+*/
+
+/*
+       // genZ
+       Handle< reco::CandidateCollection > genZlep;
+       iEvent.getByToken(genleptonicZ_ , genZlep);
+       const reco::Candidate& Zlep = (*genZlep)[0];
+       genptZl = Zlep.pt();
+       numgenZ = genZlep->size();
+
+       // genW
+       Handle< reco::CandidateCollection > genWlep;
+       iEvent.getByToken(genleptonicW_ , genWlep);
+       const reco::Candidate& Wlep = (*genWlep)[0];
+       genptWl = Wlep.pt();
+       numgenW = genWlep->size();
+*/
 
         // All the quantities which depend on RECO could go here
         if(not isGen_) {
@@ -452,7 +517,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                          absdeltaphiak4jetmet = abs(deltaPhi(ak4jetphi, metphi)); 
                          deltaphiak4jetmetvec.push_back(absdeltaphiak4jetmet);
                    //// B-Tagging
-                         btagDisc = ak4jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+                   //      btagDisc.push_back(ak4jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
                    }       
                    // sort
                    std::sort( deltaphiak4jetmetvec.begin(), deltaphiak4jetmetvec.end());
@@ -480,6 +545,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    //// --------------   EXTRA JETS -----------------------------------------------
                    ////--------------------------------------------------------------------------
                    extrajetpt.clear();                 
+                   deltaPhiextrajetfatjet.clear();
                    Handle<pat::JetCollection> extrajatos;
                    iEvent.getByToken(niceextraJetToken_, extrajatos);
                    extranumjets = extrajatos->size(); 
@@ -488,27 +554,28 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    for(unsigned int j = 0; j != extrajatos->size(); ++j) {
                            const pat::Jet& jat1 = extrajatos->at(j);
                            extrajetspt1    =  jat1.pt();
+                           extrajetphi1    =  jat1.phi();
                            extraHT += extrajetspt1;
                            extraMHTx -= jat1.px();
                            extraMHTy -= jat1.py();
                            extrajetpt.push_back(extrajetspt1);    
+                           deltaPhiextrajetfatjet.push_back(abs(deltaPhi(extrajetphi1,phiVhad)));
                    }
                    extraMHT = sqrt( extraMHTx*extraMHTx + extraMHTy*extraMHTy );
-                   ////deltaphi(jet1,jet2) extrajets
-                    if(extranumjets==2){
-                         const pat::Jet &jeta = extrajatos->at(0);
-                         const pat::Jet &jetb = extrajatos->at(1);
-                         double phia = jeta.phi();
-                         double phib = jetb.phi();
-                         deltaPhiextrajetjetabs = abs(deltaPhi(phia,phib));
-                    }   
                    ////---------------------------------------------------------------------------////
                     ////--------------------------  OTHER VARIABLES  ------------------------------////
                     ////---------------------------------------------------------------------------////
                     ////delta Phi between jet and met(from graviton) 
                     deltaphijetmet = deltaPhi(phijet1, metphi);
                     // transverse candidate mass for JET + MET
-                    candTMass    = sqrt(abs(2*ptjet1*metpt*(1-cos(deltaphijetmet))));                     
+                    candTMass    = sqrt(abs(2*ptjet1*metpt*(1-cos(deltaphijetmet))));       
+
+                    // Gen Information
+
+  
+                            
+                  
+ 
                     break;}
                 case VH_CHANNEL: // This channel needs to be implemented 
                     break;
@@ -525,6 +592,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         pileupWeight = 1.0;
         lumiWeight = 1.0;
         genWeight     = 1.0;
+        ewkWeight  = 1.0;
+
         if( !isData_ ) {
               // pileup reweight
               Handle<std::vector< PileupSummaryInfo > > puInfo;
@@ -547,8 +616,25 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               double targetEvents = targetLumiInvPb_*crossSectionPb_;
               lumiWeight = targetEvents/originalNEvents_;
          }
-         
-         totalWeight = triggerWeight*pileupWeight*lumiWeight;
+
+      
+  
+
+         // Electroweak corrections for Z+jets
+         // before 123 GeV, the function gives Zero
+/*
+         if ( genptZl > 123){
+              ewkWeight = fun1->Eval(genptZl);
+         }
+
+               
+         if ( genptWl > 123){
+              ewkWeight = fun2->Eval(genptWl);
+         }
+          
+*/
+         // total weight         
+         totalWeight = triggerWeight*pileupWeight*lumiWeight*(genWeight/abs(genWeight))*ewkWeight;
 
 //-----------------------------------------
 
@@ -642,8 +728,8 @@ void EDBRTreeMaker::setDummyValues() {
      metcorrptup    = -1e4;
      metcorrptdown  = -1e4;
      minabsdeltaphi = -1e4;
-     deltaPhiextrajetjetabs = -1e4;
-     btagDisc       = -1e4;
+//     genptZl        = -1e4;
+//     genptWl        = -1e4; 
 
 }
 
@@ -651,8 +737,13 @@ void EDBRTreeMaker::setDummyValues() {
 void EDBRTreeMaker::beginJob(){
     if ( !isData_ ){
          f1 = new TFile( puWeights_.fullPath().c_str() );
-         h1 = (TH1D*)f1->Get("pileupWeights");
-    }
+         h1 = (TH1D*)f1->Get("pileupWeights");  
+         // Electroweak corrections
+//         f2 = new TFile( EWcorr_.fullPath().c_str() );
+//         fun1 = (TF1*)f2->Get("ewkZcorrection");
+//         fun2 = (TF1*)f2->Get("ewkWcorrection");      
+    } 
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------

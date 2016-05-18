@@ -20,7 +20,8 @@ photonsVetoProd = cms.EDProducer("PatPhotonSelectorByValueMap",
 photonVeto = cms.EDFilter("PATCandViewCountFilter",
                  minNumber = cms.uint32(0),
                  maxNumber = cms.uint32(0),
-                 src = cms.InputTag("photonsVetoProd")
+                 src = cms.InputTag("photonsVetoProd"),
+                 filter = cms.bool(True)
 )
 
 

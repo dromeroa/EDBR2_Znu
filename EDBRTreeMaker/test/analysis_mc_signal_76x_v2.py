@@ -36,10 +36,18 @@ VZ_JetMET       = True
 ##     4. Samples                                                                        #
 ##***************************************************************************************#                
 ## Signal                                                         
-SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_800_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_1000_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_1200_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_1400_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_1600_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_1800_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_2000_76xs_v2"
 #SAMPLE="RSGravZZToZZinv_2500_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_3000_76xs_v2"
+#SAMPLE="RSGravZZToZZinv_3500_76xs_v2"
 #SAMPLE="RSGravZZToZZinv_4000_76xs_v2"
-
+SAMPLE="RSGravZZToZZinv_4500_76xs_v2"
 ### To use with CRAB
 #import sys
 #SAMPLE = str(sys.argv[2])
@@ -61,18 +69,37 @@ process.maxEvents.input = -1
 ## Cross sections (pb)
 
 configXsecs = { 
+                "RSGravZZToZZinv_800_76xs_v2"            : 1, 
                 "RSGravZZToZZinv_1000_76xs_v2"           : 1,
+                "RSGravZZToZZinv_1200_76xs_v2"           : 1,
+                "RSGravZZToZZinv_1400_76xs_v2"           : 1,
+                "RSGravZZToZZinv_1600_76xs_v2"           : 1, 
+                "RSGravZZToZZinv_1800_76xs_v2"           : 1,
+                "RSGravZZToZZinv_2000_76xs_v2"           : 1,
                 "RSGravZZToZZinv_2500_76xs_v2"           : 1,
+                "RSGravZZToZZinv_3000_76xs_v2"           : 1,
+                "RSGravZZToZZinv_3500_76xs_v2"           : 1,
+                "RSGravZZToZZinv_4000_76xs_v2"           : 1,
+                "RSGravZZToZZinv_4500_76xs_v2"           : 1,
 #                "RSGravZZToZZinv_1000_76xs_v2"           : 0.4802378249,
 #                "RSGravZZToZZinv_2500_76xs_v2"           : 0.0021077948,
-                "RSGravZZToZZinv_4000_76xs_v2"           : 1,
+
              }
 
 configNevents = {
 
+                "RSGravZZToZZinv_800_76xs_v2"            : 100000,                
                 "RSGravZZToZZinv_1000_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_1200_76xs_v2"           : 99200,
+                "RSGravZZToZZinv_1400_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_1600_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_1800_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_2000_76xs_v2"           : 100000,
                 "RSGravZZToZZinv_2500_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_3000_76xs_v2"           : 99200,
+                "RSGravZZToZZinv_3500_76xs_v2"           : 100000,
                 "RSGravZZToZZinv_4000_76xs_v2"           : 100000,
+                "RSGravZZToZZinv_4500_76xs_v2"           : 99200,
                 }
 
 usedXsec = configXsecs[SAMPLE]
@@ -90,13 +117,14 @@ process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.extraJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.Numberjetsak4QCD_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.deltaPhiak4Jets_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
-
 
 ##***************************************************************************************#
 ##     8. Modules                                                                        #
@@ -132,7 +160,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
                                                 puWeights           = cms.FileInPath(  "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ))
-                                                     
+                                                                                                     
 
 ##***************************************************************************************#
 ##     9. Electron and Photon ID                                                         #

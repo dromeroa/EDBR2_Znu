@@ -95,6 +95,7 @@ process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
+process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 ##***************************************************************************************#
@@ -184,6 +185,7 @@ process.analysis          = cms.Path(
                                              process.photonvetoSequence         *
                                              process.muonsVetoSequence          *
                                              process.tausVetoSequence           *
+                                             process.bJetsVetoSequence          *
                                              process.gravitonSequence           * 
                                              process.treeDumper       
                                                                                 )

@@ -117,7 +117,7 @@ Deltaphi::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    // Initialize the vector
    allabsdeltaphiak4jetmet.clear();
-   minabsDeltaphi = -1e4;
+   minabsDeltaphi = 0;
 
    // Loop for the jets
    for(unsigned int k = 0; k != jets->size(); ++k) {

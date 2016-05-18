@@ -1,5 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
+from PhysicsTools.PatAlgos.selectionLayer1.jetSelector_cfi import selectedPatJets
+
 ### This add the payload to the jets in order to use later the JEC  
 
 corrJetsProducer = cms.EDProducer ( "CorrJetsProducer",
@@ -8,6 +10,7 @@ corrJetsProducer = cms.EDProducer ( "CorrJetsProducer",
                                      rho      =    cms.InputTag( "fixedGridRhoFastjetAll" ),
                                      payload  =    cms.string  ( "AK8PFchs" ),
                                      isData   =    cms.bool    ( False ))
+
 
 
 hadronicVnu = cms.EDFilter(  "CandViewSelector",

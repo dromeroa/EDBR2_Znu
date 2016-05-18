@@ -2,6 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors
 from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJets
+from PhysicsTools.PatAlgos.cleaningLayer1.jetCleaner_cfi import cleanPatJets
 from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 
 
@@ -42,7 +43,7 @@ fatJetsNuSequence = cms.Sequence(
                                    patJetsReapplyJEC            *
                                    selectJets                   *
                                    niceJets                      
-                                                                 )
+                                )
 
 
 

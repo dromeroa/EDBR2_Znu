@@ -16,6 +16,7 @@ config.General.transferLogs = True
 #config.General.requestName = 'EDBR_WJetsToLNu_HT-400To600_76X'
 #config.General.requestName = 'EDBR_WJetsToLNu_HT-600ToInf_76X'
 #config.General.requestName = 'EDBR_TTbar_76X'
+#config.General.requestName = 'EDBR_TTbar_76X_EXT'
 #config.General.requestName = 'EDBR_ZZ_76X'
 #config.General.requestName = 'EDBR_WW_76X'
 #config.General.requestName = 'EDBR_WZ_76X'
@@ -55,6 +56,8 @@ config.JobType.psetName = 'analysis_QCD_HT200to300_76x_v2.py'
 
 ## TTbar
 #config.Data.inputDataset ='/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/MINIAODSIM'
+#config.Data.inputDataset='/TTJets_13TeV-amcatnloFXFX-pythia8/RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext1-v1/MINIAODSIM'
+
 
 ## Dibosons
 #config.Data.inputDataset ='/WW_TuneCUETP8M1_13TeV-pythia8/RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/MINIAODSIM'

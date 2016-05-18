@@ -128,7 +128,7 @@ configNevents = {
                 "ZZ_76x_v2"                              : 985600,
                 "WZ_76x_v2"                              : 1000000,  
                 "TTJets_amcatnloFXFX_76x_v2"             : 12771412, ## Effective (sumweight) -> generated : 38475776
-                "TTJets_amcatnloFXFX_76x_v2_ext"         : 196937036,
+                "TTJets_amcatnloFXFX_76x_v2_ext"         : 65363623, ## Effective (sumewight) -> generated : 196937036
                 "QCD_HT200to300_76x_v2"                  : 18784379, 
                 "QCD_HT300to500_76x_v2"                  : 16909004,
                 "QCD_HT500to700_76x_v2"                  : 19665695,
