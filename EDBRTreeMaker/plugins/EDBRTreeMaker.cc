@@ -45,6 +45,9 @@
 #include "TEfficiency.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TH2.h"
+
+
 #include "TString.h"
 #include "TTree.h"
 #include "TF1.h"
@@ -90,6 +93,8 @@ private:
   virtual void beginJob() override;
   virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
   virtual void endJob() override;
+//  BTagCalibrationReader reader;
+//  BTagCalibration calib;
 
 
   template<typename T>
@@ -113,10 +118,14 @@ private:
   int nevent, run, lumisec;
   int channel, reg;
   double triggerWeight, lumiWeight, pileupWeight, genWeight, ewkWeight;
+  double electronWeight, electronrecoWeight, photonWeight, muonWeight, muonisoWeight, vetobtaggWeight;
   double totalWeight;
 
   bool isGen_;
   bool isData_; 
+  bool correctEW_;
+  bool correctBtag_;
+
   int originalNEvents_;
   double crossSectionPb_;
   double targetLumiInvPb_;
@@ -125,6 +134,12 @@ private:
   edm::FileInPath puWeights_;
   edm::FileInPath EWcorr_;
   edm::EDGetTokenT<reco::VertexCollection> vertexToken_;
+
+  edm::FileInPath electronsSFs_;
+  edm::FileInPath elrecoSFs_;
+  edm::FileInPath photonsSFs_;
+  edm::FileInPath muonSFs_;
+  edm::FileInPath muIsoSFs_;
 
 
   edm::EDGetTokenT<double> rhoToken;
@@ -145,6 +160,7 @@ private:
   double tau1,     tau2,     tau3,     tau21;
   double etjet1,   ptjet1,   etajet1,  phijet1;
   double massjet1, softjet1, prunedjet1;
+  double ptCorUp, ptCorDown;
 
   //------------------ AK8 JET ID VARIABLES------------------------------------
   double chf, nhf, cef, nef;
@@ -185,6 +201,36 @@ private:
 
   double rho; // energy density
 
+  // Leptons
+  edm::EDGetTokenT<pat::MuonCollection> muonToken_;
+  edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
+  edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
+ 
+  std::vector<double> muonsPT; 
+  std::vector<double> muonsETA;
+  std::vector<double> electronsPT;
+  std::vector<double> electronsETA;
+  std::vector<double> photonsPT;
+  std::vector<double> photonsETA;
+  std::vector<double> btaggjetsPT;
+  std::vector<double> btaggjetsETA;
+
+
+  int nmuons, nelectrons, nphotons, nbtaggjets;
+
+  // btagging info
+  double bdisc;
+  double taggWeight;
+  double notaggWeight;
+  double MCBtaggweight;
+  double btaggWeight;
+  edm::FileInPath btaggEff_;
+  TFile *effBtagMap;
+  TH2D *effBtagMaphisto;
+  int partonFlavorValue;
+
+  TF1 *CSVM_SFb_30to670pt;
+
   //------------------- GEN INFORMATION ------------------------
   edm::EDGetTokenT<reco::CandidateCollection> genleptonicZ_;
   edm::EDGetTokenT<reco::CandidateCollection> genleptonicW_;
@@ -193,12 +239,27 @@ private:
   int numgenZ, numgenW;
 
 
+  edm::FileInPath triggerSFs_;
+
+
   void setDummyValues();
  
- 
-  TFile *f1, *f2;
+  TFile *f1, *f2, *f3, *f4, *f5, *f6, *f7, *file1;
   TH1D *h1;
-  TF1 *fun1, *fun2; 
+  TF1 *fun1, *fun2;
+  TH2F *h2, *h3, *h4, *h5, *h6; 
+  TH1F *h7;
+
+  double getEfficiency( const double& pt, const double& eta) {
+     double eff = 1.;
+     TH2D *thisHist = effBtagMaphisto;
+     int binx = thisHist->GetXaxis()->FindBin(pt);
+     int biny = thisHist->GetYaxis()->FindBin(eta);
+     eff = thisHist->GetBinContent(binx, biny);
+    return eff;
+     }
+
+
  
 };
 
@@ -207,14 +268,19 @@ private:
 //
 EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   isGen_           (                                   iConfig.getParameter<bool>          ( "isGen"             ) ),
+  correctEW_       (                                   iConfig.getParameter<bool>          ( "correctEW"         ) ),
+  correctBtag_     (                                   iConfig.getParameter<bool>          ( "correctBtag"       ) ),
   originalNEvents_ (                                   iConfig.getParameter<int>           ( "originalNEvents"   ) ),
   crossSectionPb_  (                                   iConfig.getParameter<double>        ( "crossSectionPb"    ) ),
   targetLumiInvPb_ (                                   iConfig.getParameter<double>        ( "targetLumiInvPb"   ) ),
   EDBRChannel_     (                                   iConfig.getParameter<std::string>   ( "EDBRChannel"       ) ),
   vertexToken_     ( consumes<reco::VertexCollection>( iConfig.getParameter<edm::InputTag> ( "vertex"          ) ) ),
   niceak4JetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceak4JetsSrc"   ) )),
-  niceextraJetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceextraJetsSrc" ) ))
-//  prunedGenToken_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("pruned")))
+  niceextraJetToken_ ( consumes<pat::JetCollection>    ( iConfig.getParameter<edm::InputTag> ( "niceextraJetsSrc" ) )),
+  muonToken_       ( consumes<pat::MuonCollection>   ( iConfig.getParameter<edm::InputTag> (  "muons"             ) ) ),
+  electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+  photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
+  prunedGenToken_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("pruned")))
 {
 
    using namespace edm;
@@ -223,20 +289,42 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
         isData_ = iConfig.getParameter<bool> ("isData");
    else isData_ = true;
 
+
+
    if( iConfig.existsAs<edm::FileInPath>("puWeights") )
         puWeights_ = iConfig.getParameter<edm::FileInPath>("puWeights") ;
 
   if( iConfig.existsAs<FileInPath>("EWcorr") )
      EWcorr_ = iConfig.getParameter<FileInPath>("EWcorr") ;
 
+    if( iConfig.existsAs<FileInPath>("elrecoSFs") )
+     elrecoSFs_ = iConfig.getParameter<FileInPath>("elrecoSFs") ;
+
+  if( iConfig.existsAs<FileInPath>("electronsSFs") )
+     electronsSFs_ = iConfig.getParameter<FileInPath>("electronsSFs") ;
+
+  if( iConfig.existsAs<FileInPath>("muonSFs") )
+     muonSFs_ = iConfig.getParameter<FileInPath>("muonSFs") ;
+
+  if( iConfig.existsAs<FileInPath>("muIsoSFs") )
+     muIsoSFs_ = iConfig.getParameter<FileInPath>("muIsoSFs") ;
+
+  if( iConfig.existsAs<FileInPath>("photonsSFs") )
+     photonsSFs_ = iConfig.getParameter<FileInPath>("photonsSFs") ;
+
+  if( iConfig.existsAs<FileInPath>("btaggEff") )
+     btaggEff_ = iConfig.getParameter<FileInPath>("btaggEff");
+
+
+  if( iConfig.existsAs<FileInPath>("triggerSFs") )
+     triggerSFs_ = iConfig.getParameter<FileInPath>("triggerSFs") ;
+
+
 
   rhoToken          = consumes<double>(          InputTag("fixedGridRhoFastjetAll"            ));
   gravitonsToken    = consumes<reco::CompositeCandidateView>(  InputTag("graviton","","TEST"  ));
   puInfoToken       = consumes<std::vector<PileupSummaryInfo>>(InputTag("slimmedAddPileupInfo"));
   genEvtInfoToken   = consumes<GenEventInfoProduct>(           InputTag("generator"           ));
-
-  genleptonicZ_     =consumes<reco::CandidateCollection>( InputTag("genZboson::TEST" ));
-  genleptonicW_     =consumes<reco::CandidateCollection>( InputTag("genWboson::TEST" )); 
 
 
   if(EDBRChannel_ == "VZ_CHANNEL")
@@ -253,6 +341,10 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
        << ". Please check EDBRTreeMaker.cc for allowed values.";
     throw ex;
   }
+
+
+   // function for b-tagging SF
+   CSVM_SFb_30to670pt = new TF1("CSVM_SFb_30to670pt","0.934588*((1.+(0.00678184*x))/(1.+(0.00627144*x)))",30.,670.);
 
 
   
@@ -312,15 +404,18 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("metcorrptup"     ,&metcorrptup    ,"metcorrptup/D"    );
   outTree_->Branch("metcorrptdown"   ,&metcorrptdown  ,"metcorrptdown/D"  );
   outTree_->Branch("minabsdeltaphi"  ,&minabsdeltaphi ,"minabsdeltaphi/D" );
-//  outTree_->Branch("btagDisc"        ,&btagDisc        );
-//  outTree_->Branch("genptZl"         ,&genptZl         ,"genptZl/D"       );
-//  outTree_->Branch("genptWl"         ,&genptWl         ,"genptWl/D"       );
 
   /// Other quantities
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
   outTree_->Branch("lumiWeight"      ,&lumiWeight     ,"lumiWeight/D"     );
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
   outTree_->Branch("genWeight"       ,&genWeight      ,"genWeight/D"      );
+  outTree_->Branch("electronWeight"  ,&electronWeight ,"electronWeight/D"      );
+  outTree_->Branch("electronrecoWeight"   ,&electronrecoWeight, "electronrecoWeight/D" );
+  outTree_->Branch("photonWeight"    ,&photonWeight   ,"photonWeight/D"   );
+  outTree_->Branch("muonWeight"      ,&muonWeight     ,"muonWeight/D"     );
+  outTree_->Branch("muonisoWeight"      ,&muonisoWeight     ,"muonisoWeight/D"     );
+  outTree_->Branch("vetobtaggWeight"    ,&vetobtaggWeight, "vetobtaggWeight/D"  );
   outTree_->Branch("totalWeight"     ,&totalWeight    ,"totalWeight/D"    );
   outTree_->Branch("deltaphijetmet"    ,&deltaphijetmet   ,"deltaphijetmet/D"   );
   outTree_->Branch("ak4jetpt"          ,&ak4jetpt     );
@@ -335,6 +430,24 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("nef"   ,&nef  ,"nef/D"   );
   outTree_->Branch("nch"   ,&nch  ,"nch/I"   );
   outTree_->Branch("nconstituents"  ,&nconstituents  ,"nconstituents/I"   );
+
+  /// Leptons
+  outTree_->Branch("nelectrons"   ,&nelectrons  ,"nelectrons/I"  );
+  outTree_->Branch("nmuons"   ,&nmuons  ,"nmuons/I"  );
+  outTree_->Branch("nphotons"   ,&nphotons  ,"nphotons/I"  );
+  outTree_->Branch("nbtaggjets"   ,&nbtaggjets  ,"nbtaggjets/I"  );
+  outTree_->Branch("muonsPT"      ,&muonsPT     );
+  outTree_->Branch("muonsETA"      ,&muonsETA     );
+  outTree_->Branch("electronsPT"      ,&electronsPT     );
+  outTree_->Branch("electronsETA"      ,&electronsETA     );
+  outTree_->Branch("photonsPT"      ,&photonsPT     );
+  outTree_->Branch("photonsETA"      ,&photonsETA     );
+  outTree_->Branch("btaggjetsPT"      ,&btaggjetsPT     );
+  outTree_->Branch("btaggjetsETA"      ,&btaggjetsETA     );
+
+  outTree_->Branch("ptCorUp" ,&ptCorUp ,"ptCorUp/D" );
+  outTree_->Branch("ptCorDown" ,&ptCorDown ,"ptCorDown/D" );
+
 
 }
 
@@ -364,50 +477,35 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
        const reco::Candidate& graviton = gravitons->at(0);
 
-/* 
-        Handle<edm::View<reco::GenParticle> > pruned;
-        iEvent.getByToken(prunedGenToken_,pruned);
 
-        // genZ
-        int cont = 0;    
-        for(size_t i=0; i<pruned->size();i++){
-            if(abs((*pruned)[i].pdgId()) ==  23 ){
-                cont = cont+1; 
-                const Candidate *Zlep  = &(*pruned)[i];
-                genptZl = Zlep->pt();
-               if (cont>0) break;
+      if (correctEW_){
+
+          Handle<edm::View<reco::GenParticle> > pruned;
+          iEvent.getByToken(prunedGenToken_,pruned);
+
+          // genZ
+          int cont = 0;    
+          for(size_t i=0; i<pruned->size();i++){
+              if(abs((*pruned)[i].pdgId()) ==  23 ){
+                  cont = cont+1; 
+                  const Candidate *Zlep  = &(*pruned)[i];
+                  genptZl = Zlep->pt();
+                 if (cont>0) break;
              }
+           }
+
+           // genW
+           int cont2 = 0;
+           for(size_t j=0; j<pruned->size();j++){
+              if(abs((*pruned)[j].pdgId()) ==  24 ){
+                  cont2 = cont2+1; 
+                  const Candidate *Wlep  = &(*pruned)[j];
+                  genptWl = Wlep->pt();
+                  if (cont2>0) break;
+               }
+            }
         }
 
-
-         // genW
-         int cont2 = 0;
-         for(size_t j=0; j<pruned->size();j++){
-            if(abs((*pruned)[j].pdgId()) ==  24 ){
-                cont2 = cont2+1; 
-                const Candidate *Wlep  = &(*pruned)[j];
-                genptWl = Wlep->pt();
-                if (cont2>0) break;
-             }
-        }
-
-*/
-
-/*
-       // genZ
-       Handle< reco::CandidateCollection > genZlep;
-       iEvent.getByToken(genleptonicZ_ , genZlep);
-       const reco::Candidate& Zlep = (*genZlep)[0];
-       genptZl = Zlep.pt();
-       numgenZ = genZlep->size();
-
-       // genW
-       Handle< reco::CandidateCollection > genWlep;
-       iEvent.getByToken(genleptonicW_ , genWlep);
-       const reco::Candidate& Wlep = (*genWlep)[0];
-       genptWl = Wlep.pt();
-       numgenW = genWlep->size();
-*/
 
         // All the quantities which depend on RECO could go here
         if(not isGen_) {
@@ -473,6 +571,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    softjet1     = hadronicVnu.userFloat("ak8PFJetsCHSSoftDropMass");
                    prunedjet1   = hadronicVnu.userFloat("ak8PFJetsCHSPrunedMass");
                    massVhad     = hadronicVnu.userFloat("ak8PFJetsCHSCorrPrunedMass");
+                   ptCorUp      = hadronicVnu.userFloat("ptCorUp");
+                   ptCorDown    = hadronicVnu.userFloat("ptCorDown");
 //                   massVhad = prunedjet1 * prunedMassCorrection( rho, nVtx, hadronicVnu, JetCorParColl ); 
                    ////---------------------------------------------------------------------------------////
                    ////------------------------------  MET ---------------------------------------------////
@@ -570,11 +670,95 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     // transverse candidate mass for JET + MET
                     candTMass    = sqrt(abs(2*ptjet1*metpt*(1-cos(deltaphijetmet))));       
 
-                    // Gen Information
+                    //---------- Leptons Information --------------------------------
+                    std::vector<const pat::Muon*> muonsVec;
+                    std::vector<const pat::Electron*> electronsVec;
+                    std::vector<const pat::Photon*> photonsVec;
+                    std::vector<const pat::Jet*> btaggjetsVec;
+                    electronsPT.clear();
+                    electronsETA.clear();
+                    muonsPT.clear();
+                    muonsETA.clear();
+                    photonsPT.clear();
+                    photonsETA.clear();
+                    btaggjetsPT.clear();
+                    btaggjetsETA.clear();
 
-  
+                    
+                   //Muons
+                   edm::Handle<pat::MuonCollection> muons;
+                   iEvent.getByToken(muonToken_, muons);
+                   for (const pat::Muon &mu : *muons) {
+                         if (mu.pt() < 20 ) continue;
+                         if ( fabs(mu.eta()) > 2.4 ) continue;
+
+                         // Veto Muons selection
+                         if (!mu.isPFMuon()) continue;
+                         if (mu.isLooseMuon() == false) continue;
+                         if ((mu.pfIsolationR04().sumChargedHadronPt+max(0.,mu.pfIsolationR04().sumNeutralHadronEt+mu.pfIsolationR04().sumPhotonEt-0.5*mu.pfIsolationR04().sumPUPt))/mu.pt()> 0.25) continue;
+
+                         muonsVec.push_back(&mu);
+                         muonsPT.push_back(mu.pt());
+                         muonsETA.push_back(fabs(mu.eta()));
+                   }
+
+                   // Electrons
+                   edm::Handle<pat::ElectronCollection> electrons;
+                   iEvent.getByToken(electronToken_, electrons);
+                   for (const pat::Electron &el : *electrons) {
+                         if (el.pt()<20) continue;
+                         if ( fabs(el.eta()) > 2.4 ) continue;
+
+                          if(el.electronID("cutBasedElectronID-Spring15-25ns-V1-standalone-veto")){
+                             electronsVec.push_back(&el);                        
+                             electronsPT.push_back(el.pt());
+                             electronsETA.push_back(fabs(el.superCluster()->eta()));
+                          }
+
+                 }   
+
+                // Photons  
+                edm::Handle<pat::PhotonCollection> photons;
+                iEvent.getByToken(photonToken_, photons);                 
+                for (const pat::Photon &pho : *photons) {
+                      if (pho.pt()<20) continue;
+                         if ( fabs(pho.eta()) > 2.5 ) continue;
+                           if(pho.photonID("cutBasedPhotonID-Spring15-50ns-V1-standalone-loose")){
+                             photonsVec.push_back(&pho);
+                             photonsPT.push_back(pho.pt());
+                             photonsETA.push_back(fabs(pho.superCluster()->eta())); 
+                           }
+                }
+
+
+                // b-tag jets  
+                for (const pat::Jet &j : *extrajatos) {
+                      bdisc = j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+           
+                       
+                      if (bdisc < 0.8) continue;
+                       
+                          btaggjetsVec.push_back(&j);
+                          btaggjetsPT.push_back(j.pt());
+                          btaggjetsETA.push_back(j.eta());
+                }
+
+
                             
-                  
+
+
+              std::sort(muonsVec.begin(),muonsVec.end(),RefGreaterByPt<pat::Muon>());
+              std::sort(electronsVec.begin(),electronsVec.end(),RefGreaterByPt<pat::Electron>());
+              std::sort(photonsVec.begin(),photonsVec.end(),RefGreaterByPt<pat::Photon>());
+              std::sort(btaggjetsVec.begin(),btaggjetsVec.end(),RefGreaterByPt<pat::Jet>());
+
+              nmuons = muonsVec.size();
+              nelectrons = electronsVec.size();
+              nphotons = photonsVec.size();               
+              nbtaggjets = btaggjetsVec.size();
+
+
+   
  
                     break;}
                 case VH_CHANNEL: // This channel needs to be implemented 
@@ -593,6 +777,15 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         lumiWeight = 1.0;
         genWeight     = 1.0;
         ewkWeight  = 1.0;
+        electronWeight = 1.0; 
+        electronrecoWeight = 1.0;
+        muonWeight = 1.0;
+        muonisoWeight =1.0; 
+        taggWeight = 1.0;
+        notaggWeight = 1.0;
+        btaggWeight = 1.0;
+        vetobtaggWeight = 1.0;
+        totalWeight = 1.0;
 
         if( !isData_ ) {
               // pileup reweight
@@ -615,14 +808,139 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               // lumi weight
               double targetEvents = targetLumiInvPb_*crossSectionPb_;
               lumiWeight = targetEvents/originalNEvents_;
-         }
+         
 
-      
-  
+
+             // LEPTONS WEIGHTS
+
+             if (nelectrons ==1){
+                int bin1 = electronsPT[0]<200. ? h2->FindBin(electronsETA[0],electronsPT[0]) : h2->FindBin(electronsETA[0],199.);
+                electronWeight = 1-(h2->GetBinContent(bin1));
+                int bin2 = electronsPT[0]<200. ? h3->FindBin(electronsETA[0],electronsPT[0]) : h3->FindBin(electronsETA[0],199.);
+                electronrecoWeight = 1-(h3->GetBinContent(bin2));
+
+//                  cout << "the number os electrons is  " << nelectrons << endl;
+//                 cout << "the electron weight is  " << electronWeight  << endl; 
+//                  cout << "the electron reco weight is  " << electronrecoWeight  << endl;
+             }
+
+
+             if (nelectrons ==2){
+                int bin1a = electronsPT[0]<200. ? h2->FindBin(electronsETA[0],electronsPT[0]) : h2->FindBin(electronsETA[0],199.);
+                int bin1b = electronsPT[1]<200. ? h2->FindBin(electronsETA[1],electronsPT[1]) : h2->FindBin(electronsETA[1],199.);
+
+                electronWeight = 1-( h2->GetBinContent(bin1a) * h2->GetBinContent(bin1b) );
+ 
+                int bin2a = electronsPT[0]<200. ? h3->FindBin(electronsETA[0],electronsPT[0]) : h3->FindBin(electronsETA[0],199.);
+                int bin2b = electronsPT[1]<200. ? h3->FindBin(electronsETA[1],electronsPT[1]) : h3->FindBin(electronsETA[1],199.);
+
+                electronrecoWeight = 1-( h3->GetBinContent(bin2a) * h3->GetBinContent(bin2b) ); 
+
+//                 cout << "the number os electrons is  " << nelectrons << endl;
+//                 cout << "the electron weight is  " << electronWeight  << endl;
+//                 cout << "the electron reco weight is  " << electronWeight  << endl;
+             }
+              
+            
+                if (nphotons ==1){
+                int bin3 = photonsPT[0]<200. ? h4->FindBin(photonsETA[0],photonsPT[0]) : h4->FindBin(photonsETA[0],199.);
+                photonWeight = 1-(h4->GetBinContent(bin3));
+
+//                  cout << "the number of photons is  " << nphotons << endl;
+//                  cout << "the photon weight is  " << photonWeight  << endl;
+             }
+
+                if (nphotons ==2){
+                int bin4a = photonsPT[0]<200. ? h4->FindBin(photonsETA[0],photonsPT[0]) : h4->FindBin(photonsETA[0],199.);
+                int bin4b = photonsPT[1]<200. ? h4->FindBin(photonsETA[1],photonsPT[1]) : h4->FindBin(photonsETA[1],199.);
+                photonWeight = 1-( h4->GetBinContent(bin4a) * h4->GetBinContent(bin4b) );
+
+//                  cout << "the number of photons is  " << nphotons << endl;
+//                  cout << "the photon weight is  " << photonWeight  << endl;
+             }
+
+
+               if (nmuons ==1){
+                int bin5 = muonsPT[0]<120. ? h5->FindBin(muonsETA[0],muonsPT[0]) : h5->FindBin(muonsETA[0],119.);
+                muonWeight = 1-(h5->GetBinContent(bin5));
+                int bin6 = muonsPT[0]<120. ? h6->FindBin(muonsETA[0],muonsPT[0]) : h6->FindBin(muonsETA[0],119.);
+                muonisoWeight = 1-(h6->GetBinContent(bin6));
+
+//                  cout << "the number os muons is  " << nmuons << endl;
+//                  cout << "the muon weight is  " << muonWeight  << endl;
+//                  cout << "the muon iso weight is  " << muonisoWeight  << endl;
+             }
+
+
+             if (nmuons ==2){
+                int bin5a = muonsPT[0]<120. ? h5->FindBin(muonsETA[0],muonsPT[0]) : h5->FindBin(muonsETA[0],119.);
+                int bin5b = muonsPT[1]<120. ? h5->FindBin(muonsETA[1],muonsPT[1]) : h5->FindBin(muonsETA[1],119.);
+
+                muonWeight = 1-( h5->GetBinContent(bin5a) * h5->GetBinContent(bin5b) );
+
+                int bin6a = muonsPT[0]<120. ? h6->FindBin(muonsETA[0],muonsPT[0]) : h6->FindBin(muonsETA[0],119.);
+                int bin6b = muonsPT[1]<120. ? h6->FindBin(muonsETA[1],muonsPT[1]) : h6->FindBin(muonsETA[1],119.);
+
+                muonisoWeight = 1-( h6->GetBinContent(bin6a) * h6->GetBinContent(bin6b) );
+
+//                 cout << "the number of muons is  " << nmuons << endl;
+//                 cout << "the muon weight is  " << muonWeight  << endl;
+//                 cout << "the muon iso weight is  " << muonisoWeight  << endl;
+             }
+
+
+
+            
+         if (correctBtag_){
+             // b-tagg jets weight
+             Handle<pat::JetCollection> extrajat;
+             iEvent.getByToken(niceextraJetToken_, extrajat);
+             for (const pat::Jet &jat : *extrajat) {
+                    
+                   double  jatpt   = jat.pt();
+                   double  jateta  = jat.eta();
+                   double  bDisc   = jat.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+                   int PartonFlavorValue = jat.partonFlavour();
+
+                   if (fabs(PartonFlavorValue) !=5) continue;
+                   if (fabs(jateta) > 2.4 ) continue;
+                   if ( jatpt > 650. ) continue;
+                   if ( jatpt<20. ) continue;
+
+                   double scalefactor = CSVM_SFb_30to670pt->Eval(jatpt);  
+//                   cout << "the SF:  " << scalefactor << endl;      
+                   double effMC = getEfficiency(jatpt, jateta);
+//                   cout << "the eff  :  " << effMC << endl;
+                   if ((scalefactor != 0) && (effMC!= 0)){      
+                     if (bDisc >= 0.8){
+                                         taggWeight *= scalefactor;
+                     }
+                     else{
+                              notaggWeight *= ( 1-(scalefactor*effMC)) / (1-effMC);
+                     }
+                  }
+         
+             }
+             
+
+            if (nbtaggjets>0 ){    
+
+             btaggWeight = taggWeight*notaggWeight;
+             vetobtaggWeight = 1 - btaggWeight;
+//             cout << "............... EVENT ................  " << endl;
+//             cout << "the number of b-tagg jets is  " << nbtaggjets << endl;
+//             cout << "the b-tagg weight is  " << btaggWeight  << endl;     
+//             cout << "the veto b-tagg weight is  " << vetobtaggWeight  << endl;  
+            } 
+
+         }// end of correct Btag 
+
+
+     if (correctEW_){
 
          // Electroweak corrections for Z+jets
          // before 123 GeV, the function gives Zero
-/*
+
          if ( genptZl > 123){
               ewkWeight = fun1->Eval(genptZl);
          }
@@ -632,9 +950,22 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               ewkWeight = fun2->Eval(genptWl);
          }
           
-*/
-         // total weight         
-         totalWeight = triggerWeight*pileupWeight*lumiWeight*(genWeight/abs(genWeight))*ewkWeight;
+     }
+
+
+
+     // Trigger weight
+     if( metpt>250){
+                int bin7 =  h7->FindBin(metpt);
+                triggerWeight = (h7->GetBinContent(bin7));
+
+      }
+
+
+} // end of is ! data
+
+ // total weight         
+ totalWeight = triggerWeight*pileupWeight*lumiWeight*(genWeight/abs(genWeight))*ewkWeight*electronWeight*electronrecoWeight*photonWeight*muonWeight*muonisoWeight*vetobtaggWeight;
 
 //-----------------------------------------
 
@@ -678,14 +1009,22 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 void EDBRTreeMaker::setDummyValues() {
      nVtx           = -1e4;
-     triggerWeight  = -1e4;
-     pileupWeight   = -1e4;
-     lumiWeight     = -1e4;
-     totalWeight    = -1e4;
+     triggerWeight  =  1;
+     pileupWeight   = 1;
+     lumiWeight     = 1;
+     totalWeight    = 1;
+     electronWeight = 1;
+     electronrecoWeight = 1;
+     photonWeight   = 1;
+     muonWeight     = 1;
+     muonisoWeight  = 1;
+     vetobtaggWeight = 1;
      ptVhad         = -1e4;
      yVhad          = -1e4;
      phiVhad        = -1e4;
      massVhad       = -1e4;
+     ptCorUp = -1e4;
+     ptCorDown = -1e4;
      tau1           = -1e4;
      tau2           = -1e4;
      tau3           = -1e4;
@@ -728,20 +1067,42 @@ void EDBRTreeMaker::setDummyValues() {
      metcorrptup    = -1e4;
      metcorrptdown  = -1e4;
      minabsdeltaphi = -1e4;
-//     genptZl        = -1e4;
-//     genptWl        = -1e4; 
-
+     nelectrons = 0;
+     nmuons = 0;
+     nphotons = 0;
+     nbtaggjets = 0;
+   
 }
 
 // ------------ method called once each job just before starting event loop  ------------
 void EDBRTreeMaker::beginJob(){
     if ( !isData_ ){
-         f1 = new TFile( puWeights_.fullPath().c_str() );
-         h1 = (TH1D*)f1->Get("pileupWeights");  
-         // Electroweak corrections
-//         f2 = new TFile( EWcorr_.fullPath().c_str() );
-//         fun1 = (TF1*)f2->Get("ewkZcorrection");
-//         fun2 = (TF1*)f2->Get("ewkWcorrection");      
+                  f1 = new TFile( puWeights_.fullPath().c_str() );
+         h1 = (TH1D*)f1->Get("pileupWeights");
+         f2 = new TFile( electronsSFs_.fullPath().c_str() );
+         f3 = new TFile( elrecoSFs_.fullPath().c_str() );
+         f4 = new TFile( photonsSFs_.fullPath().c_str() );
+         f5 = new TFile( muonSFs_.fullPath().c_str() );
+         f6 = new TFile( muIsoSFs_.fullPath().c_str() );
+         f7 = new TFile( triggerSFs_.fullPath().c_str());
+         h2 = (TH2F*)f2->Get("EGamma_SF2D");
+         h3 = (TH2F*)f3->Get("EGamma_SF2D");
+         h4 = (TH2F*)f4->Get("EGamma_SF2D");
+         h5 = (TH2F*)f5->Get("MC_NUM_LooseID_DEN_genTracks_PAR_pt_spliteta_bin1/abseta_pt_ratio");
+         h6 = (TH2F*)f6->Get("MC_NUM_LooseRelIso_DEN_LooseID_PAR_pt_spliteta_bin1/abseta_pt_ratio");
+         h7 = (TH1F*)f7->Get("mettrigSF");
+         // access to b-tagg efficiency
+         effBtagMap = new TFile( btaggEff_.fullPath().c_str() );
+         effBtagMaphisto = (TH2D*)effBtagMap->Get("efficiency_b");
+
+        if (correctEW_){
+         // electroweak corrections
+         file1 = new TFile( EWcorr_.fullPath().c_str() );
+         fun1 = (TF1*)file1->Get("ewkZcorrection");
+         fun2 = (TF1*)file1->Get("ewkWcorrection"); 
+         }
+
+
     } 
 
 }

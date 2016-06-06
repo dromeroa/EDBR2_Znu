@@ -153,11 +153,11 @@ process.load("ExoDiBosonResonances.EDBRCommon.niceJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.niceak4Jets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.extraJets_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodMET_cff")
-process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
-process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
-process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
+#process.load("ExoDiBosonResonances.VetoesProducer.photon_Vetoes_cff")
+#process.load("ExoDiBosonResonances.VetoesProducer.ele_Vetoes_cff")
+#process.load("ExoDiBosonResonances.VetoesProducer.Muon_Vetoes_cff")
 process.load("ExoDiBosonResonances.VetoesProducer.Taus_Vetoes_cff")
-process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
+#process.load("ExoDiBosonResonances.VetoesProducer.btag_Veto_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.FilterdeltaPhi_cff")
 
 ##***************************************************************************************#
@@ -186,15 +186,32 @@ process.gravitonFilter = cms.EDFilter(          "CandViewCountFilter",
 process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 isGen               = cms.bool      (  False                      ),
                                                 isData              = cms.bool      (  False                      ),
+                                                correctEW           = cms.bool      (  False                      ),
+                                                correctBtag         = cms.bool      (  False                      ),    
                                                 originalNEvents     = cms.int32     (  usedNevents                ),
                                                 crossSectionPb      = cms.double    (  usedXsec                   ),
                                                 targetLumiInvPb     = cms.double    (  2307                       ),
                                                 EDBRChannel         = cms.string    (  CHANNEL                    ),
                                                 niceextraJetsSrc    = cms.InputTag  (  "niceextraJets"            ),
                                                 niceak4JetsSrc      = cms.InputTag  (  "niceak4Jets"              ),
+                                                muons               = cms.InputTag("slimmedMuons"),
+                                                electrons           = cms.InputTag("slimmedElectrons"),
+                                                photons             = cms.InputTag("slimmedPhotons"),
                                                 puWeights           = cms.FileInPath(  "ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/pileupWeights69mb.root"),
-                                                vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ))
-                                                     
+                                                electronsSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/CutBasedID_VetoWP_76X_18Feb.txt_SF2D.root"),
+                                                elrecoSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/eleRECO.txt_SF2D.root"),
+                                                photonsSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/Loosenumbers.txt.egamma_SF2D.root"),
+                                                muonSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/MuonID_Z_RunCD_Reco76X_Feb15.root"),
+                                                muIsoSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/MuonIso_Z_RunCD_Reco76X_Feb15.root"),
+                                                btaggEff = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/btaggMaps/RSGravZZToZZinv_1000_effMAP.root"),
+                                                triggerSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/mettrigSF.root"),
+                                                vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ),
+                                                pruned              = cms.InputTag  (    "prunedGenParticles"     ))
+
+
+
+
+                                                    
 
 ##***************************************************************************************#
 ##     9. Electron and Photon ID                                                         #
@@ -241,13 +258,13 @@ process.analysis          = cms.Path(
                                              process.ak4jetSequence             *
                                              process.extrajetSequence           *
                                              process.mindeltaPhiSequence        *
-                                             process.egmGsfElectronIDs          *
-                                             process.VETOSelectEvents           *
-                                             process.egmPhotonIDs               *
-                                             process.photonvetoSequence         *
-                                             process.muonsVetoSequence          *
+#                                             process.egmGsfElectronIDs          *
+#                                             process.VETOSelectEvents           *
+#                                             process.egmPhotonIDs               *
+#                                             process.photonvetoSequence         *
+#                                             process.muonsVetoSequence          *
                                              process.tausVetoSequence           *
-                                             process.bJetsVetoSequence          *
+#                                             process.bJetsVetoSequence          *
                                              process.gravitonSequence           * 
                                              process.treeDumper       
                                                                                 )

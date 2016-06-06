@@ -19,10 +19,22 @@ patJetsReapplyJEC = updatedPatJets.clone(
 
 
 
+slimmedJetsSmeared = cms.EDProducer('SmearedPATJetProducer',
+           src = cms.InputTag('patJetsReapplyJEC'),
+           enabled = cms.bool(True),
+           rho = cms.InputTag("fixedGridRhoFastjetAll"),
+           resolutionFile = cms.FileInPath('ExoDiBosonResonances/EDBRJets/data/Fall15_25nsV2_MC_PtResolution_AK8PFchs.txt'),
+           scaleFactorFile = cms.FileInPath('ExoDiBosonResonances/EDBRJets/data/Fall15_25nsV2_MC_SF_AK8PFchs.txt'),
+           genJets = cms.InputTag('slimmedGenJetsAK8'),
+           dRMax = cms.double(0.2),
+           dPtMaxFactor = cms.double(3),
+           debug = cms.untracked.bool(False)
+           )
+
 ###-------- JET ID LOOSE --------------------------------------
 selectJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
                            filterParams = pfJetIDSelector.clone(),
-                           src = cms.InputTag("patJetsReapplyJEC"),
+                           src = cms.InputTag("slimmedJetsSmeared"),
                            filter = cms.bool(True) )
                          
 
@@ -40,7 +52,8 @@ niceJets = cms.EDFilter("PATJetSelector",
 
 fatJetsNuSequence = cms.Sequence( 
                                    patJetCorrFactorsReapplyJEC  *
-                                   patJetsReapplyJEC            *
+                                   patJetsReapplyJEC            *  
+                                   slimmedJetsSmeared           *
                                    selectJets                   *
                                    niceJets                      
                                 )
