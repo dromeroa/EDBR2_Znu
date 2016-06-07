@@ -59,7 +59,8 @@ VZ_JetMET       = True
 #SAMPLE="BulkGravToZZToZhadZinv-2000_76xs_v2"
 #SAMPLE="BulkGravToZZToZhadZinv-2500_76xs_v2"
 #SAMPLE="BulkGravToZZToZhadZinv-3500_76xs_v2"
-SAMPLE="BulkGravToZZToZhadZinv-4000_76xs_v2"
+#SAMPLE="BulkGravToZZToZhadZinv-4000_76xs_v2"
+SAMPLE="BulkGravToZZToZhadZinv-4500_76xs_v2"
 
 
 ## Signal Wprime
@@ -121,7 +122,7 @@ configXsecs = {
                 "BulkGravToZZToZhadZinv-2500_76xs_v2"    : 1,
                 "BulkGravToZZToZhadZinv-3500_76xs_v2"    : 1,
                 "BulkGravToZZToZhadZinv-4000_76xs_v2"    : 1, ## have a warning (check)!
-
+                "BulkGravToZZToZhadZinv-4500_76xs_v2"    : 1,
 
              }
 
@@ -154,6 +155,7 @@ configNevents = {
                 "BulkGravToZZToZhadZinv-2500_76xs_v2"    : 99200,
                 "BulkGravToZZToZhadZinv-3500_76xs_v2"    : 100000,
                 "BulkGravToZZToZhadZinv-4000_76xs_v2"    : 99200,
+                "BulkGravToZZToZhadZinv-4000_76xs_v2"    : 99000,
                 }
 
 usedXsec = configXsecs[SAMPLE]
