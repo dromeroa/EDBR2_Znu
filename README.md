@@ -2,10 +2,10 @@ Instructions to setup the ExoDiBosonResonances code
 ========
 
 ```
-cmsrel CMSSW_7_6_5_patch1
-cd CMSSW_7_6_5_patch1/src
+cmsrel CMSSW_8_1_0_pre8 
+cd CMSSW_8_1_0_pre8/src
 cmsenv
-git clone -b 76X git@github.com:dromeroa/EDBR2_Znu.git ExoDiBosonResonances
+git clone -b 8X git@github.com:dromeroa/EDBR2_Znu.git ExoDiBosonResonances
 scram b -j 10
 ```
 
