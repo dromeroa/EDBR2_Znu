@@ -1,12 +1,12 @@
 
-// CHECKING THE CODE
-// FIRST TRY FROM 03/04/2016
-// FOR ERFEXP IN THE SUBDOMINANT
+// FROM 24/07/2016
+// FOR THE FINAL FIT OF THE TRASNVERSE MASS LOW PURITY
 //
 // FROM /afs/cern.ch/work/d/dromeroa/private/ALPHAMETHOD_Enero25/CMSSW_8_0_0_pre5/src/ALPHA_METHOD/TESTNEWCODE
-// Do : >cmsenv
+// Do : >cmsenv (ROOT 6)
+// FIRST WE NEED TO COMPILE THE LIBRARY HWWLVJRooPdfs_cxx.so
 // root[] gSystem->Load("../PDFs/HWWLVJRooPdfs_cxx.so")
-// root[] .x test01abril.C("HP")
+// root[] .x fitResultMTLP.C("LP")
 
 #include "TMath.h"
 #include "string.h"
@@ -33,19 +33,13 @@ void fitResultMTLP(std::string key)
   int plevelshapDom = -1;
   // Silent RooFit
   RooMsgService::instance().setGlobalKillBelow(FATAL);
-
-  // Which plots do you want?
-
-  // Transverse mass
-  const bool plotDomSB = true;
-  const bool plotalpha = true;
   ////**************************************************
 
 
   ////*********************************************************************
   //// 2. INTRODUCE THE VARIABLES
   ////*********************************************************************
-  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  3500., "GeV");
+  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  2000., "GeV");
   RooRealVar massVhad("massVhad","M_{j}" ,               40.,   220., "GeV");
   RooRealVar tau21("tau21","tau21",                       0.,   1.0        );
   RooRealVar totalWeight("totalWeight", "total weight",   -100.,  100.         );
@@ -113,26 +107,25 @@ void fitResultMTLP(std::string key)
   TChain treeMC2( "treeDumper/EDBRCandidates");
   std::map<Int_t, std::string> inputFile;
 
-
-      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
-      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_76x_v2.root"                             );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1500to2000_76x_v2.root"                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT700to1000_76x_v2.root"                  );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTbar_76x_v2.root"                            );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTJets_reg_76x_v2.root"                        );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_VV_76x_v2.root"                                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_WW_76x_v2.root"                                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_WZ_76x_v2.root"                                );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_Z+Jets_76x_v2.root"                            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-100To200_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-200To400_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-400To600_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_W+Jets_76x_v2.root"                            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
+      treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
+      treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_76x_v2.root"                             );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1500to2000_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT700to1000_76x_v2.root"                  );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_TTbar_76x_v2.root"                            );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_TTJets_reg_76x_v2.root"                        );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_VV_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_WW_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_WZ_76x_v2.root"                                );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_Z+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-100To200_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-200To400_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-400To600_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_W+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
   ////*******************************************************************************
 
 
@@ -177,13 +170,6 @@ void fitResultMTLP(std::string key)
   // a variable to store the number of events en each background, with a minimum and maximum value
   RooRealVar nbkg1("nbkg1","nbkg1",bkg1.sumEntries(),bkg1.sumEntries()/10,bkg1.sumEntries()*10);
   RooRealVar nbkg2("nbkg2","nbkg2",bkg2.sumEntries(),bkg2.sumEntries()/10,bkg1.sumEntries()*10);
-/*
-  RooCategory MC("MC","MC");
-  //------------------------------------------------------------------------------------------------------------
-  MC.defineType( "dominant");
-  MC.defineType("subdominant");
-  RooDataSet allMC("allMC","allMC", variables, WeightVar(totalWeight), Index(MC), Import("dominant",bkg1), Import("subdominant",bkg2));
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////        _   _                                                                    //
@@ -232,7 +218,7 @@ void fitResultMTLP(std::string key)
 
   // Do the fits to fix the shapes of the MC
   RooFitResult *rf1 = emodel1_pdf.fitTo(bkg1, Save(1), PrintLevel(plevelnorm1));
-  RooFitResult *rf2 = emodel2_pdf.fitTo(bkg2, Save(1), PrintLevel(plevelnorm2),Range(40,160));
+  RooFitResult *rf2 = emodel2_pdf.fitTo(bkg2, Save(1), PrintLevel(plevelnorm2));
 
   // Fix the parameters (shape), let variable the normalization of the dominant
   c1.setConstant(true);
@@ -264,6 +250,8 @@ void fitResultMTLP(std::string key)
  RooFormulaVar Total_SIG_yield( "Total_SIG_yield","@0*(@1+@2)",RooArgList( *Total_SIG_integral,nbkg1,nbkg2));
  RooFormulaVar Norma( "Norma","@0 +@1",RooArgList( nbkg1,nbkg2));
 
+  RooFormulaVar coef( "coef","@0/@1", RooArgList(Sub_SB_yield,Dom_SB_yield));
+
  cout << "Dom estimation = " << Dom_SIG_yield.getVal() << " +/- " << Dom_SIG_yield.getPropagatedError(*rf1) << endl;
  cout << "Sub estimation = " << Sub_SIG_yield.getVal() << " +/- " << Sub_SIG_yield.getPropagatedError(*rf2) << endl;
  std::cout << "Events in signal region = " << Data_lSIG.sumEntries() << std::endl;
@@ -282,19 +270,18 @@ void fitResultMTLP(std::string key)
 
 //********************************************************************************//
 //                                                                                //     
-//                              III. PDFs                                     //
+//                              III. PDFs (Transverse Mass)                       //
 //                                                                                //     
 //********************************************************************************//
-
-  std::cout << "LLegue a los pdfs   "  << std::endl;
 
  ////*********************************************************************************
  ////   10.  Expo tail PDF for Dominant Backround in SB
  ////********************************************************************************
- RooRealVar s0("s0","slope of the exp0",1., 0., 200.);
-// RooRealVar a0("a0","parameter of exp0", 0. , -1, 1);
- RooRealVar a0("a0","parameter of exp0", 1. , 0., 10);
- RooExpTailPdf Dom_SB_pdf("Dom_SB_pdf", "Dom in SB region", candTMass, s0,a0);
+
+
+  RooRealVar s0("s0","slope of the exp0", 1., 0., 200.);
+  RooRealVar a0("a0","parameter of exp0", 1. , 0, 10);
+  RooExpTailPdf Dom_SB_pdf("Dom_SB_pdf", "Dom in SB region", candTMass, s0,a0);
  ////******************************************************************************** 
 
  ////*********************************************************************************
@@ -317,27 +304,19 @@ void fitResultMTLP(std::string key)
  RooRealVar s3("s3","slope of the exp3", 100., 0., 1000.);
  RooRealVar s4("s4","slope of the exp4", 100., 0., 1000.);
 
-// RooRealVar s3("s3","slope of the exp3", 1., 0., 200.);
-// RooRealVar s4("s4","slope of the exp4", 1., 0., 200.);
-
  RooRealVar a3("a3","parameter of exp3", 0.1 , 0.001, 10.);
  RooRealVar a4("a4","parameter of exp4", 0.1 , 0.001, 10.);
-
-//  RooRealVar a3("a3","parameter of exp3", 0.03 , 0., 60.);
-//  RooRealVar a4("a4","parameter of exp4", 0.03 , 0., 60.);
 
  RooExpTailPdf Sub_SR_pdf( "Sub_SR_pdf", "Sub in nominal region", candTMass,s3,a3);
  RooExpTailPdf Sub_SB_pdf("Sub_SB_pdf", "Sub in sideband region", candTMass,s4,a4);
 
   
   // The Products
-//  RooAddPdf Add_Data_SB_pdf("Add_Data_SB_pdf", "Model data in sideband", Sub_SB_pdf, Dat_SB, coef);
+  RooAddPdf Data_SB_pdf_2("Data_SB_pdf_2", "Model data in sideband", Sub_SB_pdf, Data_SB_pdf, coef);
   RooAlpha4ExpTailPdf alpha_pdf("alpha_pdf", "alpha function for Dom", candTMass,s1,a1,s0,a0);
   RooProdPdf MC_est_pdf("MC_est_pdf", "Data-driven bakground estimation", alpha_pdf, Data_SB_pdf);
-
-
 //------------------------------------------------------------
-  candTMass.setRange("range", 600., 3500);
+  candTMass.setRange("range", 600., 2000);
 
   RooDataSet Sub_SR( "Sub_SR", "Sub_SR", variables, Cut(lowerSIG), WeightVar(totalWeight), Import(treeMC2));
   RooDataSet Sub_SB("Sub_SB", "Sub_SB", variables, Cut(allSB), WeightVar(totalWeight), Import(treeMC2));
@@ -346,144 +325,53 @@ void fitResultMTLP(std::string key)
   s3.setConstant(true); a3.setConstant(true);
   s4.setConstant(true); a4.setConstant(true);
 
-
-
-
   RooCategory reg("reg","reg");
   reg.defineType("1");
   reg.defineType("2");
   reg.defineType("3");
 
   RooDataSet bigSample("bigSample","bigSample",variables,WeightVar(totalWeight),Index(reg),Import("1",Dom_SR),Import("2",Dom_SB),Import("3",Data_SB));
-  RooSimultaneous bigSample_pdf("bigSample_pdf", "simultaneous pdf", RooArgList(Dom_SR_pdf,Dom_SB_pdf,Data_SB_pdf), reg);
+  RooSimultaneous bigSample_pdf("bigSample_pdf", "simultaneous pdf", RooArgList(Dom_SR_pdf,Dom_SB_pdf,Data_SB_pdf_2), reg);
 
   // FINAL FIT  
   RooFitResult *fitres = bigSample_pdf.fitTo(bigSample, Save(1), Range("range"), SumW2Error(kTRUE), PrintLevel(-1));
-//    RooFitResult *fitres = bigSample_pdf.fitTo(bigSample, Save(1), Range("range"), SumW2Error(kTRUE));
 
   RooDataSet *alpha = alpha_pdf.generate(candTMass,1.e6);
   alpha->SetName("alpha");
 
-
-
 //---------------------------------------------------------------------------------------------
 
-  RooBinning xbins2(58,600,3500);
-  RooPlot *plot1 = candTMass.frame(Title("#bf{MC SIG}"));
-  RooPlot *plot2 = candTMass.frame(Title("#bf{MC SB}"));
+  RooBinning xbins2(28,600,2000);
   RooPlot *plot3 = candTMass.frame();
-  RooPlot *plot4 = candTMass.frame(Title("#bf{Data SB}"));
   RooPlot *plot5 = candTMass.frame();
-  plot1->SetAxisRange(600,3500,"X");
-  plot2->SetAxisRange(600,3500,"X");
-  plot3->SetAxisRange(600,3500,"X");
-  plot4->SetAxisRange(600,3500,"X");
-  plot5->SetAxisRange(600,3500,"X");
-
- // ---------------------------------------------------------------------------
- // -----------------  Dom SB region-- ---------------------------------
- // --------------------------------------------------------------------------
+  plot3->SetAxisRange(600,2000,"X");
+  plot5->SetAxisRange(600,2000,"X");
 
 
-  Dom_SB.plotOn(plot2,Binning(xbins2),RooFit::Invisible());
-  Dom_SB_pdf.plotOn( plot2,Name("error2"),VisualizeError(*fitres,1),LineColor(kBlack),FillColor(kGray),FillStyle(3002));
-  Dom_SB.plotOn(plot2,Name("mc2"),Binning(xbins2),DrawOption("P"));
-  Dom_SB_pdf.plotOn( plot2,Name("fit2"),Binning(xbins2),DrawOption("L"),LineWidth(3),LineColor(kGreen+2));
-  Dom_SB_pdf.paramOn(plot2,Layout(0.50,0.9,0.6)) ;
-
-
-  plot2->drawAfter("fit2","error2");
-  plot2->drawAfter("error2","line");
-  plot2->getAttText()->SetTextSize(0.03);
-  plot2->SetMinimum(0.001);
-  plot2->SetMaximum(1000);
-
-  TCanvas* canvasMVZ2 = new TCanvas("MVZ2","MVZ2",800,800);
-
-  RooHist* hpull2 = plot2->pullHist();
-  RooPlot* Frame2pull = candTMass.frame(Range("fullRange"));
-  Frame2pull->addPlotable(hpull2,"P");
-
-  Double_t chi2plot2 = plot2->chiSquare("fit2", "mc2", 2);
-
-  TPad* fPads2a = NULL;
-  TPad* fPads2b = NULL;
-  fPads2a = new TPad("pad2a", "", 0.00, 0.15, 0.99, 0.99);
-  fPads2b = new TPad("pad2b", "", 0.00, 0.05, 0.99, 0.225);
-  fPads2a->SetFillColor(0);
-  fPads2a->SetLineColor(0);
-  fPads2b->SetFillColor(0);
-  fPads2b->SetLineColor(0);
-  fPads2a->Draw();
-  fPads2b->Draw();
-
-  fPads2a->cd();
-  fPads2a->SetLogy();
-  plot2->GetYaxis()->SetTitleOffset(1.30);
-  plot2->GetXaxis()->SetLabelSize(0);
-
-if (plotDomSB) { plot2->Draw();}
-
-  char result2[100];
-  strcpy(result2,legTitle[key].c_str());
-  strcat(result2," - SB Region");
-
-  TLegend *leg2 = new TLegend(0.50,0.6,0.9,0.9);
-  leg2->SetHeader(result2);
-  leg2->AddEntry("mc2",  "Dominant Background ",    "ep");
-  leg2->AddEntry("fit2","Exponential Fit", "l");
-  leg2->SetTextSize(0.03);
-  leg2->Draw();
-  TLegendEntry *header2 = (TLegendEntry*)leg2->GetListOfPrimitives()->First();
-  header2->SetTextAlign(22);
-  header2->SetTextColor(1);
-  header2->SetTextSize(.035);
-
-  fPads2b->cd();
-  fPads2b->SetGridx();
-  fPads2b->SetGridy();
-  Frame2pull->GetYaxis()->SetLabelSize(0.08);
-  Frame2pull->GetXaxis()->SetLabelSize(0.17);
-  Frame2pull->GetYaxis()->SetTitle("Pulls");
-  Frame2pull->GetYaxis()->SetTitleOffset(0.30);
-  Frame2pull->GetYaxis()->SetTitleSize(0.15);
-  Frame2pull->GetXaxis()->SetTitleSize(0.17);
-  Frame2pull->GetXaxis()->SetTitle("M_{T} (GeV)");
-  Frame2pull->GetYaxis()->SetRangeUser(-5,5);
-  Frame2pull->SetTitle("");
-  Frame2pull->Draw();
-  TPaveLabel *MT2 = new TPaveLabel(0.7,0.7,0.9,0.9, Form("#chi^{2}/dof = %f", chi2plot2),"brNDC");
-  MT2->Draw();
-
-
-if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str()));}
-
-
-
+  // The alpha
   alpha->plotOn(plot3,RooFit::Invisible());
   alpha_pdf.plotOn(plot3,Name("1sigma"),VisualizeError(*fitres,1,kFALSE),FillStyle(1001),FillColor(kGreen),LineColor(kBlack));
   alpha_pdf.plotOn(plot3,Name("2sigma"),VisualizeError(*fitres,2,kFALSE),FillStyle(1001),FillColor(kYellow),LineColor(kBlack)); 
   alpha_pdf.plotOn(plot3,Name("mean"),DrawOption("L"),LineWidth(2),LineColor(kBlack));
-//  alpha_pdf.paramOn(plot3,Layout(0.50,0.99,0.9)) ;
   plot3->drawAfter("2sigma","1sigma");
   plot3->drawAfter("1sigma","mean");
 
   plot3->SetTitle("");
 
-  TText* te1 = new TText(800,56000,"CMS") ;
+  TText* te1 = new TText(700,47000,"CMS") ;
   te1->SetTextSize(0.03) ;
   te1->SetTextColor(kBlack) ;
   te1->SetTextFont(61);
   plot3->addObject(te1) ;
 
-  TText* txt1a = new TText(800,54000,"Simulation") ;
+  TText* txt1a = new TText(700,45000,"Simulation") ;
   txt1a->SetTextSize(0.03) ;
   txt1a->SetTextColor(kBlack) ;
   txt1a->SetTextFont(52);
   plot3->addObject(txt1a) ;
 
 
-  TText* txt2a = new TText(2500,61000,"2.307 /fb (13TeV)") ;
+  TText* txt2a = new TText(1600,51000,"2.318 /fb (13TeV)") ;
   txt2a->SetTextSize(0.03) ;
   txt2a->SetTextColor(kBlack) ;
   plot3->addObject(txt2a) ;
@@ -494,12 +382,12 @@ if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str(
   plot3->GetXaxis()->SetTitleSize(0.05);
   plot3->GetXaxis()->SetTitleOffset(0.85);
   plot3->GetXaxis()->SetTitle("M_{T} (GeV)");
-  plot3->SetMinimum(-5e3); 
-  plot3->SetMaximum(60e3);
+  plot3->SetMinimum(0); 
+  plot3->SetMaximum(50e3);
 
 
   TCanvas* canvasalpha = new TCanvas("alpha","alpha",800,800);
-  if (plotalpha){  plot3->Draw();}
+  plot3->Draw();
 
    TLegend *leg3 = new TLegend(0.50,0.6,0.9,0.9);
    leg3->SetHeader("Alpha transfer function");
@@ -514,13 +402,8 @@ if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str(
    header3->SetTextSize(.035);
 
 
-
-  if (plotalpha) { 
-
-                     canvasalpha->SaveAs(Form("otherPlots/alpha2%s.png",key.c_str()));
-                     canvasalpha->SaveAs(Form("otherPlots/alpha2%s.pdf",key.c_str())); 
-}
-
+   canvasalpha->SaveAs(Form("otherPlots/alpha%s.png",key.c_str()));
+   canvasalpha->SaveAs(Form("otherPlots/alpha%s.pdf",key.c_str())); 
 
 
  // ---------------------------------------------------------------------------
@@ -529,11 +412,8 @@ if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str(
  
   MC_est_pdf.plotOn(plot5,RooFit::Invisible());
   MC_est_pdf.plotOn( plot5,Name("error5"),Normalization(N),VisualizeError(*fitres,1),LineColor(kBlack),FillColor(kRed),FillStyle(3002));
-//  MC_est_pdf.plotOn( plot5,Name("line5"),Binning(xbins2),Normalization(N), DrawOption("L"),LineWidth(2),LineColor(kBlack));
   MC_est_pdf.plotOn( plot5,Name("fit5"),Binning(xbins2),Normalization(N),VLines(),DrawOption("F"), FillColor(kAzure-9),LineColor(kWhite));
   Sub_SR_pdf.plotOn( plot5,Name("subfit5"),Binning(xbins2),Normalization(Nsub),VLines(),DrawOption("F"), FillColor(kOrange-4),LineColor(kWhite));
-//  MC_est_pdf.paramOn(plot5,Layout(0.50,0.9,0.6)) ;
-//  Data_lSIG.plotOn( plot5,Name("Data"),Binning(xbins2));
 
   plot5->GetXaxis()->SetTitle("M_{T} (GeV)");
   plot5->GetYaxis()->SetTitle("Events");
@@ -542,34 +422,32 @@ if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str(
 
   plot5->drawAfter("fit5","error5");
   plot5->drawAfter("fit5","subfit5");
-//  plot5->drawAfter("error5","line5");
-  //plot5->drawAfter("error5","Data");
-//  plot5->getAttText()->SetTextSize(0.03);
-  plot5->SetMinimum(0.001);
+  plot5->SetMinimum(0.01);
   plot5->SetMaximum(1000);
 
 
-   TText* tex1 = new TText(800,400,"CMS") ;
+   TText* tex1 = new TText(700,400,"CMS") ;
   tex1->SetTextSize(0.04) ;
   tex1->SetTextColor(kBlack) ;
   tex1->SetTextFont(61);
   plot5->addObject(tex1) ;
 
-  TText* tex2 = new TText(800,200,"Preliminary") ;
+  TText* tex2 = new TText(700,200,"Preliminary") ;
   tex2->SetTextSize(0.04) ;
   tex2->SetTextColor(kBlack) ;
   tex2->SetTextFont(52);
   plot5->addObject(tex2) ;
 
 
-  TText* tex3 = new TText(2500,1100,"2.307 /fb (13TeV)") ;
-  tex3->SetTextSize(0.04) ;
+  TText* tex3 = new TText(1600,1100,"2.318 /fb (13TeV)") ;
+  tex3->SetTextSize(0.03) ;
   tex3->SetTextColor(kBlack) ;
   plot5->addObject(tex3) ;
 
 
   TCanvas* canvasMVZ5 = new TCanvas("canvasMVZ5","canvasMVZ5",800,800);
   canvasMVZ5->SetLogy();
+
   plot5->Draw();
 
 
@@ -587,7 +465,6 @@ if (plotDomSB){  canvasMVZ2->SaveAs(Form("otherPlots/DomSB_MVZ%s.png",key.c_str(
    header5->SetTextAlign(22);
    header5->SetTextColor(1);
    header5->SetTextSize(.035);
-
 
   canvasMVZ5->SaveAs(Form("otherPlots/finalresult%s.png",key.c_str()));
   canvasMVZ5->SaveAs(Form("otherPlots/finalresult%s.pdf",key.c_str()));

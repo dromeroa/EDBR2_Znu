@@ -38,7 +38,7 @@ void fitSR_exptailLP(std::string key)
   ////*********************************************************************
   //// 2. INTRODUCE THE VARIABLES
   ////*********************************************************************
-  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  3500., "GeV");
+  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  2000., "GeV");
   RooRealVar massVhad("massVhad","M_{j}" ,               40.,   220., "GeV");
   RooRealVar tau21("tau21","tau21",                       0.,   1.0        );
   RooRealVar totalWeight("totalWeight", "total weight",   0.,  10.         );
@@ -107,25 +107,25 @@ void fitSR_exptailLP(std::string key)
   TChain treeMC2( "treeDumper/EDBRCandidates");
   std::map<Int_t, std::string> inputFile;
 
-      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
-      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_76x_v2.root"                             );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1500to2000_76x_v2.root"                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT700to1000_76x_v2.root"                  );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTbar_76x_v2.root"                            );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTJets_reg_76x_v2.root"                        );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_VV_76x_v2.root"                                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_WW_76x_v2.root"                                );
-      treeMC2.Add(      "../trees/newtrees/treeEDBR_WZ_76x_v2.root"                                );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_Z+Jets_76x_v2.root"                            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-100To200_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-200To400_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-400To600_76x_v2.root"           );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_W+Jets_76x_v2.root"                            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
-      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
+          treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
+      treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_76x_v2.root"                             );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1500to2000_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT700to1000_76x_v2.root"                  );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_TTbar_76x_v2.root"                            );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_TTJets_reg_76x_v2.root"                        );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_VV_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_WW_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_WZ_76x_v2.root"                                );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_Z+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-100To200_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-200To400_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_ZJetsToNuNu_HT-400To600_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_W+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
 
 
       ////*******************************************************************************
@@ -180,16 +180,18 @@ void fitSR_exptailLP(std::string key)
 //  RooExpNPdf Dom_SR_pdf("Dom_SR_pdf", "Dom in SR ",   candTMass,k0,n0);
 
 
-  candTMass.setRange("range", 600., 3500);
+//  candTMass.setRange("range", 600., 3500);
+//candTMass.setRange("range", 600., 3500);
+
 
   RooDataSet Dom_SR("Dom_SR", "Dom_SR", variables, Cut(lowerSIG), WeightVar(totalWeight), Import(treeMC1));
   RooFitResult *testf1  = Dom_SR_pdf.fitTo(Dom_SR,Save(),SumW2Error(kTRUE));
 
 //---------------------------------------------------------------------------------------------
 
-  RooBinning xbins2(58,600,3500);
+  RooBinning xbins2(28,600,2000);
   RooPlot *plot2 = candTMass.frame();
-  plot2->SetAxisRange(600,3500,"X");
+  plot2->SetAxisRange(600,2000,"X");
 
 
  // ---------------------------------------------------------------------------
@@ -222,7 +224,7 @@ void fitSR_exptailLP(std::string key)
   plot2->addObject(txt1a) ;
 
 
-  TText* txt2a = new TText(2500,1100,"2.307 /fb (13TeV)") ;
+  TText* txt2a = new TText(2500,1100,"2.318 /fb (13TeV)") ;
   txt2a->SetTextSize(0.04) ;
   txt2a->SetTextColor(kBlack) ;
   plot2->addObject(txt2a) ;
@@ -232,8 +234,10 @@ void fitSR_exptailLP(std::string key)
    TCanvas* canvasMVZ2 = new TCanvas("MVZ2","MVZ2",800,800);
 
    RooHist* hpull2 = plot2->pullHist();
-   RooPlot* Frame2pull = candTMass.frame(Range(600,3500));
+   RooPlot* Frame2pull = candTMass.frame(Range(600,2000));
    Frame2pull->addPlotable(hpull2,"P");
+
+   
 
    Double_t chi2plot2 = plot2->chiSquare("fit2", "mc2", 2);
 
@@ -252,7 +256,7 @@ void fitSR_exptailLP(std::string key)
    fPads2a->SetLogy();
    plot2->GetYaxis()->SetTitleOffset(1.30);
    plot2->GetXaxis()->SetLabelSize(0);
-   plot2->SetMinimum(0.001);
+   plot2->SetMinimum(0.1);
    plot2->SetMaximum(1000);
    plot2->Draw();
 
