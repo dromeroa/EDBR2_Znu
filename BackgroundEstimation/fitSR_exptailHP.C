@@ -11,7 +11,7 @@
 #include "TMath.h"
 #include "string.h"
 
-void fitSR_exptailLP(std::string key)
+void fitSR_exptailHP(std::string key)
 {
  
   using namespace RooFit;
@@ -41,9 +41,8 @@ void fitSR_exptailLP(std::string key)
   RooRealVar candTMass("candTMass","M_{VZ}",            600.,  2000., "GeV");
   RooRealVar massVhad("massVhad","M_{j}" ,               40.,   220., "GeV");
   RooRealVar tau21("tau21","tau21",                       0.,   1.0        );
-  RooRealVar totalWeight("totalWeight", "total weight",   0.,  10.         );
-  RooRealVar genWeight("genWeight", "gen weight",  -100.,  100.         ); 
-  RooArgSet variables(candTMass,massVhad,tau21,totalWeight,genWeight);
+  RooRealVar totalWeight("totalWeight", "total weight",   -100.,  100.         );
+  RooArgSet variables(candTMass,massVhad,tau21,totalWeight);
   ////**********************************************************************
 
  
@@ -107,7 +106,33 @@ void fitSR_exptailLP(std::string key)
   TChain treeMC2( "treeDumper/EDBRCandidates");
   std::map<Int_t, std::string> inputFile;
 
-          treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
+// old trigger
+/*
+      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
+      treeData.Add(     "../trees/newtrees/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_76x_v2.root"                             );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT1500to2000_76x_v2.root"                );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_QCD_HT700to1000_76x_v2.root"                  );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTbar_76x_v2.root"                            );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_TTJets_reg_76x_v2.root"                        );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_VV_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_WW_76x_v2.root"                                );
+      treeMC2.Add(      "../trees/newtrees/treeEDBR_WZ_76x_v2.root"                                );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_Z+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-100To200_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-200To400_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_ZJetsToNuNu_HT-400To600_76x_v2.root"           );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_W+Jets_76x_v2.root"                            );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
+      treeMC1.Add(      "../trees/newtrees/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
+      //// *******************************************************************************
+
+*/
+// new trigger
+
+      treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
       treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
       treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_76x_v2.root"                             );
       treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
@@ -127,8 +152,6 @@ void fitSR_exptailLP(std::string key)
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
 
-
-      ////*******************************************************************************
 
 
 //********************************************************************************//
@@ -172,17 +195,10 @@ void fitSR_exptailLP(std::string key)
   // Exponential tail (for dominant SR)
   RooRealVar s0("s0","slope of the exp0", 1., 0., 200.);
   RooRealVar a0("a0","parameter of exp0", 0.03 , 0., 60.);
+
   RooExpTailPdf Dom_SR_pdf( "DomSR_pdf", "Dom in signal region", candTMass,s0,a0);
 
-  // Exp N
-//  RooRealVar k0("k0","parameter of expN0",  -0.1,  -1 ,   1);
-//  RooRealVar n0("n0","parameter of expN1",  1359,   0.,   2500);
-//  RooExpNPdf Dom_SR_pdf("Dom_SR_pdf", "Dom in SR ",   candTMass,k0,n0);
-
-
-//  candTMass.setRange("range", 600., 3500);
-//candTMass.setRange("range", 600., 3500);
-
+  candTMass.setRange("range", 600., 2000);
 
   RooDataSet Dom_SR("Dom_SR", "Dom_SR", variables, Cut(lowerSIG), WeightVar(totalWeight), Import(treeMC1));
   RooFitResult *testf1  = Dom_SR_pdf.fitTo(Dom_SR,Save(),SumW2Error(kTRUE));
@@ -190,7 +206,7 @@ void fitSR_exptailLP(std::string key)
 //---------------------------------------------------------------------------------------------
 
   RooBinning xbins2(28,600,2000);
-  RooPlot *plot2 = candTMass.frame();
+  RooPlot *plot2 = candTMass.frame(Title("#bf{MC SIG}"));
   plot2->SetAxisRange(600,2000,"X");
 
 
@@ -200,7 +216,7 @@ void fitSR_exptailLP(std::string key)
 
 
   Dom_SR.plotOn(plot2,Binning(xbins2),RooFit::Invisible());
-  Dom_SR_pdf.plotOn( plot2,Name("error2"),VisualizeError(*testf1,1),LineColor(kBlack),FillColor(kBlue),FillStyle(3002));
+  Dom_SR_pdf.plotOn( plot2,Name("error2"),VisualizeError(*testf1,1),LineColor(kBlack),FillColor(kAzure-2),FillStyle(3002));
   Dom_SR.plotOn(plot2,Name("mc2"),Binning(xbins2),DrawOption("P"));
   Dom_SR_pdf.plotOn( plot2,Name("fit2"),Binning(xbins2),DrawOption("L"),LineWidth(3),LineColor(kGreen+2));
   Dom_SR_pdf.paramOn(plot2,Layout(0.53,0.9,0.7)) ;
@@ -211,21 +227,21 @@ void fitSR_exptailLP(std::string key)
   plot2->getAttText()->SetTextSize(0.03);
   plot2->SetTitle("");
 
-     TText* te1 = new TText(800,400,"CMS") ;
+   TText* te1 = new TText(700,400,"CMS") ;
   te1->SetTextSize(0.04) ;
   te1->SetTextColor(kBlack) ;
   te1->SetTextFont(61);
   plot2->addObject(te1) ;
 
-  TText* txt1a = new TText(800,200,"Simulation") ;
+  TText* txt1a = new TText(700,200,"Simulation") ;
   txt1a->SetTextSize(0.04) ;
   txt1a->SetTextColor(kBlack) ;
   txt1a->SetTextFont(52);
   plot2->addObject(txt1a) ;
 
 
-  TText* txt2a = new TText(2500,1100,"2.318 /fb (13TeV)") ;
-  txt2a->SetTextSize(0.04) ;
+  TText* txt2a = new TText(1600,1100,"2.318 /fb (13TeV)") ;
+  txt2a->SetTextSize(0.03) ;
   txt2a->SetTextColor(kBlack) ;
   plot2->addObject(txt2a) ;
 
@@ -234,10 +250,8 @@ void fitSR_exptailLP(std::string key)
    TCanvas* canvasMVZ2 = new TCanvas("MVZ2","MVZ2",800,800);
 
    RooHist* hpull2 = plot2->pullHist();
-   RooPlot* Frame2pull = candTMass.frame(Range(600,2000));
+   RooPlot* Frame2pull = candTMass.frame(Range("fullRange"));
    Frame2pull->addPlotable(hpull2,"P");
-
-   
 
    Double_t chi2plot2 = plot2->chiSquare("fit2", "mc2", 2);
 
@@ -256,7 +270,7 @@ void fitSR_exptailLP(std::string key)
    fPads2a->SetLogy();
    plot2->GetYaxis()->SetTitleOffset(1.30);
    plot2->GetXaxis()->SetLabelSize(0);
-   plot2->SetMinimum(0.1);
+   plot2->SetMinimum(0.01);
    plot2->SetMaximum(1000);
    plot2->Draw();
 
@@ -267,7 +281,7 @@ void fitSR_exptailLP(std::string key)
    TLegend *leg2 = new TLegend(0.53,0.7,0.9,0.9);
    leg2->SetHeader(result2);
    leg2->AddEntry("mc2",  "Dominant Background ",    "ep");
-   leg2->AddEntry("fit2","Expo tail Fit Function", "l");
+   leg2->AddEntry("fit2","Expo tail Fit", "l");
    leg2->SetTextSize(0.03);
    leg2->Draw();
    TLegendEntry *header2 = (TLegendEntry*)leg2->GetListOfPrimitives()->First();
@@ -295,7 +309,6 @@ void fitSR_exptailLP(std::string key)
 
    canvasMVZ2->SaveAs(Form("otherPlots/sigDom_MVZ%s.png",key.c_str()));
    canvasMVZ2->SaveAs(Form("otherPlots/sigDom_MVZ%s.pdf",key.c_str()));
-
 
 
 }

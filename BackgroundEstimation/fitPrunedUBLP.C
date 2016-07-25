@@ -1,17 +1,16 @@
 
-// CHECKING THE CODE
-// FIRST TRY FROM 03/04/2016
-// FOR ERFEXP IN THE SUBDOMINANT
+// FROM 24/07/2016
+// FINAL FIT FOR PRUNED MASS UNBLINDED LP
 //
 // FROM /afs/cern.ch/work/d/dromeroa/private/ALPHAMETHOD_Enero25/CMSSW_8_0_0_pre5/src/ALPHA_METHOD/TESTNEWCODE
 // Do : >cmsenv
 // root[] gSystem->Load("../PDFs/HWWLVJRooPdfs_cxx.so")
-// root[] .x test01abril.C("HP")
+// root[] .x fitPrunedUBLP.C("LP")
 
 #include "TMath.h"
 #include "string.h"
 
-void fitdataSB_exptailLP(std::string key)
+void fitPrunedUBLP(std::string key)
 {
  
   using namespace RooFit;
@@ -26,10 +25,11 @@ void fitdataSB_exptailLP(std::string key)
   ////*************************************************
   //// 1.  DEFINE THE CONDITIONS
   ////*************************************************
-  const bool isBlind = false;
+  const bool isBlind = true;
   int plevelnorm = -1;
-  int plevelshap =-1;
+  int plevelshap = -1;
   int plevelshapDom = -1;
+  int plevelshapSubDom = 1;
   // Silent RooFit
   RooMsgService::instance().setGlobalKillBelow(FATAL);
   ////**************************************************
@@ -38,7 +38,7 @@ void fitdataSB_exptailLP(std::string key)
   ////*********************************************************************
   //// 2. INTRODUCE THE VARIABLES
   ////*********************************************************************
-  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  2000., "GeV");
+  RooRealVar candTMass("candTMass","M_{VZ}",            600.,  3500., "GeV");
   RooRealVar massVhad("massVhad","M_{j}" ,               40.,   220., "GeV");
   RooRealVar tau21("tau21","tau21",                       0.,   1.0        );
   RooRealVar totalWeight("totalWeight", "total weight",   -100.,  100.         );
@@ -77,6 +77,7 @@ void fitdataSB_exptailLP(std::string key)
   TCut lowerSB  = "massVhad<65."  + selectedCategory;
   TCut upperSB  = "massVhad>135." + selectedCategory;
   TCut allSB    = lowerSB or upperSB;
+  TCut all    = lowerSB or upperSB or lowerSIG or upperSIG;
   ////***************************************************************
 
 
@@ -107,7 +108,7 @@ void fitdataSB_exptailLP(std::string key)
   std::map<Int_t, std::string> inputFile;
 
 
-          treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
+      treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
       treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
       treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_76x_v2.root"                             );
       treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_HT1000to1500_76x_v2.root"                );
@@ -127,7 +128,7 @@ void fitdataSB_exptailLP(std::string key)
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
 
-      ////*******************************************************************************
+     ////*******************************************************************************
 
 
 //********************************************************************************//
@@ -152,7 +153,7 @@ void fitdataSB_exptailLP(std::string key)
   // data in upper signal region
   RooDataSet upsigObs("upsigObs","upsigObs", variables, Cut(upperSIG), Import(treeData));
 
-  RooDataSet Data_SB("Data_SB","Data_SB", variables, Cut(allSB), Import(treeData));
+  RooDataSet alldata("alldata","alldata", variables, Cut(all), Import(treeData));
 
   ////************************************************************************************
 
@@ -160,214 +161,188 @@ void fitdataSB_exptailLP(std::string key)
   ////********************************************************************************************************
   ////   9.  DATASETS TO HOST MC
   ////********************************************************************************************************                 
+  std::cout << "Simulated datasets" << std::endl;
+  // Dominant background
   RooDataSet bkg1("bkg1", "bkg1", variables, Cut(selectedCategory), WeightVar("totalWeight"), Import(treeMC1));
+  // Subdominant background
   RooDataSet bkg2("bkg2", "bkg2", variables, Cut(selectedCategory), WeightVar("totalWeight"), Import(treeMC2));
+  // a variable to store the number of events en each background, with a minimum and maximum value  
   RooRealVar nbkg1("nbkg1","nbkg1",bkg1.sumEntries(),bkg1.sumEntries()/10,bkg1.sumEntries()*10);
   RooRealVar nbkg2("nbkg2","nbkg2",bkg2.sumEntries(),bkg2.sumEntries()/10,bkg1.sumEntries()*10);
-  RooCategory MC("MC","MC");
-  MC.defineType( "dominant");
-  MC.defineType("subdominant");
-  RooDataSet allMC("allMC","allMC", variables, WeightVar(totalWeight), Index(MC), Import("dominant",bkg1), Import("subdominant",bkg2));
+  ////***********************************************************************************************************
+  
+  
+  
+/////////////////////////////////////////////////////////////////////////////////////
+//        _   _                                                                    //
+//       | \ | |                          | (_)         | | (_)                    //
+//       |  \| | ___  _ __ _ __ ___   __ _| |_ ___  __ _| |_ _  ___  _ __          //
+//       | . ` |/ _ \| '__| '_ ` _ \ / _` | | / __|/ _` | __| |/ _ \| '_ \         //
+//       | |\  | (_) | |  | | | | | | (_| | | \__ \ (_| | |_| | (_) | | | |        //
+//       |_| \_|\___/|_|  |_| |_| |_|\__,_|_|_|___/\__,_|\__|_|\___/|_| |_|        //
+//                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////
 
 
+  ////************************************************************************
+  ////  10. THE PDFs 
+  ////************************************************************************
+
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Dominant Background (Error Function * Exponential = ErfExp)
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   RooRealVar c1("c1","slope of the exp",             -0.032,  -1.,    0.);
   RooRealVar offset1("offset1","offset of the erf",    85.0,   1.,  150.);
   RooRealVar width1("width1",  "width of the erf",     36.0,   1,   100.);
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
 
-  RooRealVar mu1("mu1", "average", 84, 0, 300);
-  RooRealVar sigma1("sigma1", "sigma", 8.7, 0, 100);
-  RooRealVar mu2("mu2", "average", 102, 0, 200);
-  RooRealVar sigma2("sigma2", "sigma", 28, 0, 100);
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Subdominant Background
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Gaus 2 (gauss1 +gauss2)
+  RooRealVar mu1("mu1", "average", 150, 0, 300);
+  RooRealVar sigma1("sigma1", "sigma", 16, 0, 100);
+  RooRealVar mu2("mu2", "average", 75, 0, 200);
+  RooRealVar sigma2("sigma2", "sigma", 28, 0, 100); 
   RooGaussian gauss1("gauss1","gaussian PDF1", massVhad, mu1, sigma1);
   RooGaussian gauss2("gauss2","gaussian PDF2", massVhad, mu2, sigma2);
   RooRealVar funfrac("funfrac","fraction of functions",0.6,0.,1.);
-
-  RooErfExpPdf model1_pdf("model1_pdf","dominant backgrounds",massVhad,c1,offset1,width1);
-  RooAddPdf model2_pdf("Gaus2", "gaussian plus gaussian", RooArgList(gauss1, gauss2), funfrac);
-
-  RooExtendPdf emodel1_pdf("emodel1_pdf","extended dom backgrounds",model1_pdf,nbkg1);
-  RooExtendPdf emodel2_pdf("emodel2_pdf","extended sub backgrounds",model2_pdf,nbkg2);
-
-  RooFitResult *rf1 = model1_pdf.fitTo(bkg1, Save(1), PrintLevel(plevelnorm));
-  RooFitResult *rf2 = model2_pdf.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
-
-  c1.setConstant(true);
-  offset1.setConstant(true);
-  width1.setConstant(true);
-  mu1.setConstant(true);
-  mu2.setConstant(true);
-  sigma1.setConstant(true);
-  sigma2.setConstant(true);
-  funfrac.setConstant(true);
-  nbkg1.setConstant(false);
-  nbkg2.setConstant(true);
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-  RooAddPdf model_ext("model_ext","sum of extended models",RooArgList(emodel1_pdf,emodel2_pdf));
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //  THE MODELS
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  RooErfExpPdf model1("model1","dominant backgrounds",massVhad,c1,offset1,width1);
+  RooErfExpPdf model1a("model1a","dominant backgroundsa",massVhad,c1,offset1,width1);
 
-  RooFitResult * Nfit =  model_ext.fitTo(Data_SB,Extended(kTRUE),Range("lowerSB,upperSB"),PrintLevel(-1));
-  nbkg1.setConstant(true);
-
- RooAbsReal* Dom_SIG_integral = model1_pdf.createIntegral(massVhad,NormSet(massVhad),Range("lowerSIG"));
- RooAbsReal* Sub_SIG_integral = model2_pdf.createIntegral(massVhad,NormSet(massVhad),Range("lowerSIG"));
- RooAbsReal* Dom_SB_integral = model1_pdf.createIntegral(massVhad,NormSet(massVhad),Range("lowerSB,upperSB"));
- RooAbsReal* Sub_SB_integral = model2_pdf.createIntegral(massVhad,NormSet(massVhad),Range("lowerSB,upperSB"));
- RooAbsReal* Total_SIG_integral = model_ext.createIntegral(massVhad,NormSet(massVhad),Range("lowerSIG"));
- RooFormulaVar Dom_SIG_yield( "Dom_SIG_yield","@0*@1",RooArgList( *Dom_SIG_integral,nbkg1));
- RooFormulaVar Sub_SIG_yield( "Sub_SIG_yield","@0*@1",RooArgList( *Sub_SIG_integral,nbkg2));
- RooFormulaVar Dom_SB_yield( "Dom_SB_yield","@0*@1",RooArgList( *Dom_SB_integral,nbkg1));
- RooFormulaVar Sub_SB_yield("Sub_SB_yield","@0*@1",RooArgList(*Sub_SB_integral,nbkg2));
- RooFormulaVar Total_SIG_yield( "Total_SIG_yield","@0*(@1+@2)",RooArgList( *Total_SIG_integral,nbkg1,nbkg2));
- RooFormulaVar Norma( "Norma","@0 +@1",RooArgList( nbkg1,nbkg2));
+  RooAddPdf model3("Gaus2", "gaussian plus gaussian", RooArgList(gauss1, gauss2), funfrac);
+  RooAddPdf model3a("Gaus2a", "gaussian plus gaussiana", RooArgList(gauss1, gauss2), funfrac);
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
- RooFormulaVar coef( "coef","@0/@1", RooArgList(Sub_SB_yield,Dom_SB_yield));
+  // A command to add a normalization to the PDF
+  RooExtendPdf emodel1("emodel1","extended dom backgrounds",model1,nbkg1);
+  RooExtendPdf emodel1a("emodel1a","extended dom backgroundsa",model1a,nbkg1);
+  RooExtendPdf emodel3("emodel3","extended sub backgrounds",model3,nbkg2);
+  RooExtendPdf emodel3a("emodel3a","extended sub backgrounds",model3a,nbkg2);
+
+  // The fit of each background in all range separatly
+  std::cout << "Fitting models - normalisation" << std::endl;
+  RooFitResult *rf1 = emodel1.fitTo(bkg1, Save(1), PrintLevel(plevelnorm));
+  RooFitResult *rf1a = emodel1a.fitTo(bkg1, Save(1), PrintLevel(plevelnorm));
+
+  RooFitResult *rf3 = emodel3.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
+  RooFitResult *rf3a = emodel3a.fitTo(bkg2, Save(1), PrintLevel(plevelnorm));
+
+  //*****************************************************************
+  //                     PLOTS FOR THE BACKGROUNDS AND FITS
+  //****************************************************************
+
+ //++++++++++++++++++++++i+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // bining for subdominant background
+   RooBinning xbins(36,40,220);
+  
+
+ ////*******************************************************************************
+ ////              FINAL BACKGROUND MODEL
+ ////******************************************************************************* 
+
+ RooAddPdf model_ext("model_ext","sum of extended models",RooArgList(emodel1,emodel3));
+ c1.setConstant(true);
+ offset1.setConstant(true);
+ width1.setConstant(true);
+ mu1.setConstant(true);
+ sigma1.setConstant(true);
+ mu2.setConstant(true);
+ sigma2.setConstant(true);
+ funfrac.setConstant(true);
+ nbkg1.setConstant(false);
+ nbkg2.setConstant(true);
+
+ RooFitResult* erf = model_ext.fitTo(sbObs,Extended(kTRUE),Range("lowerSB,upperSB"),PrintLevel(plevelnorm),Save());
+ RooPlot* frame5 = massVhad.frame();
+ TCanvas cv5("cv5","cv5",800,800);
+
+ alldata.plotOn(frame5,Name("data"),Binning(36));
+ model_ext.plotOn(frame5,Name("bothMC"),Range("fullRange"),LineColor(kWhite),FillColor(kAzure+6),VLines(),DrawOption("F"));
+ model_ext.plotOn(frame5,Name("subdominantMC"),Components("emodel3"),FillColor(kYellow+1),VLines(),DrawOption("F"),Range("fullRange"),LineColor(kWhite));
+ frame5->SetMinimum(0.00005 );
+ frame5->drawAfter("bothMC","subdominantMC");
+ frame5->drawAfter("subdominantMC","data");
+ frame5->SetTitle("");
 
 
+   TText* txt0 = new TText(50,280,"CMS") ;
+  txt0->SetTextSize(0.04) ;
+  txt0->SetTextColor(kBlack) ;
+  txt0->SetTextFont(61);
+  frame5->addObject(txt0) ;
+
+  TText* txt1 = new TText(50,265,"Preliminary") ;
+  txt1->SetTextSize(0.04) ;
+  txt1->SetTextColor(kBlack) ;
+  txt1->SetTextFont(52);
+  frame5->addObject(txt1) ;
 
 
+  TText* txt2 = new TText(159,308,"2.318 /fb (13TeV)") ;
+  txt2->SetTextSize(0.04) ;
+  txt2->SetTextColor(kBlack) ;
+  frame5->addObject(txt2) ;
+
+ RooHist* hpull5 = frame5->pullHist("data","bothMC");
+ RooPlot* frame5a = massVhad.frame();
+ frame5a->addPlotable(hpull5,"P");
 
 
+ TPad* fPads1d = NULL;
+ TPad* fPads2d = NULL;
+ fPads1d = new TPad("pad1d", "", 0.00, 0.17, 0.99, 0.99);
+ fPads2d = new TPad("pad2d", "", 0.00, 0.04, 0.99, 0.25);
+ fPads1d->SetFillColor(0);
+ fPads1d->SetLineColor(0);
+ fPads2d->SetFillColor(0);
+ fPads2d->SetLineColor(0);
+ fPads1d->Draw();
+ fPads2d->Draw();
 
+ fPads1d->cd();
+ frame5->GetYaxis()->SetTitleOffset(1.30);
+ frame5->GetXaxis()->SetLabelSize(0);
+ frame5->GetYaxis()->SetRangeUser(0.00005,300);
+ frame5->Draw();
 
+ TLegend *leg1d = new TLegend(0.55,0.55,0.9,0.9);
+ leg1d->SetHeader(legTitle[key].c_str());
+ leg1d->AddEntry("bothMC",  "Dominant MC fit",    "f");
+ leg1d->AddEntry("subdominantMC","Subdominant MC fit", "f");
+ leg1d->AddEntry("data","data in sidebands", "ep");
+ leg1d->SetTextSize(0.025);
+ leg1d->Draw();
+ TLegendEntry *header1d = (TLegendEntry*)leg1d->GetListOfPrimitives()->First();
+ header1d->SetTextAlign(22);
+ header1d->SetTextColor(1);
+ header1d->SetTextSize(.05);
 
-  // Exponential (for data in SB)
-  RooRealVar s1("s1","slope of the exp1", 1., 0., 200.);
-  RooRealVar a1("a1","parameter of exp1", 0.03 , 0, 60);
-  RooExpTailPdf Data_SB_pdf("Data_SB_pdf", "Data in SB region", candTMass, s1,a1);
-//  a1.setConstant(true);
+ fPads2d->cd();
+ fPads2d->SetGridx();
+ fPads2d->SetGridy();
+ fPads2d->SetTopMargin(0);
+ fPads2d->SetBottomMargin(0.4);
+ frame5a->GetYaxis()->SetLabelSize(0.08);
+ frame5a->GetXaxis()->SetLabelSize(0.17);
+ frame5a->GetYaxis()->SetTitle("Pulls");
+ frame5a->GetYaxis()->SetTitleOffset(0.30);
+ frame5a->GetYaxis()->SetTitleSize(0.15);
+ frame5a->GetXaxis()->SetTitleSize(0.17);
+ frame5a->GetYaxis()->SetRangeUser(-5,5);
+ frame5a->SetTitle("");
+ frame5a->Draw();
 
-
-
- RooRealVar s4("s4","slope of the exp4", 100., 0., 1000.);
- RooRealVar a4("a4","parameter of exp4", 0.1 , 0.001, 10.);
- RooExpTailPdf Sub_SB_pdf("Sub_SB_pdf", "Sub in sideband region", candTMass,s4,a4);
-
-
-  RooAddPdf Data_SB_pdf_2("Data_SB_pdf_2", "Model data in sideband", Sub_SB_pdf, Data_SB_pdf, coef);
-
-  RooDataSet Sub_SB("Sub_SB", "Sub_SB", variables, Cut(allSB), WeightVar(totalWeight), Import(treeMC2));
-  Sub_SB_pdf.fitTo(Sub_SB, Range("range"), SumW2Error(true), PrintLevel(-1));
-  s4.setConstant(true); a4.setConstant(true);
-
-
-
-  candTMass.setRange("range", 600., 2000);
-
-
-  RooFitResult *testf1  = Data_SB_pdf_2.fitTo(Data_SB,Save(),SumW2Error(kTRUE));
-
-//---------------------------------------------------------------------------------------------
-
-  RooBinning xbins2(28,600,2000);
-  RooPlot *plot1 = candTMass.frame(Title("#bf{MC SIG}"));
-  RooPlot *plot2 = candTMass.frame(Title("#bf{Data SB}"));
-  RooPlot *plot3 = candTMass.frame(Title("#bf{MC SIG / MC SB}"));
-  RooPlot *plot4 = candTMass.frame(Title("#bf{Data SB}"));
-  plot1->SetAxisRange(600,2000,"X");
-  plot2->SetAxisRange(600,2000,"X");
-  plot3->SetAxisRange(600,2000,"X");
-  plot4->SetAxisRange(600,2000,"X");
-
-
- // ---------------------------------------------------------------------------
- // ------------------   MC IN SIDEBAND ---------------------------------------
- // --------------------------------------------------------------------------
-
-
-  Data_SB.plotOn(plot2,Binning(xbins2),RooFit::Invisible());
-  Data_SB_pdf.plotOn( plot2,Name("error2"),VisualizeError(*testf1,1),LineColor(kBlack),FillColor(kGray),FillStyle(3002));
-  Data_SB.plotOn(plot2,Name("mc2"),Binning(xbins2),DrawOption("P"));
-  Data_SB_pdf.plotOn( plot2,Name("fit2"),Binning(xbins2),DrawOption("L"),LineWidth(3),LineColor(kGreen+2));
-  Data_SB_pdf.paramOn(plot2,Layout(0.53,0.9,0.7)) ;
-
-  plot2->drawAfter("error2","mc2");
-  plot2->drawAfter("error2","fit2");
-  plot2->drawAfter("fit2","mc2");
-  plot2->getAttText()->SetTextSize(0.03);
-  plot2->SetTitle("");
-
-   TText* te1 = new TText(800,400,"CMS") ;
-  te1->SetTextSize(0.04) ;
-  te1->SetTextColor(kBlack) ;
-  te1->SetTextFont(61);
-  plot2->addObject(te1) ;
-
-  TText* txt1a = new TText(800,200,"Preliminary") ;
-  txt1a->SetTextSize(0.04) ;
-  txt1a->SetTextColor(kBlack) ;
-  txt1a->SetTextFont(52);
-  plot2->addObject(txt1a) ;
-
-
-  TText* txt2a = new TText(2500,1100,"2.318 /fb (13TeV)") ;
-  txt2a->SetTextSize(0.038) ;
-  txt2a->SetTextColor(kBlack) ;
-  plot2->addObject(txt2a) ;
-
-
-   TCanvas* canvasMVZ2 = new TCanvas("MVZ2","MVZ2",800,800);
-
-   RooHist* hpull2 = plot2->pullHist();
-   RooPlot* Frame2pull = candTMass.frame(Range("fullRange"));
-   Frame2pull->addPlotable(hpull2,"P");
-
-   Double_t chi2plot2 = plot2->chiSquare("fit2", "mc2", 2);
-
-   TPad* fPads2a = NULL;
-   TPad* fPads2b = NULL;
-   fPads2a = new TPad("pad1", "", 0.00, 0.17, 0.99, 0.99);
-   fPads2b = new TPad("pad2", "", 0.00, 0.04, 0.99, 0.22);
-   fPads2a->SetFillColor(0);
-   fPads2a->SetLineColor(0);
-   fPads2b->SetFillColor(0);
-   fPads2b->SetLineColor(0);
-   fPads2a->Draw();
-   fPads2b->Draw();
-
-   fPads2a->cd();
-   fPads2a->SetLogy();
-   plot2->GetYaxis()->SetTitleOffset(1.30);
-   plot2->GetXaxis()->SetLabelSize(0);
-   plot2->SetMinimum(0.1);
-   plot2->SetMaximum(1000);
-   plot2->Draw();
-
-   char result2[100];
-   strcpy(result2,legTitle[key].c_str());
-   strcat(result2," - SB Region");
-
-   TLegend *leg2 = new TLegend(0.53,0.7,0.9,0.9);
-   leg2->SetHeader(result2);
-   leg2->AddEntry("mc2",  " Data",    "ep");
-   leg2->AddEntry("fit2","Expo tail Fit Function", "l");
-   leg2->SetTextSize(0.03);
-   leg2->Draw();
-   TLegendEntry *header2 = (TLegendEntry*)leg2->GetListOfPrimitives()->First();
-   header2->SetTextAlign(22);
-   header2->SetTextColor(1);
-   header2->SetTextSize(.035);
-
-   fPads2b->cd();
-   fPads2b->SetGridx();
-   fPads2b->SetGridy();
-   fPads2b->SetTopMargin(0);
-   fPads2b->SetBottomMargin(0.4);
-   Frame2pull->GetYaxis()->SetLabelSize(0.08);
-   Frame2pull->GetXaxis()->SetLabelSize(0.17);
-   Frame2pull->GetYaxis()->SetTitle("Pulls");
-   Frame2pull->GetYaxis()->SetTitleOffset(0.30);
-   Frame2pull->GetYaxis()->SetTitleSize(0.15);
-   Frame2pull->GetXaxis()->SetTitleSize(0.17);
-   Frame2pull->GetXaxis()->SetTitle("M_{T} (GeV)");
-   Frame2pull->GetYaxis()->SetRangeUser(-5,5);
-   Frame2pull->SetTitle("");
-   Frame2pull->Draw();
-   TPaveLabel *MT2 = new TPaveLabel(0.7,0.85,0.9,1, Form("#chi^{2}/dof = %f", chi2plot2),"brNDC");
-   MT2->Draw();
-
-   canvasMVZ2->SaveAs(Form("otherPlots/sbData_MVZ%s.png",key.c_str()));
-   canvasMVZ2->SaveAs(Form("otherPlots/sbData_MVZ%s.pdf",key.c_str()));
+ // SAVE THE FILE
+ cv5.SaveAs(Form("otherPlots/dataMjUB%s.png",key.c_str())); 
+ cv5.SaveAs(Form("otherPlots/dataMjUB%s.pdf",key.c_str()));
 
 
 }

@@ -1,17 +1,16 @@
 
-// FROM 24/07/2016
-// FOR THE FINAL FIT OF THE TRASNVERSE MASS LOW PURITY
+// 24/07/2016
+// FINAL FIT FOR TRANSVERSE MASS UNBLINDED
 //
 // FROM /afs/cern.ch/work/d/dromeroa/private/ALPHAMETHOD_Enero25/CMSSW_8_0_0_pre5/src/ALPHA_METHOD/TESTNEWCODE
-// Do : >cmsenv (ROOT 6)
-// FIRST WE NEED TO COMPILE THE LIBRARY HWWLVJRooPdfs_cxx.so
+// Do : >cmsenv
 // root[] gSystem->Load("../PDFs/HWWLVJRooPdfs_cxx.so")
-// root[] .x fitResultMTLP.C("LP")
+// root[] .x fitResultMTLPUB.C("LP")
 
 #include "TMath.h"
 #include "string.h"
 
-void fitResultMTLP(std::string key)
+void fitResultMTLPUB(std::string key)
 {
  
   using namespace RooFit;
@@ -107,6 +106,7 @@ void fitResultMTLP(std::string key)
   TChain treeMC2( "treeDumper/EDBRCandidates");
   std::map<Int_t, std::string> inputFile;
 
+
       treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015C_25ns_16Dec2015_v1.root"         );
       treeData.Add(     "../trees/newtreesPAS/treeEDBR_MET_Run2015D_16Dec2015_v1.root"              );
       treeMC2.Add(      "../trees/newtreesPAS/treeEDBR_QCD_76x_v2.root"                             );
@@ -126,6 +126,7 @@ void fitResultMTLP(std::string key)
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-100To200_76x_v2.root"            );
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-200To400_76x_v2.root"            );
       treeMC1.Add(      "../trees/newtreesPAS/treeEDBR_WJetsToLNu_HT-400To600_76x_v2.root"            );
+
   ////*******************************************************************************
 
 
@@ -270,18 +271,15 @@ void fitResultMTLP(std::string key)
 
 //********************************************************************************//
 //                                                                                //     
-//                              III. PDFs (Transverse Mass)                       //
+//                              III. PDFs                                     //
 //                                                                                //     
 //********************************************************************************//
-
  ////*********************************************************************************
  ////   10.  Expo tail PDF for Dominant Backround in SB
  ////********************************************************************************
-
-
-  RooRealVar s0("s0","slope of the exp0", 1., 0., 200.);
-  RooRealVar a0("a0","parameter of exp0", 1. , 0, 10);
-  RooExpTailPdf Dom_SB_pdf("Dom_SB_pdf", "Dom in SB region", candTMass, s0,a0);
+ RooRealVar s0("s0","slope of the exp0",1., 0., 200.);
+ RooRealVar a0("a0","parameter of exp0", 1. , 0., 10);
+ RooExpTailPdf Dom_SB_pdf("Dom_SB_pdf", "Dom in SB region", candTMass, s0,a0);
  ////******************************************************************************** 
 
  ////*********************************************************************************
@@ -315,6 +313,8 @@ void fitResultMTLP(std::string key)
   RooAddPdf Data_SB_pdf_2("Data_SB_pdf_2", "Model data in sideband", Sub_SB_pdf, Data_SB_pdf, coef);
   RooAlpha4ExpTailPdf alpha_pdf("alpha_pdf", "alpha function for Dom", candTMass,s1,a1,s0,a0);
   RooProdPdf MC_est_pdf("MC_est_pdf", "Data-driven bakground estimation", alpha_pdf, Data_SB_pdf);
+
+
 //------------------------------------------------------------
   candTMass.setRange("range", 600., 2000);
 
@@ -324,6 +324,9 @@ void fitResultMTLP(std::string key)
   Sub_SB_pdf.fitTo(Sub_SB, Range("range"), SumW2Error(true), PrintLevel(-1));
   s3.setConstant(true); a3.setConstant(true);
   s4.setConstant(true); a4.setConstant(true);
+
+
+
 
   RooCategory reg("reg","reg");
   reg.defineType("1");
@@ -339,71 +342,13 @@ void fitResultMTLP(std::string key)
   RooDataSet *alpha = alpha_pdf.generate(candTMass,1.e6);
   alpha->SetName("alpha");
 
+
+
 //---------------------------------------------------------------------------------------------
 
   RooBinning xbins2(28,600,2000);
-  RooPlot *plot3 = candTMass.frame();
   RooPlot *plot5 = candTMass.frame();
-  plot3->SetAxisRange(600,2000,"X");
   plot5->SetAxisRange(600,2000,"X");
-
-
-  // The alpha
-  alpha->plotOn(plot3,RooFit::Invisible());
-  alpha_pdf.plotOn(plot3,Name("1sigma"),VisualizeError(*fitres,1,kFALSE),FillStyle(1001),FillColor(kGreen),LineColor(kBlack));
-  alpha_pdf.plotOn(plot3,Name("2sigma"),VisualizeError(*fitres,2,kFALSE),FillStyle(1001),FillColor(kYellow),LineColor(kBlack)); 
-  alpha_pdf.plotOn(plot3,Name("mean"),DrawOption("L"),LineWidth(2),LineColor(kBlack));
-  plot3->drawAfter("2sigma","1sigma");
-  plot3->drawAfter("1sigma","mean");
-
-  plot3->SetTitle("");
-
-  TText* te1 = new TText(700,47000,"CMS") ;
-  te1->SetTextSize(0.03) ;
-  te1->SetTextColor(kBlack) ;
-  te1->SetTextFont(61);
-  plot3->addObject(te1) ;
-
-  TText* txt1a = new TText(700,45000,"Simulation") ;
-  txt1a->SetTextSize(0.03) ;
-  txt1a->SetTextColor(kBlack) ;
-  txt1a->SetTextFont(52);
-  plot3->addObject(txt1a) ;
-
-
-  TText* txt2a = new TText(1600,51000,"2.318 /fb (13TeV)") ;
-  txt2a->SetTextSize(0.03) ;
-  txt2a->SetTextColor(kBlack) ;
-  plot3->addObject(txt2a) ;
-
-  plot3->GetYaxis()->SetTitle("");
-  plot3->GetYaxis()->SetTitleSize(0.05);
-  plot3->GetYaxis()->SetTitleOffset(0.85);
-  plot3->GetXaxis()->SetTitleSize(0.05);
-  plot3->GetXaxis()->SetTitleOffset(0.85);
-  plot3->GetXaxis()->SetTitle("M_{T} (GeV)");
-  plot3->SetMinimum(0); 
-  plot3->SetMaximum(50e3);
-
-
-  TCanvas* canvasalpha = new TCanvas("alpha","alpha",800,800);
-  plot3->Draw();
-
-   TLegend *leg3 = new TLegend(0.50,0.6,0.9,0.9);
-   leg3->SetHeader("Alpha transfer function");
-   leg3->AddEntry("mean","alpha function",    "l");
-   leg3->AddEntry("1sigma",  "#alpha #pm 1 #sigma ",    "f");
-   leg3->AddEntry("2sigma","#alpha #pm 2 #sigma", "f");
-   leg3->SetTextSize(0.03);
-   leg3->Draw();
-   TLegendEntry *header3 = (TLegendEntry*)leg3->GetListOfPrimitives()->First();
-   header3->SetTextAlign(22);
-   header3->SetTextColor(1);
-   header3->SetTextSize(.035);
-
-
-   canvasalpha->SaveAs(Form("otherPlots/alpha%s.png",key.c_str()));
-   canvasalpha->SaveAs(Form("otherPlots/alpha%s.pdf",key.c_str())); 
 
 
  // ---------------------------------------------------------------------------
@@ -414,17 +359,19 @@ void fitResultMTLP(std::string key)
   MC_est_pdf.plotOn( plot5,Name("error5"),Normalization(N),VisualizeError(*fitres,1),LineColor(kBlack),FillColor(kRed),FillStyle(3002));
   MC_est_pdf.plotOn( plot5,Name("fit5"),Binning(xbins2),Normalization(N),VLines(),DrawOption("F"), FillColor(kAzure-9),LineColor(kWhite));
   Sub_SR_pdf.plotOn( plot5,Name("subfit5"),Binning(xbins2),Normalization(Nsub),VLines(),DrawOption("F"), FillColor(kOrange-4),LineColor(kWhite));
+  Data_lSIG.plotOn( plot5,Name("Data"),Binning(xbins2));
 
-  plot5->GetXaxis()->SetTitle("M_{T} (GeV)");
-  plot5->GetYaxis()->SetTitle("Events");
-  plot5->GetYaxis()->SetTitleOffset(1.30);
-  plot5->SetTitle("");
-
-  plot5->drawAfter("fit5","error5");
-  plot5->drawAfter("fit5","subfit5");
   plot5->SetMinimum(0.01);
   plot5->SetMaximum(1000);
 
+
+  plot5->drawAfter("fit5","error5");
+  plot5->drawAfter("subfit5","error5");
+
+  plot5->SetTitle("");
+  plot5->GetXaxis()->SetTitle("M_{T} (GeV)");
+  plot5->GetYaxis()->SetTitle("Events");
+  plot5->GetYaxis()->SetTitleOffset(1.30);
 
    TText* tex1 = new TText(700,400,"CMS") ;
   tex1->SetTextSize(0.04) ;
@@ -440,16 +387,36 @@ void fitResultMTLP(std::string key)
 
 
   TText* tex3 = new TText(1600,1100,"2.318 /fb (13TeV)") ;
-  tex3->SetTextSize(0.03) ;
+  tex3->SetTextSize(0.04) ;
   tex3->SetTextColor(kBlack) ;
   plot5->addObject(tex3) ;
+
 
 
   TCanvas* canvasMVZ5 = new TCanvas("canvasMVZ5","canvasMVZ5",800,800);
   canvasMVZ5->SetLogy();
 
-  plot5->Draw();
+  RooHist* hpull5 = plot5->pullHist("Data","fit5");
+  RooPlot* Frame5pull = candTMass.frame(Range("fullRange"));
+  Frame5pull->addPlotable(hpull5,"P");
 
+  TPad* fPads5a = NULL;
+  TPad* fPads5b = NULL;
+  fPads5a = new TPad("pad5a", "", 0.00, 0.15, 0.99, 0.99);
+  fPads5b = new TPad("pad5b", "", 0.00, 0.05, 0.99, 0.225);
+  fPads5a->SetFillColor(0);
+  fPads5a->SetLineColor(0);
+  fPads5b->SetFillColor(0);
+  fPads5b->SetLineColor(0);
+  fPads5a->Draw();
+  fPads5b->Draw();
+
+
+  fPads5a->cd();
+  fPads5a->SetLogy();
+  plot5->GetYaxis()->SetTitleOffset(1.30);
+  plot5->GetXaxis()->SetLabelSize(0);
+  plot5->Draw();
 
    char result5[100];
    strcpy(result5,legTitle[key].c_str());
@@ -459,6 +426,7 @@ void fitResultMTLP(std::string key)
    leg5->SetHeader(result5);
    leg5->AddEntry("fit5",  "Dominant Background ",    "f");
    leg5->AddEntry("subfit5","Subdominant Background", "f");
+   leg5->AddEntry("Data","data signal region", "P");
    leg5->SetTextSize(0.03);
    leg5->Draw();
    TLegendEntry *header5 = (TLegendEntry*)leg5->GetListOfPrimitives()->First();
@@ -466,7 +434,26 @@ void fitResultMTLP(std::string key)
    header5->SetTextColor(1);
    header5->SetTextSize(.035);
 
-  canvasMVZ5->SaveAs(Form("otherPlots/finalresult%s.png",key.c_str()));
-  canvasMVZ5->SaveAs(Form("otherPlots/finalresult%s.pdf",key.c_str()));
+  fPads5b->cd();
+  fPads5b->SetGridx();
+  fPads5b->SetGridy();
+  fPads5b->SetTopMargin(0);
+  fPads5b->SetBottomMargin(0.4);
+
+
+  Frame5pull->GetYaxis()->SetLabelSize(0.08);
+  Frame5pull->GetXaxis()->SetLabelSize(0.17);
+  Frame5pull->GetYaxis()->SetTitle("Pulls");
+  Frame5pull->GetYaxis()->SetTitleOffset(0.30);
+  Frame5pull->GetYaxis()->SetTitleSize(0.15);
+  Frame5pull->GetXaxis()->SetTitleSize(0.17);
+  Frame5pull->GetXaxis()->SetTitle("M_{T} (GeV)");
+  Frame5pull->GetYaxis()->SetRangeUser(-5,5);
+  Frame5pull->SetTitle("");
+  Frame5pull->Draw();
+
+
+  canvasMVZ5->SaveAs(Form("otherPlots/finalresultUB%s.png",key.c_str()));
+  canvasMVZ5->SaveAs(Form("otherPlots/finalresultUB%s.pdf",key.c_str()));
 
 }
