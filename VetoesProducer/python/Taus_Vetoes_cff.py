@@ -13,7 +13,7 @@ vetoTausel = selectedPatTaus.clone(
                                src = 'goodTaus',
                                cut =
                                'tauID("decayModeFinding")&'
-                               'tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits")')
+                               'tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits")')
 
 
 niceLeptonsTau = cms.EDProducer("deltaRleptonsProducer",

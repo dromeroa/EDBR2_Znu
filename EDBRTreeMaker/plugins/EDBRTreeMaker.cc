@@ -691,7 +691,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    edm::Handle<pat::MuonCollection> muons;
                    iEvent.getByToken(muonToken_, muons);
                    for (const pat::Muon &mu : *muons) {
-                         if (mu.pt() < 20 ) continue;
+                         if (mu.pt() < 10 ) continue;
                          if ( fabs(mu.eta()) > 2.4 ) continue;
 
                          // Veto Muons selection
@@ -708,7 +708,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                    edm::Handle<pat::ElectronCollection> electrons;
                    iEvent.getByToken(electronToken_, electrons);
                    for (const pat::Electron &el : *electrons) {
-                         if (el.pt()<20) continue;
+                         if (el.pt()<10) continue;
                          if ( fabs(el.eta()) > 2.4 ) continue;
 
                           if(el.electronID("cutBasedElectronID-Spring15-25ns-V1-standalone-veto")){
@@ -723,7 +723,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 edm::Handle<pat::PhotonCollection> photons;
                 iEvent.getByToken(photonToken_, photons);                 
                 for (const pat::Photon &pho : *photons) {
-                      if (pho.pt()<20) continue;
+                      if (pho.pt()<15) continue;
                          if ( fabs(pho.eta()) > 2.5 ) continue;
                            if(pho.photonID("cutBasedPhotonID-Spring15-50ns-V1-standalone-loose")){
                              photonsVec.push_back(&pho);
