@@ -20,7 +20,8 @@ process.MessageLogger.cerr.FwkReport.limit = 99999999
 ##***************************************************************************************#
 ##     2. Global Tag                                                                     #
 ##***************************************************************************************#
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 ## FROM March 05 2016
 process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_RunIIFall15DR76_v1'
 
@@ -206,7 +207,8 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 btaggEff = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/btaggMaps/RSGravZZToZZinv_1000_MAP.root"),
                                                 triggerSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/TriggerSF.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ),
-                                                pruned              = cms.InputTag  (    "prunedGenParticles"     ))
+                                                pruned              = cms.InputTag  (    "prunedGenParticles"     )),
+                                                packed = cms.InputTag("packedGenParticles"))
 
 
 

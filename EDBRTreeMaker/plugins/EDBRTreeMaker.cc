@@ -76,7 +76,7 @@
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 
 #include <boost/foreach.hpp>
 #include <utility>
@@ -217,8 +217,12 @@ private:
   std::vector<double> btaggjetsPT;
   std::vector<double> btaggjetsETA;
 
-
   int nmuons, nelectrons, nphotons, nbtaggjets;
+  int nmuonsBefMatch;
+
+  double mmDeltaR, MinmmDeltaR;
+  std::vector<double> deltaRMu; 
+
 
   // btagging info
   double bdisc;
@@ -237,6 +241,7 @@ private:
   edm::EDGetTokenT<reco::CandidateCollection> genleptonicZ_;
   edm::EDGetTokenT<reco::CandidateCollection> genleptonicW_;
   edm::EDGetTokenT<edm::View<reco::GenParticle> > prunedGenToken_;
+  edm::EDGetTokenT<edm::View<pat::PackedGenParticle> > packedGenToken_;
   double genptZl, genptWl;
   int numgenZ, numgenW;
 
@@ -282,7 +287,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   muonToken_       ( consumes<pat::MuonCollection>   ( iConfig.getParameter<edm::InputTag> (  "muons"             ) ) ),
   electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
   photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
-  prunedGenToken_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("pruned")))
+  prunedGenToken_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("pruned"))),
+  packedGenToken_(consumes<edm::View<pat::PackedGenParticle> >(iConfig.getParameter<edm::InputTag>("packed")))
 {
 
    using namespace edm;
@@ -436,6 +442,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   /// Leptons
   outTree_->Branch("nelectrons"   ,&nelectrons  ,"nelectrons/I"  );
   outTree_->Branch("nmuons"   ,&nmuons  ,"nmuons/I"  );
+  outTree_->Branch("nmuonsBefMatch"    ,&nmuonsBefMatch    ,"nmuonsBefMatch/I"  );
   outTree_->Branch("nphotons"   ,&nphotons  ,"nphotons/I"  );
   outTree_->Branch("nbtaggjets"   ,&nbtaggjets  ,"nbtaggjets/I"  );
   outTree_->Branch("muonsPT"      ,&muonsPT     );
@@ -674,8 +681,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                     //---------- Leptons Information --------------------------------
                     std::vector<const pat::Muon*> muonsVec;
+                    std::vector<const pat::Muon*> Matchmuons;
                     std::vector<const pat::Electron*> electronsVec;
+                    std::vector<const pat::Electron*> Matchelectrons;
                     std::vector<const pat::Photon*> photonsVec;
+                    std::vector<const pat::Photon*> Matchphotons;
                     std::vector<const pat::Jet*> btaggjetsVec;
                     electronsPT.clear();
                     electronsETA.clear();
@@ -686,8 +696,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     btaggjetsPT.clear();
                     btaggjetsETA.clear();
 
+                    // Packed gen collection
+                   Handle<edm::View<pat::PackedGenParticle> > packed;
+                   iEvent.getByToken(packedGenToken_,packed);
                     
-                   //Muons
+//*****************************************************************
+//                           MUONS
+//****************************************************************
+                   deltaRMu.clear();
                    edm::Handle<pat::MuonCollection> muons;
                    iEvent.getByToken(muonToken_, muons);
                    for (const pat::Muon &mu : *muons) {
@@ -699,12 +715,50 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                          if (mu.isLooseMuon() == false) continue;
                          if ((mu.pfIsolationR04().sumChargedHadronPt+max(0.,mu.pfIsolationR04().sumNeutralHadronEt+mu.pfIsolationR04().sumPhotonEt-0.5*mu.pfIsolationR04().sumPUPt))/mu.pt()> 0.25) continue;
 
+                         // MC Match
+                         for(const pat::PackedGenParticle& genmu : *packed){
+                             if ( ! (fabs (genmu.pdgId()) == 13) ) continue;
+                             if ( fabs(genmu.eta()) > 2.4 ) continue;
+                             if ((mu.charge()*genmu.charge()) < 0 ) continue;
+                             Candidate::LorentzVector Recmu = mu.p4();
+                             Candidate::LorentzVector Genmu = genmu.p4();
+                             mmDeltaR = deltaR(Recmu, Genmu);
+                             deltaRMu.push_back(mmDeltaR);
+                          }                         
+
                          muonsVec.push_back(&mu);
-                         muonsPT.push_back(mu.pt());
-                         muonsETA.push_back(fabs(mu.eta()));
+                  }
+
+                  // sort the collections
+                  std::sort(muonsVec.begin(),muonsVec.end(),RefGreaterByPt<pat::Muon>());
+                  std::sort(deltaRMu.begin(),deltaRMu.end());
+
+                  //save the min deltaR
+                  if (deltaRMu.size()){
+                   MinmmDeltaR = deltaRMu[0];
+                  }
+                  // number of muons before match
+                  nmuonsBefMatch = muonsVec.size();
+                      
+                 // The matching and save the objects
+                 BOOST_FOREACH(const pat::Muon* Mu, muonsVec) {
+                     if ( MinmmDeltaR < 0.1){
+                          Matchmuons.push_back(Mu);
+                          double Mupt = Mu->pt();
+                          double Mueta = fabs(Mu->eta());
+                          muonsPT.push_back(Mupt);
+                          muonsETA.push_back(Mueta);
+                     }
                    }
 
-                   // Electrons
+                 // Number of match muons
+                 std::sort(Matchmuons.begin(),Matchmuons.end(),RefGreaterByPt<pat::Muon>());
+                 nmuons = Matchmuons.size();
+
+//*****************************************************************
+////                           ELECTRONS
+////****************************************************************
+                   
                    edm::Handle<pat::ElectronCollection> electrons;
                    iEvent.getByToken(electronToken_, electrons);
                    for (const pat::Electron &el : *electrons) {
@@ -749,12 +803,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                             
 
 
-              std::sort(muonsVec.begin(),muonsVec.end(),RefGreaterByPt<pat::Muon>());
               std::sort(electronsVec.begin(),electronsVec.end(),RefGreaterByPt<pat::Electron>());
               std::sort(photonsVec.begin(),photonsVec.end(),RefGreaterByPt<pat::Photon>());
               std::sort(btaggjetsVec.begin(),btaggjetsVec.end(),RefGreaterByPt<pat::Jet>());
 
-              nmuons = muonsVec.size();
               nelectrons = electronsVec.size();
               nphotons = photonsVec.size();               
               nbtaggjets = btaggjetsVec.size();
@@ -1071,6 +1123,7 @@ void EDBRTreeMaker::setDummyValues() {
      minabsdeltaphi = -1e4;
      nelectrons = 0;
      nmuons = 0;
+     nmuonsBefMatch = 0;
      nphotons = 0;
      nbtaggjets = 0;
    
