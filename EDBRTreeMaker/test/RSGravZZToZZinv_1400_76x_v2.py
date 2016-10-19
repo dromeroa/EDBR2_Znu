@@ -187,7 +187,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 btaggEff = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/btaggMaps/RSGravZZToZZinv_1400_MAP.root"),
                                                 triggerSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/TriggerSF.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ),
-                                                pruned              = cms.InputTag  (    "prunedGenParticles"     )),
+                                                pruned              = cms.InputTag  (    "prunedGenParticles"     ),
                                                 packed = cms.InputTag("packedGenParticles"))
                                                                                                      
 
