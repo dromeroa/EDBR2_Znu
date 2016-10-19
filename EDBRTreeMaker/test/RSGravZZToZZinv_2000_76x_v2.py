@@ -185,7 +185,7 @@ process.treeDumper = cms.EDAnalyzer(            "EDBRTreeMaker",
                                                 muonSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/MuonID_Z_RunCD_Reco76X_Feb15.root"),
                                                 muIsoSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/MuonIso_Z_RunCD_Reco76X_Feb15.root"),
                                                 btaggEff = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/btaggMaps/RSGravZZToZZinv_2000_MAP.root"),
-                                                triggerSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/mettrigSF.root"),
+                                                triggerSFs = cms.FileInPath("ExoDiBosonResonances/EDBRTreeMaker/data/inputfiles/TriggerSF.root"),
                                                 vertex              = cms.InputTag  (  "goodOfflinePrimaryVertex" ),
                                                 pruned              = cms.InputTag  (    "prunedGenParticles"     ))
                                                                                                      

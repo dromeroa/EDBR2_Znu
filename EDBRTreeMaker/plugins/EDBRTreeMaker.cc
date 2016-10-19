@@ -1,6 +1,8 @@
 // system include files
 #include <iostream>
 #include <memory>
+#include <map>
+#include <string>
 
 // user include files
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -1090,7 +1092,7 @@ void EDBRTreeMaker::beginJob(){
          h4 = (TH2F*)f4->Get("EGamma_SF2D");
          h5 = (TH2F*)f5->Get("MC_NUM_LooseID_DEN_genTracks_PAR_pt_spliteta_bin1/abseta_pt_ratio");
          h6 = (TH2F*)f6->Get("MC_NUM_LooseRelIso_DEN_LooseID_PAR_pt_spliteta_bin1/abseta_pt_ratio");
-         h7 = (TH1F*)f7->Get("mettrigSF");
+         h7 = (TH1F*)f7->Get("TriggerSF");
          // access to b-tagg efficiency
          effBtagMap = new TFile( btaggEff_.fullPath().c_str() );
          effBtagMaphisto = (TH2D*)effBtagMap->Get("efficiency_b");
