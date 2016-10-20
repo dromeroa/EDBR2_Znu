@@ -800,7 +800,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                   nelectronsBefMatch = electronsVec.size();
 
                   // the matching
-                  BOOST_FOREACH(const pat:Electron* El, electronsVec) {
+                  BOOST_FOREACH(const pat::Electron* El, electronsVec) {
                      if ( MineeDeltaR < 0.1){
                           Matchelectrons.push_back(El);
                           double Elept = El->pt();
