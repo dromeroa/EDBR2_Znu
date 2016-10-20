@@ -48,7 +48,7 @@ VZ_JetMET       = True
 
 ###-----   W + jets-------------------
 #SAMPLE="WJetsToLNu_HT-100To200_76x_v2"
-SAMPLE="WJetsToLNu_HT-200To400_76x_v2"
+SAMPLE="WJetsToLNu_HT-200To400_76xs_v2"
 #SAMPLE="WJetsToLNu_HT-400To600_76x_v2"
 #SAMPLE="WJetsToLNu_HT-600ToInf_76x_v2"
 
@@ -98,7 +98,7 @@ configXsecs = {
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 13.1979,   ##   10.73  x 1.23 (NLO)
                 "ZJetsToNuNu_HT-600ToInf_76x_v2"         : 5.06268,   ##    4.116 x 1.23 (NLO)
                 "WJetsToLNu_HT-100To200_76x_v2"          : 1627.45,   ## 1345     x 1.21 (NLO) 
-                "WJetsToLNu_HT-200To400_76x_v2"          : 435.237,   ##  359.7   x 1.21 (NLO)
+                "WJetsToLNu_HT-200To400_76xs_v2"          : 435.237,   ##  359.7   x 1.21 (NLO)
                 "WJetsToLNu_HT-400To600_76x_v2"          : 59.1811,   ##   48.91  x 1.21 (NLO)
                 "WJetsToLNu_HT-600ToInf_76x_v2"          : 22.7117,   ##   18.77  x 1.21 (NLO)
                 "WW_76x_v2"                              : 118.7,
@@ -122,7 +122,7 @@ configNevents = {
                 "ZJetsToNuNu_HT-400To600_76x_v2"         : 954435,
                 "ZJetsToNuNu_HT-600ToInf_76x_v2"         : 1033818,
                 "WJetsToLNu_HT-100To200_76x_v2"          : 10205377, 
-                "WJetsToLNu_HT-200To400_76x_v2"          : 4949568,
+                "WJetsToLNu_HT-200To400_76xs_v2"          : 4949568,
                 "WJetsToLNu_HT-400To600_76x_v2"          : 1943664,
                 "WJetsToLNu_HT-600ToInf_76x_v2"          : 1041358,
                 "WW_76x_v2"                              : 988418,
