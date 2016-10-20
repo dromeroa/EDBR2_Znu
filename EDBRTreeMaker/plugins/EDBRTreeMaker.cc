@@ -218,7 +218,7 @@ private:
   std::vector<double> btaggjetsETA;
 
   int nmuons, nelectrons, nphotons, nbtaggjets;
-  int nmuonsBefMatch, nelectronsBefMatch;
+  int nmuonsBefMatch, nelectronsBefMatch, nphotonsBefMatch;
 
   double mmDeltaR, MinmmDeltaR;
   std::vector<double> deltaRMu; 
@@ -226,6 +226,8 @@ private:
   double eeDeltaR, MineeDeltaR;
   std::vector<double> deltaREle;
 
+  double ppDeltaR, MinppDeltaR;
+  std::vector<double> deltaRPho;
 
 
   // btagging info
@@ -449,6 +451,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("nmuons"   ,&nmuons  ,"nmuons/I"  );
   outTree_->Branch("nmuonsBefMatch"    ,&nmuonsBefMatch    ,"nmuonsBefMatch/I"  );
   outTree_->Branch("nphotons"   ,&nphotons  ,"nphotons/I"  );
+  outTree_->Branch("nphotonsBefMatch"    ,&nphotonsBefMatch    ,"nphotonsBefMatch/I"  );
   outTree_->Branch("nbtaggjets"   ,&nbtaggjets  ,"nbtaggjets/I"  );
   outTree_->Branch("muonsPT"      ,&muonsPT     );
   outTree_->Branch("muonsETA"      ,&muonsETA     );
@@ -458,6 +461,9 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("photonsETA"      ,&photonsETA     );
   outTree_->Branch("btaggjetsPT"      ,&btaggjetsPT     );
   outTree_->Branch("btaggjetsETA"      ,&btaggjetsETA     );
+  outTree_->Branch("MinmmDeltaR"       ,&MinmmDeltaR, "MinmmDeltaR/D"  );
+  outTree_->Branch("MineeDeltaR"       ,&MineeDeltaR, "MineeDeltaR/D"  );
+  outTree_->Branch("MinppDeltaR"       ,&MinppDeltaR, "MinppDeltaR/D"  );
 
   outTree_->Branch("ptCorUp" ,&ptCorUp ,"ptCorUp/D" );
   outTree_->Branch("ptCorDown" ,&ptCorDown ,"ptCorDown/D" );
@@ -773,7 +779,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                          // veto electron selection
                          if(! el.electronID("cutBasedElectronID-Spring15-25ns-V1-standalone-veto")) continue;
 
-                         // MC Match
+                         //Delta R
                          for(const pat::PackedGenParticle& genele : *packed){
                              if ( ! (fabs (genele.pdgId()) == 11) ) continue;
                              if ( fabs(genele.eta()) > 2.4 ) continue;
@@ -820,21 +826,61 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //////                           PHOTONS
 //////****************************************************************
 
-       
+                deltaRPho.clear(); 
                 edm::Handle<pat::PhotonCollection> photons;
                 iEvent.getByToken(photonToken_, photons);                 
                 for (const pat::Photon &pho : *photons) {
                       if (pho.pt()<15) continue;
-                         if ( fabs(pho.eta()) > 2.5 ) continue;
-                           if(pho.photonID("cutBasedPhotonID-Spring15-50ns-V1-standalone-loose")){
-                             photonsVec.push_back(&pho);
-                             photonsPT.push_back(pho.pt());
-                             photonsETA.push_back(fabs(pho.superCluster()->eta())); 
-                           }
-                }
+                      if ( fabs(pho.eta()) > 2.5 ) continue;
+
+                      // ID
+                      if( ! pho.photonID("cutBasedPhotonID-Spring15-50ns-V1-standalone-loose")) continue;
+
+                      // Delta R
+                      for(const pat::PackedGenParticle& genpho: *packed){
+                             if ( ! (fabs (genpho.pdgId()) == 22) ) continue;
+                             if ( fabs(genele.eta()) > 2.5 ) continue;
+                             Candidate::LorentzVector Recpho = pho.p4();
+                             Candidate::LorentzVector Genpho = genpho.p4();
+                             ppDeltaR = deltaR(Recpho, Genpho);
+                             deltaRPho.push_back(ppDeltaR);
+                       }
+
+                       photonsVec.push_back(&pho);
+                 }
+             
+                 // sort
+                 std::sort(photonsVec.begin(),photonsVec.end(),RefGreaterByPt<pat::Photon>());
+                 std::sort(deltaRPho.begin(),deltaRPho.end());
+
+                 // min deltaR
+                 if (deltaRPho.size()){
+                   MinppDeltaR = deltaRPho[0];
+                  }
+  
+                  // number of photons before match
+                  nphotonsBefMatch = photonsVec.size();
+
+                  // the matching
+                  BOOST_FOREACH(const pat::Photon* Pho, photonsVec) {
+                     if ( MinppDeltaR < 0.1){
+                          Matchphotons.push_back(Pho);
+                          double Phopt = Pho->pt();
+                          double Phoeta = fabs(Pho->superCluster()->eta());
+                          photonsPT.push_back(Phopt);
+                          photonsETA.push_back(Phoeta);
+                     }
+                   }
 
 
-                // b-tag jets  
+                 std::sort(Matchphotons.begin(),Matchphotons.end(),RefGreaterByPt<pat::Photon>());
+                 nphotons = Matchphotons.size();
+
+
+//*****************************************************************
+////////                          BTAG JETS
+////////**************************************************************
+  
                 for (const pat::Jet &j : *extrajatos) {
                       bdisc = j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
            
@@ -850,10 +896,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                             
 
 
-              std::sort(photonsVec.begin(),photonsVec.end(),RefGreaterByPt<pat::Photon>());
               std::sort(btaggjetsVec.begin(),btaggjetsVec.end(),RefGreaterByPt<pat::Jet>());
-
-              nphotons = photonsVec.size();               
               nbtaggjets = btaggjetsVec.size();
 
 
@@ -1170,9 +1213,12 @@ void EDBRTreeMaker::setDummyValues() {
      nmuons = 0;
      nmuonsBefMatch = 0;
      nelectronsBefMatch = 0;
+     nphotonsBefMatch = 0;
      nphotons = 0;
      nbtaggjets = 0;
-   
+     MinmmDeltaR = -1e4;
+     MineeDeltaR = -1e4;
+     MinppDeltaR = -1e4;
 }
 
 // ------------ method called once each job just before starting event loop  ------------
