@@ -839,7 +839,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                       // Delta R
                       for(const pat::PackedGenParticle& genpho: *packed){
                              if ( ! (fabs (genpho.pdgId()) == 22) ) continue;
-                             if ( fabs(genele.eta()) > 2.5 ) continue;
+                             if ( fabs(genpho.eta()) > 2.5 ) continue;
                              Candidate::LorentzVector Recpho = pho.p4();
                              Candidate::LorentzVector Genpho = genpho.p4();
                              ppDeltaR = deltaR(Recpho, Genpho);
