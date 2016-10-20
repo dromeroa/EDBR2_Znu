@@ -218,10 +218,14 @@ private:
   std::vector<double> btaggjetsETA;
 
   int nmuons, nelectrons, nphotons, nbtaggjets;
-  int nmuonsBefMatch;
+  int nmuonsBefMatch, nelectronsBefMatch;
 
   double mmDeltaR, MinmmDeltaR;
   std::vector<double> deltaRMu; 
+
+  double eeDeltaR, MineeDeltaR;
+  std::vector<double> deltaREle;
+
 
 
   // btagging info
@@ -441,6 +445,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
 
   /// Leptons
   outTree_->Branch("nelectrons"   ,&nelectrons  ,"nelectrons/I"  );
+  outTree_->Branch("nelectronsBefMatch"    ,&nelectronsBefMatch    ,"nelectronsBefMatch/I"  );
   outTree_->Branch("nmuons"   ,&nmuons  ,"nmuons/I"  );
   outTree_->Branch("nmuonsBefMatch"    ,&nmuonsBefMatch    ,"nmuonsBefMatch/I"  );
   outTree_->Branch("nphotons"   ,&nphotons  ,"nphotons/I"  );
@@ -758,22 +763,64 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //*****************************************************************
 ////                           ELECTRONS
 ////****************************************************************
-                   
+                   deltaREle.clear();              
                    edm::Handle<pat::ElectronCollection> electrons;
                    iEvent.getByToken(electronToken_, electrons);
                    for (const pat::Electron &el : *electrons) {
                          if (el.pt()<10) continue;
                          if ( fabs(el.eta()) > 2.4 ) continue;
 
-                          if(el.electronID("cutBasedElectronID-Spring15-25ns-V1-standalone-veto")){
-                             electronsVec.push_back(&el);                        
-                             electronsPT.push_back(el.pt());
-                             electronsETA.push_back(fabs(el.superCluster()->eta()));
+                         // veto electron selection
+                         if(! el.electronID("cutBasedElectronID-Spring15-25ns-V1-standalone-veto")) continue;
+
+                         // MC Match
+                         for(const pat::PackedGenParticle& genele : *packed){
+                             if ( ! (fabs (genele.pdgId()) == 11) ) continue;
+                             if ( fabs(genele.eta()) > 2.4 ) continue;
+                             if ((el.charge()*genele.charge()) < 0 ) continue;
+                             Candidate::LorentzVector Recele = el.p4();
+                             Candidate::LorentzVector Genele = genele.p4();
+                             eeDeltaR = deltaR(Recele, Genele);
+                             deltaREle.push_back(eeDeltaR);
                           }
+    
+                          electronsVec.push_back(&el);                        
+                    }
 
-                 }   
+                    // sort
+                    std::sort(electronsVec.begin(),electronsVec.end(),RefGreaterByPt<pat::Electron>());
+                    std::sort(deltaREle.begin(),deltaREle.end());
+                       
+                    // Save min deltaR
+                   if (deltaREle.size()){
+                   MineeDeltaR = deltaREle[0];
+                   }
 
-                // Photons  
+                  // number of electrons before match
+                  nelectronsBefMatch = electronsVec.size();
+
+                  // the matching
+                  BOOST_FOREACH(const pat:Electron* El, electronsVec) {
+                     if ( MineeDeltaR < 0.1){
+                          Matchelectrons.push_back(El);
+                          double Elept = El->pt();
+                          double Eleeta = fabs(El->superCluster()->eta());
+                          electronsPT.push_back(Elept);
+                          electronsETA.push_back(Eleeta);
+                     }
+                   }
+
+
+                 std::sort(Matchelectrons.begin(),Matchelectrons.end(),RefGreaterByPt<pat::Electron>());
+                 nelectrons = Matchelectrons.size();
+
+
+
+//*****************************************************************
+//////                           PHOTONS
+//////****************************************************************
+
+       
                 edm::Handle<pat::PhotonCollection> photons;
                 iEvent.getByToken(photonToken_, photons);                 
                 for (const pat::Photon &pho : *photons) {
@@ -803,11 +850,9 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                             
 
 
-              std::sort(electronsVec.begin(),electronsVec.end(),RefGreaterByPt<pat::Electron>());
               std::sort(photonsVec.begin(),photonsVec.end(),RefGreaterByPt<pat::Photon>());
               std::sort(btaggjetsVec.begin(),btaggjetsVec.end(),RefGreaterByPt<pat::Jet>());
 
-              nelectrons = electronsVec.size();
               nphotons = photonsVec.size();               
               nbtaggjets = btaggjetsVec.size();
 
@@ -1124,6 +1169,7 @@ void EDBRTreeMaker::setDummyValues() {
      nelectrons = 0;
      nmuons = 0;
      nmuonsBefMatch = 0;
+     nelectronsBefMatch = 0;
      nphotons = 0;
      nbtaggjets = 0;
    
